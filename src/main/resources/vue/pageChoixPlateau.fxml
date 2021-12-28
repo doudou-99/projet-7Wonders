@@ -41,7 +41,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="TempleDArtemis" fitHeight="100.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#choiX">
+                  <ImageView fx:id="TempleDArtemis" fitHeight="100.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#choix">
                      <image>
                         <Image url="@../../java/vue/images/PlateauMerveille/LeTempleDArtemis.jpg" />
                      </image>

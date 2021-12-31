@@ -1,18 +1,22 @@
 package modele;
 
+import modele.enums.Couleur;
+
 import java.util.Collection;
 
 public class Effet {
     private String capacite;
     private int nombre;
-    private Collection<String> choix      ;
+    private Collection<String> choix;
+    private String capaciteSup;
 
     public Effet(){}
 
-    public Effet(String capacite, int nombre,Collection<String> choix) {
+    public Effet(String capacite, int nombre,Collection<String> choix,String capaciteSup) {
         this.capacite = capacite;
         this.nombre = nombre;
         this.choix=choix;
+        this.capaciteSup=capaciteSup;
     }
 
     public String getCapacite() {
@@ -39,12 +43,26 @@ public class Effet {
         this.choix = choix;
     }
 
+    public String getCapaciteSup() {
+        return capaciteSup;
+    }
+
+    public void setCapaciteSup(String capaciteSup) {
+        this.capaciteSup = capaciteSup;
+    }
+
+    public boolean avoirMemeRessource(String effet){
+        return effet.equals(this.capacite);
+    }
+
+
     @Override
     public String toString() {
         return "Effet{" +
                 "capacite='" + capacite + '\'' +
                 ", nombre=" + nombre +
                 ", choix=" + choix +
+                ", capaciteSup='"+capaciteSup + "'" +
                 '}';
     }
 }

@@ -1,13 +1,20 @@
 package modele.interfaces;
 
 import modele.*;
+import modele.exceptions.PartieDejaPleineException;
+import modele.exceptions.TicketInvalideException;
+import modele.exceptions.TicketPerimeException;
 
 import java.util.List;
 
 public interface FacadeWonders {
 
+    void ajoutJoueur(Joueur joueur);
     String creerPartie(Joueur joueur);
-    void rejoindrePartie(Joueur joueur,String ticket);
+
+    Joueur getJoueur(String pseudo) throws JoueurInexistantException;
+
+    void rejoindrePartie(Joueur joueur, String ticket) throws TicketPerimeException, TicketInvalideException, PartieDejaPleineException;
     Carte jouerCarte(Joueur joueur, Carte carte);
     void arreterPartie(Joueur joueur);
     void reprendrePartie(Joueur joueur);

@@ -6,6 +6,8 @@ import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
 import modele.dao.BaseMongo;
 import modele.exceptions.ConstructionMerveilleImpossible;
+import modele.exceptions.RessourceInexistanteException;
+import modele.exceptions.RessourceInsuffisanteException;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
@@ -21,6 +23,7 @@ public class Joueur {
     private String prenom;
     private String pseudo;
     private String age;
+    private static int nb=0;
     private String motDePasse;
     @BsonProperty("nombreDePiecesEnOr")
     private int nombrePiecesOr;
@@ -52,7 +55,7 @@ public class Joueur {
         this.pseudo = pseudo;
         this.age = age;
         this.motDePasse = motDePasse;
-        this.nombreBoucliers = 0;
+        this.nombreBoucliers = nb;
         this.nombrePiecesOr=0;
         this.nombrePiecesArgent=0;
         this.nombreDePoints=0;
@@ -304,6 +307,161 @@ public class Joueur {
         Bson filter = Filters.eq("pseudo",this.getPseudo());
         Bson update = Updates.push("joueurs.cartesEtages",this.cartesEtages);
         BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter,update, options);
+
+    }
+
+    public Carte construireBatimentCivils(Carte c) throws RessourceInsuffisanteException {
+        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        Bson filter = Filters.eq("pseudo", this.getPseudo());
+        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
+            if (!c.getCout().isEmpty()){
+                for (Cout cout : c.getCout()) {
+                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                }
+            }
+            for (Effet e : c.getEffet()) {
+                if (e.avoirMemeRessource("point de victoire")) {
+                    this.nombreDePoints += e.getNombre();
+                    BatimentCivil civil = new BatimentCivil(e.getNombre());
+                    this.batimentCivilList.add(civil);
+                    Bson updat = Updates.push("listeDesBatimentsCivils", civil);
+                    BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, updat, options);
+                    Bson upda = Updates.push("nombreDePoints", this.nombreDePoints);
+                    BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, upda, options);
+                }
+            }
+            Bson update = Updates.push("cite.cartes", c);
+            BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+            this.cite.ajoutCarte(c);
+            return c;
+        }
+        throw new RessourceInsuffisanteException();
+
+    }
+
+    public Carte construireBatimentsScientifiques(Carte c) throws RessourceInsuffisanteException {
+        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        Bson filter = Filters.eq("pseudo", this.getPseudo());
+        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
+            if (!c.getCout().isEmpty()){
+                for (Cout cout : c.getCout()) {
+                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                }
+            }
+            for (Effet e : c.getEffet()) {
+                if (e.avoirMemeRessource("compas") || e.avoirMemeRessource("roue") || e.avoirMemeRessource("tablette")) {
+                    this.gestionCapacite.ajoutSymbolesScientifiques(e.getCapacite(), e.getNombre());
+                }
+            }
+            Bson update = Updates.push("cite.cartes", c);
+            BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+            this.cite.ajoutCarte(c);
+            return c;
+        }
+        throw new RessourceInsuffisanteException();
+    }
+
+    public Carte construireBatimentMilitaires(Carte c) throws RessourceInsuffisanteException{
+        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        Bson filter = Filters.eq("pseudo", this.getPseudo());
+        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
+            if (!c.getCout().isEmpty()){
+                for (Cout cout : c.getCout()) {
+                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                }
+            }
+            for (Effet e : c.getEffet()) {
+                if (e.avoirMemeRessource("bouclier")) {
+                    this.nombreBoucliers+= e.getNombre();
+                    Bson update = Updates.push("nombreDeBoucliers", this.nombreBoucliers);
+                    BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+                }
+            }
+            Bson update = Updates.push("cite.cartes", c);
+            BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+            this.cite.ajoutCarte(c);
+            return c;
+        }
+        throw new RessourceInsuffisanteException();
+    }
+
+    public Carte construireMatierePremiere(Carte c) throws RessourceInsuffisanteException {
+        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        Bson filter = Filters.eq("pseudo", this.getPseudo());
+        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
+            if (!c.getCout().isEmpty()){
+                for (Cout cout : c.getCout()) {
+                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                }
+            }
+            for (Effet e : c.getEffet()) {
+                if (e.avoirMemeRessource("pierre") || e.avoirMemeRessource("argile") || e.avoirMemeRessource("bois")
+                        || e.avoirMemeRessource("minerai")) {
+                    this.gestionCapacite.ajoutMatierePremiere(e.getCapacite(), e.getNombre());
+                }
+            }
+            Bson update = Updates.push("cite.cartes", c);
+            BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+            this.cite.ajoutCarte(c);
+            return c;
+        }
+        throw new RessourceInsuffisanteException();
+    }
+
+    public Carte construireProduitManufacturés(Carte c) throws RessourceInsuffisanteException{
+        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        Bson filter = Filters.eq("pseudo", this.getPseudo());
+        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
+            if (!c.getCout().isEmpty()){
+                for (Cout cout : c.getCout()) {
+                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                }
+            }
+            for (Effet e : c.getEffet()) {
+                if (e.avoirMemeRessource("verre") || e.avoirMemeRessource("tissu") || e.avoirMemeRessource("papyrus")) {
+                    this.gestionCapacite.ajoutProduitsManufactures(e.getCapacite(), e.getNombre());
+                }
+            }
+            Bson update = Updates.push("cite.cartes", c);
+            BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+            this.cite.ajoutCarte(c);
+        }
+        throw new RessourceInsuffisanteException();
+    }
+
+
+    public boolean verifieConstructionEtage(){
+        return !cartesEtages.isEmpty();
+    }
+
+    /**
+     *Cette méthode vérifie si toutes les étage de merveille du joueur est finie
+     */
+    public boolean merveilleFinie(){
+        return this.cartesEtages.containsKey("etage:1") && this.cartesEtages.containsKey("etage:2")
+                && this.cartesEtages.containsKey("etage:3");
+    }
+
+    public boolean verifEffetCarteCite(String ressource){
+        for (Carte c: this.cite.getCartes()){
+            for (Effet e : c.getEffet()){
+                if (e.avoirMemeRessource(ressource)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Effet effetCarteCite(String ressource) throws RessourceInexistanteException {
+        for (Carte c: this.cite.getCartes()){
+            for (Effet e : c.getEffet()){
+                if (e.avoirMemeRessource(ressource)) {
+                    return e;
+                }
+            }
+        }
+        throw new RessourceInexistanteException();
 
     }
 

@@ -6,14 +6,15 @@ public class Invitation {
 
 
 
-    private int idPartie; // Identifiant de la partie concernée par l'invitation
+    private String idPartie; // Identifiant de la partie concernée par l'invitation
     private Joueur joueurCreateur; // Créateur de la partie concernée par l'invitation
+    private final int nbJoueurs=4;
 
-    public int getIdPartie() {
+    public String getIdPartie() {
         return idPartie;
     }
 
-    public void setIdPartie(int idPartie) {
+    public void setIdPartie(String idPartie) {
         this.idPartie = idPartie;
     }
 
@@ -23,5 +24,9 @@ public class Invitation {
 
     public void setJoueurCreateur(Joueur joueurCreateur) {
         this.joueurCreateur = joueurCreateur;
+    }
+
+    public int getNbJoueurs() {
+        return nbJoueurs;
     }
 }

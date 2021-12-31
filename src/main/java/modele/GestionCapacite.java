@@ -1,6 +1,11 @@
 package modele;
 
 import modele.dao.BaseMongo;
+import modele.exceptions.RessourceInsuffisanteException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class GestionCapacite {
     private static int idCompas;
@@ -27,11 +32,186 @@ public class GestionCapacite {
 
     public GestionCapacite(Tour tour){
         this.tour=tour;
+        this.nombreCompas=idCompas;
+        this.nombreBois=idBois;
+        this.nombreArgile=idArgile;
+        this.nombrePierre=idPierre;
+        this.nombreMinerai=idMinerai;
+        this.nombrePapyrus=idPapyrus;
+        this.nombreVerre=idVerre;
+        this.nombreTissu=idTissu;
+        this.nombreRoue=idRoue;
+        this.nombreTablette=idTablette;
+    }
+
+    /**
+     * Cette methode vérifie si la ressource pour construire un bâtiment ou une carte est suffisante
+     */
+    public boolean ressourceSuffisante(Cout c){
+            boolean estSuffisant=false;
+            switch (c.getRessource()) {
+                case "argile":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombreArgile >= c.getNombreUnite()) {
+                            estSuffisant = true;
+                        }
+                    }
+                    break;
+                case "pierre":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombrePierre >= c.getNombreUnite()) {
+                            estSuffisant = true;
+                        }
+                    }
+                    break;
+                case "minerai":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombreMinerai >= c.getNombreUnite()) {
+                            estSuffisant= true;
+                        }
+
+                    }
+                    break;
+                case "bois":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombreBois >= c.getNombreUnite()) {
+                            estSuffisant = true;
+                        }
+                    }
+                    break;
+                case "tissu":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombreTissu >= c.getNombreUnite()) {
+                            estSuffisant = true;
+                        }
+
+                    }
+                    break;
+                case "verre":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombreVerre >= c.getNombreUnite()) {
+                            estSuffisant = true;
+                        }
+                    }
+                    break;
+                case "papyrus":
+                    if (tour.getNombreTourEnCours() <= 6 & tour.getNombreTourEnCours() > 0) {
+                        if (nombrePapyrus >= c.getNombreUnite()) {
+                            estSuffisant = true;
+                        }
+                    }
+                    break;
+            }
+
+        return estSuffisant;
+    }
+
+    /**
+     * Cette methode vérifie si les ressources pour construire un bâtiment ou une carte sont suffisantes
+     */
+    public boolean verifierCout(Collection<Cout> couts){
+        boolean suffisants = true;
+        for (Cout c:couts) {
+                suffisants= suffisants && ressourceSuffisante(c);
+        }
+        return suffisants;
+
+    }
+
+    public boolean existeRessource(String ressource){
+        boolean existe = false;
+        switch (ressource){
+            case "pierre":
+                existe= nombrePierre > 0;
+            break;
+            case "argile":
+                existe= nombreArgile>0;
+                break;
+            case "minerai":
+                existe=nombreMinerai>0;
+                break;
+            case "bois":
+                existe=nombreBois>0;
+                break;
+            case "papyrus":
+                existe=nombrePapyrus>0;
+                break;
+            case "verre":
+                existe=nombreVerre>0;
+                break;
+            case "tissu":
+                existe=nombreTissu>0;
+                break;
+        }
+        return existe;
+    }
+
+    public boolean verifGratuits(Cout couts){
+        return couts.getRessource().equals("") && (couts.getNombreUnite() == 0);
+    }
+
+    /**
+     * Cette methode incrémente le nombre de bâtiment scientifique en fonction de la ressource ici un symbole scientifique
+     */
+    public void ajoutSymbolesScientifiques(String ressource,int nombre){
+        switch (ressource){
+            case "compas":
+                nombreCompas+=nombre;
+                break;
+            case "roue":
+                nombreRoue+=nombre;
+                break;
+            case "tablette":
+                nombreTablette+=nombre;
+                break;
+        }
+    }
+
+    /**
+     * Cette méthode incrémente les matières premières et leur nombre en fonction des cartes jouées
+     * @param ressource
+     * @param nombre
+     */
+    public void ajoutMatierePremiere(String ressource,int nombre){
+        switch (ressource){
+            case "pierre":
+                nombrePierre+=nombre;
+                break;
+            case "argile":
+                nombreArgile+=nombre;
+                break;
+            case "minerai":
+                nombreMinerai+=nombre;
+                break;
+            case "bois":
+                nombreBois+=nombre;
+                break;
+        }
+    }
+
+    /**
+     * Cette méthode incremente les produits manufacturés et leur nombre en fonction des cartes jouées par le joueur
+     * @param ressource
+     * @param nombre
+     */
+    public void ajoutProduitsManufactures(String ressource,int nombre){
+        switch (ressource) {
+            case "papyrus":
+                nombrePapyrus += nombre;
+                break;
+            case "verre":
+                nombreVerre += nombre;
+                break;
+            case "tissu":
+                nombreTissu += nombre;
+                break;
+        }
     }
 
 
-
-
+    /**
+     * Cette méthode permet d'ajouter pour chaque tour la capacité du plateau
+     */
     public void gererCapacitePlateau(){
         BaseMongo b = BaseMongo.getBase();
         for (Plateau p: b.getPlateauList()) {
@@ -75,6 +255,9 @@ public class GestionCapacite {
         }
     }
 
+    /**
+     *Cette méthode permet d'augmenter la ressource quand on construit un bâtiment ou une carte
+     */
     public void augmenterRessource(String ressource,int nombreUnite){
         switch (ressource){
             case "argile":
@@ -115,6 +298,9 @@ public class GestionCapacite {
         }
     }
 
+    /**
+     *Cette méthode permet de diminuer la ressource quand on construit un bâtiment ou une carte
+     */
     public void diminuer(String ressource,int nombreUnite){
         switch (ressource){
             case "argile":

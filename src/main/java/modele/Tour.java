@@ -1,5 +1,7 @@
 package modele;
 
+import modele.dao.BaseMongo;
+
 import java.util.*;
 
 public class Tour {
@@ -7,13 +9,11 @@ public class Tour {
     private Map<String,List<Carte>> cartesJouees;
     private Age age;
 
-    public Tour(){}
 
-
-    public Tour(Age age,int nombreTourEnCours) {
-        this.nombreTourEnCours = nombreTourEnCours;
+    public Tour() {
+        this.nombreTourEnCours = 1;
         this.cartesJouees = new HashMap<>();
-        this.age=age;
+        this.age= BaseMongo.getBase().getAges().get(0);
     }
 
     public int getNombreTourEnCours() {

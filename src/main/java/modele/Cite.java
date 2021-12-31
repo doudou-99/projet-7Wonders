@@ -1,6 +1,10 @@
 package modele;
 
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import modele.dao.BaseMongo;
 import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.Collection;

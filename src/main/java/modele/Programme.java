@@ -71,7 +71,7 @@ public class Programme {
 
         System.out.println(BaseMongo.getBase().getBatailleList());
 
-        Partie partie = new Partie(joueur,2);
+        Partie partie = new Partie(joueur);
         List<Joueur> joueuse=new ArrayList<>();
         joueuse.add(joueu);
         partie.setParticipants(joueuse);

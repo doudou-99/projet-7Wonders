@@ -54,10 +54,10 @@ public class Joueur {
         this.age = age;
         this.motDePasse = motDePasse;
         this.nombreBoucliers = 0;
-        this.nombrePieces=somme();
         this.nombreDePoints=0;
         this.listeCartes = new ArrayList<>();
         this.listePieces = new ArrayList<>();
+        this.nombrePieces=0;
         this.batimentCivilList = new ArrayList<>();
         this.cartesEtages = new HashMap<>();
         this.listePointsBataille=new ArrayList<>();

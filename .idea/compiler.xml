@@ -9,5 +9,9 @@
         <module name="RMI" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="clientjfx" target="11" />
+      <module name="modele" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/RMI/RMI.iml" filepath="$PROJECT_DIR$/RMI/RMI.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/clientjfx/clientjfx.iml" filepath="$PROJECT_DIR$/clientjfx/clientjfx.iml" />
-      <module fileurl="file://$PROJECT_DIR$/modele/modele.iml" filepath="$PROJECT_DIR$/modele/modele.iml" />
->>>>>>> master
     </modules>
   </component>
 </project>

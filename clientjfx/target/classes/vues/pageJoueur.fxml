@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="pane" prefHeight="550.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@images/background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vues.PageJoueur">
+   <center>
+      <VBox alignment="CENTER" prefHeight="410.0" prefWidth="550.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #e1dfd3;" text="Nom">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="nom"/>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #e1dfd3;" text="Prenom">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="prenom"/>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #e1dfd3;" text="Age">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="age"/>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #e1dfd3;" text="Pseudo">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="pseudo"/>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="437.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #e1dfd3;" text="Mot de passe">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField prefHeight="40.0" prefWidth="200.0" fx:id="motDePasse">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </PasswordField>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="inscrire" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="S'inscrire" onAction="#inscription">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

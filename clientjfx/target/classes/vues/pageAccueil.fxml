@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="borderpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@images/background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vues.PageAccueil">
+   <center>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="40.0" prefWidth="184.0" style="-fx-background-color: #e1dfd3;" text="Nombre de joueurs">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField prefHeight="40.0" prefWidth="200.0" fx:id="nbJoueurs"/>
+         </children>
+         <padding>
+            <Insets top="150.0" />
+         </padding>
+      </HBox>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="183.0" prefWidth="600.0" spacing="50.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="bouton" mnemonicParsing="false" onAction="#debut" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #e1dfd3;" text="JOUER" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

@@ -3,9 +3,9 @@ package application;
 import controleur.Controleur;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import modele.facade.FacadeWondersImpl;
-import modele.interfaces.FacadeWonders;
-import org.example.GestionnaireVue;
+import modeles.facade.FacadeWondersImpl;
+import modeles.interfaces.FacadeWonders;
+import vues.GestionnaireVue;
 
 public class App extends Application {
     @Override
@@ -18,5 +18,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+
     }
 }

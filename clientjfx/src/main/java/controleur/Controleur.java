@@ -3,14 +3,12 @@ package controleur;
 import controleur.ordre.EcouteurOrdre;
 import controleur.ordre.LanceurOrdre;
 import controleur.ordre.Ordre;
-import modele.Joueur;
-import modele.interfaces.FacadeWonders;
-import example.GestionnaireVue;
+import modeles.Joueur;
+import modeles.facade.FacadeWondersImpl;
+import modeles.interfaces.FacadeWonders;
+import vues.GestionnaireVue;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Controleur implements LanceurOrdre {
     private FacadeWonders facadeWonders;
@@ -37,10 +35,12 @@ public class Controleur implements LanceurOrdre {
 
 
     public void ajoutJoueur(String nom, String prenom, String age, String pseudo, String motDePasse) {
-        this.joueur = new Joueur(nom,prenom,age, pseudo,motDePasse);
+        this.joueur = new Joueur(nom,prenom,pseudo,age,motDePasse);
+        this.facadeWonders=new FacadeWondersImpl();
         this.facadeWonders.ajoutJoueur(joueur);
         this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVEAU_JOUEUR));
         this.fireOrdre(new Ordre(Ordre.OrdreType.MENU));
+        System.out.println(this.joueur);
     }
 
     public void nombre(int nombreJoueurs){
@@ -54,13 +54,12 @@ public class Controleur implements LanceurOrdre {
 
     @Override
     public void abonnement(EcouteurOrdre o, Ordre.OrdreType... types) {
-        for (Ordre.OrdreType ordre: types){
-            this.abonnes.get(ordre).add(o);
-        }
+        Arrays.stream(types).forEach(e -> this.abonnes.get(e).add(o));
     }
 
     @Override
     public void fireOrdre(Ordre ordre) {
+
         this.abonnes.get(ordre.getType()).stream().forEach(e -> e.broadCast(ordre));
     }
 }

@@ -8,10 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="clientjfx" />
         <module name="modele" />
-        <module name="RMI" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="client" target="11" />
       <module name="RMI" target="11" />
     </bytecodeTargetLevel>
   </component>

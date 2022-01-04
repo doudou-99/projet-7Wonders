@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="modele" />
         <module name="clientjfx" />
+        <module name="RMI"/>
       </profile>
     </annotationProcessing>
   </component>

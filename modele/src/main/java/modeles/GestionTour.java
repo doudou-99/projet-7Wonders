@@ -2,16 +2,18 @@ package modeles;
 
 import modeles.dao.BaseMongo;
 
+import java.io.Serializable;
+
 public class GestionTour {
     private int tourEnCours;
     private Tour tour;
 
-    public GestionTour(Tour tour){
-        this.tour=tour;
-        this.tourEnCours=1;
-        this.tour.setNombreTourEnCours(tourEnCours);
-        this.tour.setAge(BaseMongo.getBase().getAges().get(0));
+    public GestionTour(){}
 
+    public GestionTour(Age age){
+        this.tourEnCours=1;
+        this.tour = new Tour(age);
+        //this.joueurList=new ArrayList<>();
     }
 
     public void passageAgeSuivant(){
@@ -46,5 +48,6 @@ public class GestionTour {
     public void setTour(Tour tour) {
         this.tour = tour;
     }
+
 
 }

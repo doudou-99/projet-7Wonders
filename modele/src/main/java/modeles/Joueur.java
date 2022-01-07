@@ -6,9 +6,12 @@ import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Joueur {
+public class Joueur implements Serializable {
+    private static final long serialVersionUID=1L;
+
     @BsonProperty("_id")
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String id;
@@ -57,6 +60,7 @@ public class Joueur {
         this.nombreDePoints=0;
         this.listeCartes = new ArrayList<>();
         this.listePieces = new ArrayList<>();
+        this.defausse= new Defausse();
         this.nombrePieces=0;
         this.batimentCivilList = new ArrayList<>();
         this.cartesEtages = new HashMap<>();
@@ -233,7 +237,7 @@ public class Joueur {
                 '}';
     }
 
-    public int scoreEtages(Joueur joueur){
+    public int scoreEtages(modeles.Joueur joueur){
 
         if (joueur.merveilleFinie() && joueur == this){
             joueur.setNombreDePoints(joueur.getNombreDePoints()+10);
@@ -252,9 +256,18 @@ public class Joueur {
         BaseMongo.getBase().ajoutCarteDefausse(pseudo,carte);
     }
 
+    public boolean citeMemeCarte(String nomCarte){
+        for (Carte c: this.cite.getCartes()){
+            if (c.getNom().equals(nomCarte)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Carte> cartesEnPossession(PaquetCarte paquetCarte){
-        for(int i=0;i<6;i++){
-            this.listeCartes.add((Carte) paquetCarte.distribuire(4).toArray()[i]);
+        for(int i=0;i<7;i++){
+            this.listeCartes.add(paquetCarte.distribuire(4).get(i));
             paquetCarte.distribuire(4).remove(paquetCarte.distribuire(4).get(i));
         }
         return this.listeCartes;
@@ -323,27 +336,36 @@ public class Joueur {
     }
 
 
-    public void construireBatimentCivils(Carte c) throws RessourceInsuffisanteException {
+    public void construireBatimentCivils(Carte c) throws RessourceInsuffisanteException, ConstructionImpossibleException, PieceInsuffisanteException, CiteContientCarteException {
+        if (!citeMemeCarte(c.getNom())) {
+            if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
+                if (!c.getCout().isEmpty()) {
+                    for (Cout cout : c.getCout()) {
+                        this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                    }
+                }
+                for (Effet e : c.getEffet()) {
+                    if (e.avoirMemeRessource("point de victoire")) {
+                        this.nombreDePoints += e.getNombre();
+                        BatimentCivil civil = new BatimentCivil(c.getNom(), e.getNombre());
+                        this.batimentCivilList.add(civil);
+                        BaseMongo.getBase().ajoutBatimentsCivils(this.pseudo, civil);
+                        BaseMongo.getBase().ajoutPointsJoueur(this.pseudo, this.nombreDePoints);
+                    }
+                }
+                this.ajoutCite(c);
+            } else {
+                if (!this.gestionCapacite.verifierCout(c.getCout())) {
+                    if (this.pieceSuffisante(GestionCommerce.getCoutPieces())) {
+                        gestionCommerce.acheterRessourceVoisin(pseudo, c.getNom());
+                    }
+                    throw new ConstructionImpossibleException();
+                }
 
-        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
-            if (!c.getCout().isEmpty()){
-                for (Cout cout : c.getCout()) {
-                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
-                }
             }
-            for (Effet e : c.getEffet()) {
-                if (e.avoirMemeRessource("point de victoire")) {
-                    this.nombreDePoints += e.getNombre();
-                    BatimentCivil civil = new BatimentCivil(c.getNom(),e.getNombre());
-                    this.batimentCivilList.add(civil);
-                    BaseMongo.getBase().ajoutBatimentsCivils(this.pseudo,civil);
-                    BaseMongo.getBase().ajoutPointsJoueur(this.pseudo,this.nombreDePoints);
-                }
-            }
-            this.ajoutCite(c);
+        }else{
+            throw new CiteContientCarteException();
         }
-        throw new RessourceInsuffisanteException();
-
     }
 
     public List<BatimentScientifique> getSymboleScientifique(String typeSymbole){
@@ -381,101 +403,158 @@ public class Joueur {
         return this.getNombreDePoints();
     }
 
-    public void construireBatimentsScientifiques(Carte c) throws RessourceInsuffisanteException {
-        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
-            if (!c.getCout().isEmpty()){
-                for (Cout cout : c.getCout()) {
-                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+    public void construireBatimentsScientifiques(Carte c) throws RessourceInsuffisanteException, PieceInsuffisanteException, ConstructionImpossibleException, CiteContientCarteException {
+        if (!this.citeMemeCarte(c.getNom())) {
+            if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
+                if (!c.getCout().isEmpty()) {
+                    for (Cout cout : c.getCout()) {
+                        this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                    }
                 }
-            }
-            for (Effet e : c.getEffet()) {
-                if (e.avoirMemeRessource("compas") || e.avoirMemeRessource("roue") || e.avoirMemeRessource("tablette")) {
-                    this.gestionCapacite.ajoutSymbolesScientifiques(e.getCapacite(), e.getNombre());
-                    BatimentScientifique batimentScientifique=new BatimentScientifique(c.getNom(),e.getCapacite(),e.getNombre());
-                    this.batimentScientifiques.add(batimentScientifique);
+                for (Effet e : c.getEffet()) {
+                    if (e.avoirMemeRessource("compas") || e.avoirMemeRessource("roue") || e.avoirMemeRessource("tablette")) {
+                        this.gestionCapacite.ajoutSymbolesScientifiques(e.getCapacite(), e.getNombre());
+                        BatimentScientifique batimentScientifique = new BatimentScientifique(c.getNom(), e.getCapacite(), e.getNombre());
+                        this.batimentScientifiques.add(batimentScientifique);
+                    }
                 }
-            }
 
-            this.ajoutCite(c);
+                this.ajoutCite(c);
+            } else {
+                if (!this.gestionCapacite.verifierCout(c.getCout())) {
+                    if (this.pieceSuffisante(GestionCommerce.getCoutPieces())) {
+                        gestionCommerce.acheterRessourceVoisin(pseudo, c.getNom());
+                    }
+                    throw new ConstructionImpossibleException();
+                }
+
+            }
+        }else{
+            throw new CiteContientCarteException();
         }
-        throw new RessourceInsuffisanteException();
     }
 
-    public void construireBatimentMilitaires(Carte c) throws RessourceInsuffisanteException{
-
-        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
-            if (!c.getCout().isEmpty()){
-                for (Cout cout : c.getCout()) {
-                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+    public void construireBatimentMilitaires(Carte c) throws RessourceInsuffisanteException, PieceInsuffisanteException, ConstructionImpossibleException, CiteContientCarteException {
+        if (!citeMemeCarte(c.getNom())) {
+            if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
+                if (!c.getCout().isEmpty()) {
+                    for (Cout cout : c.getCout()) {
+                        this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                    }
                 }
-            }
-            for (Effet e : c.getEffet()) {
-                if (e.avoirMemeRessource("bouclier")) {
-                    this.nombreBoucliers+= e.getNombre();
-                    BaseMongo.getBase().ajoutBouclierJoueur(this.pseudo,this.nombreBoucliers);
-                }
-            }
-            this.ajoutCite(c);
-        }
-        throw new RessourceInsuffisanteException();
-    }
-
-    public void construireMatierePremiere(Carte c) throws RessourceInsuffisanteException {
-        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
-            if (!c.getCout().isEmpty()){
-                for (Cout cout : c.getCout()) {
-                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
-                }
-            }
-            for (Effet e : c.getEffet()) {
-                if (e.avoirMemeRessource("pierre") || e.avoirMemeRessource("argile") || e.avoirMemeRessource("bois")
-                        || e.avoirMemeRessource("minerai")) {
-                    this.gestionCapacite.ajoutMatierePremiere(e.getCapacite(), e.getNombre());
-                }
-            }
-            this.ajoutCite(c);
-        }
-        throw new RessourceInsuffisanteException();
-    }
-
-    public void construireGuilde(String pseudo, String nomCarte, String choix) throws RessourceInsuffisanteException, ConstructionImpossibleException {
-        Carte c = BaseMongo.getBase().getCartesNom(nomCarte);
-        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
-            if (!c.getCout().isEmpty()) {
-                for (Cout cout : c.getCout()) {
-                    this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                for (Effet e : c.getEffet()) {
+                    if (e.avoirMemeRessource("bouclier")) {
+                        this.nombreBoucliers += e.getNombre();
+                        BaseMongo.getBase().ajoutBouclierJoueur(this.pseudo, this.nombreBoucliers);
+                    }
                 }
                 this.ajoutCite(c);
+            } else {
+                if (!this.gestionCapacite.verifierCout(c.getCout())) {
+                    if (this.pieceSuffisante(GestionCommerce.getCoutPieces())) {
+                        gestionCommerce.acheterRessourceVoisin(pseudo, c.getNom());
+                    }
+                    throw new ConstructionImpossibleException();
+                }
+
             }
-            gestionGuilde.beneficeGuilde(pseudo, choix, nomCarte);
+        }else{
+            throw new CiteContientCarteException();
         }
-       throw new ConstructionImpossibleException();
     }
 
-    public void construireBatimentCommercial(String pseudo, String nomCarte) throws RessourceInsuffisanteException, PieceInsuffisanteException, RessourceVoisinInsuffisantException, RessourceInexistanteException {
-        this.gestionCommerce.acheterRessourceVoisin(pseudo, nomCarte);
+    public void construireMatierePremiere(Carte c) throws RessourceInsuffisanteException, PieceInsuffisanteException, ConstructionImpossibleException, CiteContientCarteException {
+        if (!citeMemeCarte(c.getNom())) {
+            if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
+                if (!c.getCout().isEmpty()) {
+                    for (Cout cout : c.getCout()) {
+                        this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                    }
+                }
+                for (Effet e : c.getEffet()) {
+                    if (e.avoirMemeRessource("pierre") || e.avoirMemeRessource("argile") || e.avoirMemeRessource("bois")
+                            || e.avoirMemeRessource("minerai")) {
+                        this.gestionCapacite.ajoutMatierePremiere(e.getCapacite(), e.getNombre());
+                    }
+                }
+                this.ajoutCite(c);
+            } else {
+                if (!this.gestionCapacite.verifierCout(c.getCout())) {
+                    if (this.pieceSuffisante(GestionCommerce.getCoutPieces())) {
+                        gestionCommerce.acheterRessourceVoisin(pseudo, c.getNom());
+                    }
+                    throw new ConstructionImpossibleException();
+                }
+
+            }
+        }else{
+            throw new CiteContientCarteException();
+        }
     }
 
-    public void construireProduitManufactures(Carte c) throws RessourceInsuffisanteException, ConstructionImpossibleException {
-        if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))){
-            if (!c.getCout().isEmpty()){
+    public void construireGuilde( String nomCarte) throws RessourceInsuffisanteException, ConstructionImpossibleException, PieceInsuffisanteException, CiteContientCarteException {
+        if (!citeMemeCarte(nomCarte)) {
+            Carte c = BaseMongo.getBase().getCartesNom(nomCarte);
+            if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
+                if (!c.getCout().isEmpty()) {
+                    for (Cout cout : c.getCout()) {
+                        this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
+                    }
+                    this.ajoutCite(c);
+                }
+                gestionGuilde.beneficeGuilde(pseudo,nomCarte);
+            } else {
+                if (!this.gestionCapacite.verifierCout(c.getCout())) {
+                    if (this.pieceSuffisante(GestionCommerce.getCoutPieces())) {
+                        gestionCommerce.acheterRessourceVoisin(pseudo, c.getNom());
+                    }
+                    throw new ConstructionImpossibleException();
+                }
+            }
+        }else{
+            throw new CiteContientCarteException();
+        }
+    }
+
+
+    public void construireBatimentCommercial(String nomCarte) throws RessourceInsuffisanteException, PieceInsuffisanteException, RessourceVoisinInsuffisantException, RessourceInexistanteException, ConstructionImpossibleException, CiteContientCarteException {
+        if (!citeMemeCarte(nomCarte)) {
+            this.gestionCommerce.constructionBatiment(pseudo, nomCarte);
+        }else{
+            throw new CiteContientCarteException();
+        }
+    }
+
+    public void construireProduitManufactures(Carte c) throws RessourceInsuffisanteException, ConstructionImpossibleException, PieceInsuffisanteException, CiteContientCarteException {
+        if (!citeMemeCarte(c.getNom())) {
+            if (this.gestionCapacite.verifierCout(c.getCout()) || this.gestionCapacite.verifGratuits(((List<Cout>) c.getCout()).get(0))) {
                 for (Cout cout : c.getCout()) {
+
                     this.gestionCapacite.diminuer(cout.getRessource(), cout.getNombreUnite());
                 }
-            }
-            for (Effet e : c.getEffet()) {
-                if (e.avoirMemeRessource("verre") || e.avoirMemeRessource("tissu") || e.avoirMemeRessource("papyrus")) {
-                    this.gestionCapacite.ajoutProduitsManufactures(e.getCapacite(), e.getNombre());
+                for (Effet e : c.getEffet()) {
+                    if (e.avoirMemeRessource("verre") || e.avoirMemeRessource("tissu") || e.avoirMemeRessource("papyrus")) {
+                        this.gestionCapacite.ajoutProduitsManufactures(e.getCapacite(), e.getNombre());
+                    }
                 }
+                this.ajoutCite(c);
+            } else {
+                if (!this.gestionCapacite.verifierCout(c.getCout())) {
+                    if (this.pieceSuffisante(GestionCommerce.getCoutPieces())) {
+                        gestionCommerce.acheterRessourceVoisin(pseudo, c.getNom());
+                    }
+                    throw new ConstructionImpossibleException();
+                }
+
             }
-            this.ajoutCite(c);
-            return;
+        }else{
+            throw new CiteContientCarteException();
         }
-        throw new ConstructionImpossibleException();
+
     }
 
 
-    public void jouerCarte(String pseudo, String carte, String choix) throws RessourceInsuffisanteException, PieceInsuffisanteException, RessourceVoisinInsuffisantException, RessourceInexistanteException, CartePasConstruiteException, ConstructionImpossibleException {
+    public void jouerCarte(String carte) throws RessourceInsuffisanteException, PieceInsuffisanteException, RessourceVoisinInsuffisantException, RessourceInexistanteException, CartePasConstruiteException, ConstructionImpossibleException, CiteContientCarteException {
 
         for (Carte c: this.listeCartes){
             if (c.getNom().equals(carte)){
@@ -497,10 +576,10 @@ public class Joueur {
                         this.construireBatimentMilitaires(c);
 
                     case "Guilde":
-                        this.construireGuilde(pseudo, c.getNom(), choix);
+                        this.construireGuilde(c.getNom());
 
                     case "Bâtiments commerciaux":
-                        this.construireBatimentCommercial(pseudo, c.getNom());
+                        this.construireBatimentCommercial(c.getNom());
 
                 }
             }

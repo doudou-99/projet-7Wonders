@@ -1,9 +1,12 @@
 package vues;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import controleur.Controleur;
 import controleur.ordre.EcouteurOrdre;
 import controleur.ordre.LanceurOrdre;
 import controleur.ordre.Ordre;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import modeles.dao.BaseMongo;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class PageJoueur implements EcouteurOrdre,VueInteractive {
     @FXML
@@ -29,8 +34,6 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
     public TextField nom;
     @FXML
     public PasswordField motDePasse;
-    @FXML
-    public Button inscrire;
     private Scene scene;
     private Controleur controleur;
 
@@ -52,40 +55,48 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
     }
 
     public void inscription(ActionEvent actionEvent) {
-
-        if (nom.getText().length() < 3 || this.nom.getText().isEmpty() ){
+        String nom = this.nom.getText();
+        String prenom=this.prenom.getText();
+        String age = this.age.getText();
+        String pseudo=this.pseudo.getText();
+        String motDePasse = this.motDePasse.getText();
+        if (this.nom.getLength() < 3 && !Objects.isNull(this.nom) ){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du nom");
             alert.setContentText("Le champ nom ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
-        if (prenom.getText().isEmpty() || prenom.getText().length()<3  ){
+        if (!Objects.isNull(this.prenom) && this.prenom.getLength()<3  ){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ prenom ");
             alert.setContentText("Le champ prenom ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
-        if (age.getText().length() <2 || age.getText().isEmpty()){
+        if (this.age.getLength() <2 && !Objects.isNull(this.age)){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ age");
             alert.setContentText("Le champ age ne doit pas être vide et il doit être supérieur ou égal à 2");
             alert.showAndWait();
         }
-        if (pseudo.getText().isEmpty() || pseudo.getText().length() <3){
+        if (!Objects.isNull(this.pseudo) && this.pseudo.getLength() <3){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ pseudo");
             alert.setContentText("Le pseudo ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
-        if(motDePasse.getText().isEmpty() || motDePasse.getText().length()<3) {
+        if(!Objects.isNull(this.motDePasse) && this.motDePasse.getLength()<3) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ mot de passe");
             alert.setContentText("Le mot de passe ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
 
-        this.controleur.ajoutJoueur(nom.getText(),prenom.getText(),age.getText(),pseudo.getText(),motDePasse.getText());
-
+        this.controleur.inscription(nom, prenom, age, pseudo, motDePasse);
+        this.prenom.setText("");
+        this.nom.setText("");
+        this.age.setText("");
+        this.pseudo.setText("");
+        this.motDePasse.setText("");
     }
 
     @Override
@@ -97,10 +108,13 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
     public void broadCast(Ordre ordre) {
         switch (ordre.getType()){
             case NOUVEAU_JOUEUR:
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmination de l'ajout du joueur");
-                alert.setContentText("Le joueur "+ this.pseudo.getText() +" a été ajouté! ");
-                alert.showAndWait();
+                if (BaseMongo.getBase().getJoueurList().contains(BaseMongo.getBase().getJoueur(pseudo.getText()))) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmination de l'ajout du joueur");
+                    alert.setContentText("Le joueur " + this.pseudo.getText() + " a été ajouté! ");
+                    alert.showAndWait();
+                }
+                break;
             case MENU:
                 Alert ale = new Alert(Alert.AlertType.CONFIRMATION);
                 ale.setTitle("Page joueur");

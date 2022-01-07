@@ -12,6 +12,7 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
     private PageJoueur pageJoueur;
     private PageMenu pageMenu;
     private PageChoixPlateau plateau;
+    private PageConnexion pageConnexion;
 
     public GestionnaireVue(Stage stage){
         this.stage=stage;
@@ -19,8 +20,8 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
         this.pageAccueil=PageAccueil.creer();
         this.pageJoueur=PageJoueur.creer();
         this.pageMenu=PageMenu.creer();
+        this.pageConnexion=PageConnexion.creer();
         this.plateau=PageChoixPlateau.creer();
-
     }
 
 
@@ -34,6 +35,7 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
         this.pageAccueil.setAbonnements(controleur);
         this.pageJoueur.setAbonnements(controleur);
         this.pageMenu.setAbonnements(controleur);
+        this.pageConnexion.setAbonnements(controleur);
         this.plateau.setAbonnements(controleur);
     }
 
@@ -52,6 +54,10 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
                 this.stage.setScene(this.pageJoueur.getScene());
                 this.stage.show();
                 break;
+            case CONNEXION:
+                this.stage.setScene(this.pageConnexion.getScene());
+                this.stage.show();
+                break;
             case CHOIX_PLATEAU:
                 this.stage.setScene(this.plateau.getScene());
                 this.stage.show();
@@ -64,5 +70,6 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
         pageAccueil.setControleur(controleur);
         pageJoueur.setControleur(controleur);
         pageMenu.setControleur(controleur);
+        pageConnexion.setControleur(controleur);
     }
 }

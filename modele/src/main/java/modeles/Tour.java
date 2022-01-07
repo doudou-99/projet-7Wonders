@@ -2,11 +2,13 @@ package modeles;
 
 import modeles.dao.BaseMongo;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Tour {
+public class Tour implements Serializable {
+    private static final long serialVersionUID=1L;
     private int nombreTourEnCours;
     private Map<String,List<Carte>> cartesJouees;
     private Age age;

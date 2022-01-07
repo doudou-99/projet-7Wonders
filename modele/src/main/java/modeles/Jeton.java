@@ -1,19 +1,27 @@
 package modeles;
 
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
+import java.io.Serializable;
+
 public class Jeton {
     private final static int nombre = 42;
-    private String _id;
+    @BsonProperty("_id")
+    private String id;
     private String type;
     private int points;
     private String age;
+    private String image;
 
 
     public Jeton(){}
 
-    public Jeton(String type, int points, String age) {
+    public Jeton(@BsonProperty("_id") String id,String type, int points, String age,String image) {
+        this.id=id;
         this.type = type;
         this.points = points;
         this.age = age;
+        this.image=image;
     }
 
 
@@ -21,8 +29,8 @@ public class Jeton {
         return type;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
     public void setType(String type) {
@@ -45,13 +53,26 @@ public class Jeton {
         this.age = age;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
     @Override
     public String toString() {
         return "Jeton{" +
-                "_id="+_id+
+                "id="+id+
                 ", type=" + type +
                 ", points=" + points +
                 ", age=" + age +
+                ", image='"+image+"'"+
                 '}';
     }
 }

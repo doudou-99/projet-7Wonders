@@ -1,5 +1,6 @@
 package modeles;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 public class Effet {

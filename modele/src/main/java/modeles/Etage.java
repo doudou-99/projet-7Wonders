@@ -2,9 +2,10 @@ package modeles;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class Etage {
+public class Etage implements Serializable {
     @BsonProperty("_id")
     private String id;
     private CoutConstructionEtage coutConstruction;

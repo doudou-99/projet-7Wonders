@@ -8,6 +8,6 @@ public class Banque {
     }
 
     public static void setPieces(int pieces) {
-        Banque.pieces = pieces;
+        modeles.Banque.pieces = pieces;
     }
 }

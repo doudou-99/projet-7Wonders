@@ -11,7 +11,7 @@
     <modules>
         <module>clientjfx</module>
         <module>modele</module>
-        <module>RMI</module>
+        <module>rmiserveur</module>
     </modules>
 
 

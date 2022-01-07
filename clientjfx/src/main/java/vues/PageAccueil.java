@@ -68,13 +68,13 @@ public class PageAccueil implements EcouteurOrdre,VueInteractive {
         switch (ordre.getType()){
             case NOMBRE_JOUEURS:
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmination de nombre de joueurs pour 7Wonders");
+                alert.setTitle("Confirmation de nombre de joueurs pour 7Wonders");
                 alert.setContentText("Le nombre de joueurs requis est bien "+ this.nbJoueurs.getText() +" !");
                 alert.showAndWait();
                 break;
             case JOUEUR:
                 Alert aler = new Alert(Alert.AlertType.CONFIRMATION);
-                aler.setTitle("Confirmination page joueur");
+                aler.setTitle("Confirmation page joueur");
                 aler.setContentText("On peut passer à la page d'inscription !");
                 aler.showAndWait();
                 break;

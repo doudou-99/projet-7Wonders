@@ -2,32 +2,30 @@ package modeles;
 
 import modeles.dao.BaseMongo;
 import modeles.exceptions.*;
-import modeles.interfaces.Score;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Partie {
+public class Partie implements Serializable {
+    private static final long serialVersionUID=1L;
     @BsonProperty("_id")
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String idPartie;
-    private final int nbJoueurs = 4;
+    private int nbJoueurs;
     private Joueur createur;
     private Joueur joueur;
     private Joueur joueur1;
     private Joueur joueur2;
     private List<Joueur> participants;
     private EtatPartie etatPartie;
-    private GestionTour gestionTour;
     private PartieGestion partieGestionCourant;
-    private Score scoreCourant;
-    private GestionBataille bataille;
 
 
-    public enum EtatPartie{ATTENTE,EN_COURS,ARRET,SAUVEGARDE,REPRISE,FIN}
+    public enum EtatPartie{ATTENTE,EN_COURS,ARRET,REPRISE,FIN}
 
     public Partie(){}
 
@@ -37,78 +35,65 @@ public class Partie {
         this.etatPartie = EtatPartie.ATTENTE;
     }
 
-    String creerPartie(Joueur joueur){
-        return null;
-    }
 
-    void rejoindrePartie(Joueur joueur,String ticket){
-
-    }
-
-
-    Carte jouerCarte(Joueur joueur, Carte carte){
-        return carte;
+    public void arreterPartie(){
+        this.sauvegarderPartie();
+        this.etatPartie= EtatPartie.ARRET;
     }
 
 
-    void arreterPartie(Joueur joueur){
+    public void reprendrePartie(){
+        this.etatPartie= EtatPartie.REPRISE;
     }
 
 
-    void reprendrePartie(Joueur joueur){
-
+    public void sauvegarderPartie(){
+        BaseMongo.getBase().majPartie(idPartie,partieGestionCourant);
     }
 
 
-    void sauvegarderPartie(Joueur joueur){
-
-    }
-
-
-    boolean partieCommencee(){
+    public boolean partieCommencee(){
         return this.etatPartie == EtatPartie.EN_COURS;
     }
 
-
-
-
-    List<Piece> getPieces(){
-        return createur.getListePieces();
+    public void faireAffaire(String pseudo,String choixCite, String nomCarte) throws ConstructionImpossibleException, RessourceInexistanteException, PieceInsuffisanteException, RessourceVoisinInsuffisantException {
+        this.partieGestionCourant.getGestionCommerce().faireAffaire(pseudo, choixCite, nomCarte);
     }
 
-
-
-    public void rejoindrePartie(Joueur joueur2) throws PartieDejaPleineException {
+    public void rejoindrePartie(Joueur joueur) throws PartieDejaPleineException {
+        this.participants.add(createur);
         if (etatPartie != EtatPartie.ATTENTE && this.participants.size()==nbJoueurs)
             throw new PartieDejaPleineException();
-        this.participants.add(joueur2);
+        while (this.participants.size()!=nbJoueurs){
+            this.participants.add(joueur);
+        }
+
         this.etatPartie = EtatPartie.EN_COURS;
 
     }
 
-    public void carnetScoreJoueur(){
-
+    public String vainqueurBatailleAge(String joueur,GestionTour gestionTour){
+        GestionBataille gestionBataille = new GestionBataille();
+        gestionBataille.setGestionTour(gestionTour);
+        gestionBataille.setJoueurBataille(this.partieGestionCourant.getJoueurs());
+        this.partieGestionCourant.setGestionBataille(gestionBataille);
+        this.partieGestionCourant.getGestionBataille().vainqueurBataille(joueur,gestionTour.getTour().getAge());
+        return this.partieGestionCourant.getGestionBataille().getBataille().getNomDuVainqueur();
     }
 
 
-
-
-    public void choixJoueur(String joueur, String choix,String nomCarte,String choixCarte){
-        Age age = BaseMongo.getBase().getAges().get(0);
-        Tour tour = new Tour(age);
-        this.gestionTour=new GestionTour(tour);
-        while (this.gestionTour.getTour().getNombreTourEnCours()<= age.getNombreTour()) {
+    public void choixJoueur(String joueur, String choix,String nomCarte,String choixCarte,Age age){
+        this.partieGestionCourant.setGestiontour(new GestionTour(age));
+        while (this.partieGestionCourant.getGestiontour().getTour().getNombreTourEnCours()<= age.getNombreTour()) {
             try {
                 this.partieGestionCourant.choixJoueur(joueur, choix, nomCarte, choixCarte);
-                this.scoreCourant = this.partieGestionCourant.maj(joueur, choix, nomCarte, choixCarte);
-                if (partieGestionCourant.tourJoueursFini() && this.gestionTour.getTour().getNombreTourEnCours()==this.gestionTour.getTour().getAge().getNombreTour()) {
-                    this.bataille.vainqueurBataille(joueur,age);
-                    this.gestionTour.getTour().setAge(BaseMongo.getBase().getAges().get(1));
+                this.partieGestionCourant.maj(joueur, choix, nomCarte, choixCarte);
+                if (partieGestionCourant.tourJoueursFini() &&
+                        this.partieGestionCourant.getGestiontour().getTour().getNombreTourEnCours()==this.partieGestionCourant.getGestiontour().getTour().getAge().getNombreTour()) {
+                    this.vainqueurBatailleAge(joueur,this.partieGestionCourant.getGestiontour());
+                    this.partieGestionCourant.getGestiontour().getTour().setAge(BaseMongo.getBase().getAges().get(1));
                 }
                 if (this.partieGestionCourant.partieTerminee()) {
-                    if (createur.getPseudo().equals(this.partieGestionCourant.getVainqueur())){
-
-                    }
                     this.etatPartie = EtatPartie.FIN;
                 }
             } catch (ChoixIncompletsException | CartePasConstruiteException | RessourceInexistanteException | RessourceInsuffisanteException | PieceInsuffisanteException | RessourceVoisinInsuffisantException e) {
@@ -117,9 +102,9 @@ public class Partie {
                 e.printStackTrace();
             } catch (ConstructionMerveilleImpossible constructionMerveilleImpossible) {
                 constructionMerveilleImpossible.printStackTrace();
-            } catch (PartieNonTermineeException e) {
-                e.printStackTrace();
             } catch (ConstructionImpossibleException e) {
+                e.printStackTrace();
+            } catch (CiteContientCarteException e) {
                 e.printStackTrace();
             }
         }
@@ -135,21 +120,19 @@ public class Partie {
         }
     }*/
 
-    public String getVainqueur() throws PartieNonTermineeException {
-        return this.partieGestionCourant.getVainqueur();
+    public String vainqueurJeu() throws PartieNonTermineeException {
+        return this.partieGestionCourant.vainqueur();
     }
 
     public boolean partieTerminee(){
-        if (gestionTour.getTour().getAge()== BaseMongo.getBase().getAges().get(2) && gestionTour.getTourEnCours()>=gestionTour.getTour().getAge().getNombreTour()) {
+        if (partieGestionCourant.getGestiontour().getTour().getAge()== BaseMongo.getBase().getAges().get(2) &&
+                partieGestionCourant.getGestiontour().getTourEnCours()>=partieGestionCourant.getGestiontour().getTour().getAge().getNombreTour()) {
             this.etatPartie= EtatPartie.FIN;
             return true;
         }
         return false;
     }
 
-    public Score getScoreCourant() {
-        return scoreCourant;
-    }
 
     public void setCreateur(Joueur createur) {
         this.createur = createur;
@@ -212,13 +195,7 @@ public class Partie {
         this.joueur2 = joueur2;
     }
 
-    public GestionTour getGestionTour() {
-        return gestionTour;
-    }
 
-    public void setGestionTour(GestionTour tour) {
-        this.gestionTour = tour;
-    }
 
     public PartieGestion getScoreGestionCourant() {
         return partieGestionCourant;
@@ -228,16 +205,13 @@ public class Partie {
         this.partieGestionCourant = partieGestionCourant;
     }
 
-    public void setScoreCourant(Score scoreCourant) {
-        this.scoreCourant = scoreCourant;
+
+    public PartieGestion getPartieGestionCourant() {
+        return partieGestionCourant;
     }
 
-    public GestionBataille getGestionBataille() {
-        return bataille;
-    }
-
-    public void setGestionBataille(GestionBataille bataille) {
-        this.bataille = bataille;
+    public void setPartieGestionCourant(PartieGestion partieGestionCourant) {
+        this.partieGestionCourant = partieGestionCourant;
     }
 
     @Override
@@ -246,8 +220,12 @@ public class Partie {
                 "idPartie='" + idPartie + '\'' +
                 ", nbJoueurs=" + nbJoueurs +
                 ", createur=" + createur +
+                ", joueur=" + joueur +
+                ", joueur1=" + joueur1 +
+                ", joueur2=" + joueur2 +
                 ", participants=" + participants +
                 ", etatPartie=" + etatPartie +
+                ", partieGestionCourant=" + partieGestionCourant +
                 '}';
     }
 }

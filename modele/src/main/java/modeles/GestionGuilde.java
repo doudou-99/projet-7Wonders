@@ -2,24 +2,23 @@ package modeles;
 
 import modeles.dao.BaseMongo;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GestionGuilde {
-    private Map<Integer,Joueur> joueurGuilde;
+    private Map<String,Joueur> joueurGuilde;
     private Map<String, Integer> nombreJoueur;
-    private Tour tour;
+    private GestionTour tour;
 
 
     public GestionGuilde(){
         this.joueurGuilde=new HashMap<>();
         this.nombreJoueur=new HashMap<>();
         for (int i=0;i<BaseMongo.getBase().getJoueurList().size();i++) {
-            this.joueurGuilde.put(i,BaseMongo.getBase().getJoueurList().get(i));
+            this.joueurGuilde.put(String.valueOf(i),BaseMongo.getBase().getJoueurList().get(i));
             this.nombreJoueur.put(BaseMongo.getBase().getJoueurList().get(i).getPseudo(),i);
         }
-        this.tour=tour;
     }
 
     public Joueur voisinDroite(String joueur) {
@@ -41,7 +40,7 @@ public class GestionGuilde {
                     break;
             }
         }
-        return joueurGuilde.get(voisin);
+        return joueurGuilde.get(String.valueOf(voisin));
     }
 
     public Joueur voisinGauche(String joueur) {
@@ -63,19 +62,19 @@ public class GestionGuilde {
                     break;
             }
         }
-        return joueurGuilde.get(voisin);
+        return joueurGuilde.get(String.valueOf(voisin));
     }
 
 
-    public void beneficeGuilde(String joueur,String choixCite,String nomCarte){
+    public void beneficeGuilde(String joueur,String nomCarte){
         Joueur joueur1 = BaseMongo.getBase().getJoueur(joueur);
         Carte c = BaseMongo.getBase().getCartesNom(nomCarte);
         if (joueurGuilde.containsValue(joueur1) && nombreJoueur.containsKey(joueur)) {
             if (c.getType().equals("Guilde") && joueur1.getCite().getCartes().contains(c)) {
                     for (Effet e : c.getEffet()) {
                         if (e.getCapacite().equals("point de victoire")) {
-                            if (e.getChoix().contains(choixCite) && choixCite.equals("cite gauche") || choixCite.equals("cite droite")
-                                    || choixCite.equals("cite")) {
+                            if (e.getChoix().contains("cite gauche") || e.getChoix().contains("cite droite")
+                                    || e.getChoix().contains("cite")) {
                                 if (e.getCapaciteSup().equals(c.getCouleur()) && !c.getCouleur().equals("violet")) {
                                     int nb = 0;
                                     for (Carte carte : voisinDroite(joueur).getCite().getCartes()) {
@@ -88,8 +87,8 @@ public class GestionGuilde {
                                             nb += e.getNombre();
                                         }
                                     }
-                                    joueur1.setNombreDePoints(joueur1.getNombreDePoints() + nb);
-                                    BaseMongo.getBase().ajoutPointsJoueur(joueur1.getPseudo(), joueur1.getNombreDePoints());
+                                    joueur1.setPointsVictoireGuilde(joueur1.getPointsVictoireGuilde()+ nb);
+                                    BaseMongo.getBase().ajoutPointsGuilde(joueur1.getPseudo(), joueur1.getPointsVictoireGuilde());
 
                                 }
 
@@ -107,8 +106,8 @@ public class GestionGuilde {
                                         }
 
                                     }
-                                    joueur1.setNombreDePoints(joueur1.getNombreDePoints() + nb);
-                                    BaseMongo.getBase().ajoutPointsJoueur(joueur1.getPseudo(), joueur1.getNombreDePoints());
+                                    joueur1.setPointsVictoireGuilde(joueur1.getPointsVictoireGuilde()+ nb);
+                                    BaseMongo.getBase().ajoutPointsGuilde(joueur1.getPseudo(), joueur1.getPointsVictoireGuilde());
                                 }
                                 if (e.getCapaciteSup().equals("defaite")) {
                                     int nombre = 0;
@@ -125,8 +124,8 @@ public class GestionGuilde {
                                             }
                                         }
                                     }
-                                    joueur1.setNombreDePoints(joueur1.getNombreDePoints() + nombre);
-                                    BaseMongo.getBase().ajoutPointsJoueur(joueur1.getPseudo(), joueur1.getNombreDePoints());
+                                    joueur1.setPointsVictoireGuilde(joueur1.getPointsVictoireGuilde()+ nombre);
+                                    BaseMongo.getBase().ajoutPointsGuilde(joueur1.getPseudo(), joueur1.getPointsVictoireGuilde());
                                 }
                                 if (e.getCapaciteSup().equals("etage")) {
                                     int nombrePoint = 0;
@@ -153,19 +152,19 @@ public class GestionGuilde {
                                         nombrePoint += voisinGauche(joueur).getCartesEtages().values().size();
                                     }
 
-                                    joueur1.setPointMerveille(joueur1.getPointMerveille() + nombrePoint);
-                                    BaseMongo.getBase().ajoutPointsJoueur(joueur1.getPseudo(), joueur1.getNombreDePoints());
+                                    joueur1.setPointsVictoireGuilde(joueur1.getPointsVictoireGuilde()+ nombrePoint);
+                                    BaseMongo.getBase().ajoutPointsGuilde(joueur1.getPseudo(), joueur1.getPointsVictoireGuilde());
                                 }
                             }
                         } else {
                             if (e.getCapacite().equals("compas/roue/tablette")) {
-                                if (e.getChoix().contains(choixCite) && choixCite.equals("compas")) {
+                                if (e.getChoix().contains("compas")) {
                                     joueur1.getGestionCapacite().ajoutSymbolesScientifiques("compas", 1);
                                 }
-                                if (e.getChoix().contains(choixCite) && choixCite.equals("roue")) {
+                                if (e.getChoix().contains("roue")) {
                                     joueur1.getGestionCapacite().ajoutSymbolesScientifiques("roue", 1);
                                 }
-                                if (e.getChoix().contains(choixCite) && choixCite.equals("tablette")) {
+                                if (e.getChoix().contains("tablette")) {
                                     joueur1.getGestionCapacite().ajoutSymbolesScientifiques("tablette", 1);
                                 }
                             }
@@ -176,5 +175,27 @@ public class GestionGuilde {
     }
 
 
+    public Map<String, Joueur> getJoueurGuilde() {
+        return joueurGuilde;
+    }
 
+    public void setJoueurGuilde(Map<String, Joueur> joueurGuilde) {
+        this.joueurGuilde = joueurGuilde;
+    }
+
+    public Map<String, Integer> getNombreJoueur() {
+        return nombreJoueur;
+    }
+
+    public void setNombreJoueur(Map<String, Integer> nombreJoueur) {
+        this.nombreJoueur = nombreJoueur;
+    }
+
+    public GestionTour getTour() {
+        return tour;
+    }
+
+    public void setTour(GestionTour tour) {
+        this.tour = tour;
+    }
 }

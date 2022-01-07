@@ -2,10 +2,11 @@ package modeles;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Defausse {
+public class Defausse implements Serializable {
     @BsonProperty("listeDesCartesDefausse")
     private Collection<Carte> carteDefaussees;
 

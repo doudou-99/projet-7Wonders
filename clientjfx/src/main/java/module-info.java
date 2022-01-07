@@ -8,9 +8,13 @@ module clientjfx {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
     requires modele;
+    requires java.rmi;
+    requires rmiserveur;
     opens vues to javafx.fxml;
     exports vues;
     exports application;
     exports controleur;
+    exports modele;
+
     exports controleur.ordre;
 }

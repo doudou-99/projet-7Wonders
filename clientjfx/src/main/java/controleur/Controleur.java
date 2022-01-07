@@ -1,22 +1,24 @@
 package controleur;
 
+import client.ServiceWonders;
+import client.ServiceWondersImpl;
 import controleur.ordre.EcouteurOrdre;
 import controleur.ordre.LanceurOrdre;
 import controleur.ordre.Ordre;
+import modele.ProxyServiceWonders;
+import modele.ProxyServiceWondersImpl;
 import modeles.Joueur;
-import modeles.facade.FacadeWondersImpl;
-import modeles.interfaces.FacadeWonders;
 import vues.GestionnaireVue;
 
 import java.util.*;
 
 public class Controleur implements LanceurOrdre {
-    private FacadeWonders facadeWonders;
+    private ProxyServiceWonders wonders;
     private GestionnaireVue gestionnaireVue;
     private Map<Ordre.OrdreType, Collection<EcouteurOrdre>> abonnes;
 
-    public Controleur(FacadeWonders facadeWonders, GestionnaireVue gestionnaireVue){
-        this.facadeWonders=facadeWonders;
+    public Controleur(GestionnaireVue gestionnaireVue){
+        this.wonders=new ProxyServiceWondersImpl();
         this.gestionnaireVue=gestionnaireVue;
         this.abonnes = new HashMap<>();
         for (Ordre.OrdreType type: Ordre.OrdreType.values()){
@@ -34,10 +36,9 @@ public class Controleur implements LanceurOrdre {
     private int nombreJoueur;
 
 
-    public void ajoutJoueur(String nom, String prenom, String age, String pseudo, String motDePasse) {
+    public void inscription(String nom, String prenom, String age, String pseudo, String motDePasse) {
         this.joueur = new Joueur(nom,prenom,pseudo,age,motDePasse);
-        this.facadeWonders=new FacadeWondersImpl();
-        this.facadeWonders.ajoutJoueur(joueur);
+        this.wonders.ajoutJoueur(joueur);
         this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVEAU_JOUEUR));
         this.fireOrdre(new Ordre(Ordre.OrdreType.MENU));
         System.out.println(this.joueur);
@@ -50,7 +51,9 @@ public class Controleur implements LanceurOrdre {
     }
 
 
-
+    public Joueur getJoueur() {
+        return joueur;
+    }
 
     @Override
     public void abonnement(EcouteurOrdre o, Ordre.OrdreType... types) {
@@ -59,7 +62,21 @@ public class Controleur implements LanceurOrdre {
 
     @Override
     public void fireOrdre(Ordre ordre) {
-
         this.abonnes.get(ordre.getType()).stream().forEach(e -> e.broadCast(ordre));
+    }
+
+    public void creerPartie(Joueur joueur) {
+        this.wonders.creerPartie(joueur);
+        this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVELLE_PARTIE));
+        this.fireOrdre(new Ordre(Ordre.OrdreType.CONNEXION));
+    }
+
+    public void reprendre(Joueur joueur) {
+        this.wonders.reprendrePartie(joueur);
+        this.fireOrdre(new Ordre(Ordre.OrdreType.REPRENDRE_PARTIE));
+    }
+
+    public void retourAccueil() {
+        this.fireOrdre(new Ordre(Ordre.OrdreType.ACCUEIL));
     }
 }

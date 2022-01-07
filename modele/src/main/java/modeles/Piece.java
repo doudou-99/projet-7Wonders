@@ -1,8 +1,10 @@
 package modeles;
 
-import modeles.enums.TypePiece;
 
-public class Piece {
+import java.io.Serializable;
+
+public class Piece implements Serializable {
+    private static final long serialVersionUID=1L;
     private String type;
     private int valeur;
     private int nombrePieces;

@@ -23,6 +23,11 @@ public class PageConnexion implements EcouteurOrdre,VueInteractive {
     public BorderPane borderpane;
 
     private Scene scene;
+
+    public Scene getScene() {
+        return scene;
+    }
+
     private Controleur controleur;
 
     public void initialisation(){

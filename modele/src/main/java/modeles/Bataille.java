@@ -1,23 +1,30 @@
 package modeles;
 
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
+
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class Bataille {
+    @BsonProperty("_id")
+    @BsonRepresentation(BsonType.OBJECT_ID)
+    private String id;
+    @BsonProperty("nomDuVaincu")
     private List<String> nomDuVaincu;
     private String nomDuVainqueur;
     private Age age;
 
     public Bataille(){}
 
-    public Bataille(List<String> nomDuVaincu, String nomDuVainqueur,Age age) {
+    public Bataille(String id,List<String> nomDuVaincu, String nomDuVainqueur,Age age) {
         this.nomDuVaincu = nomDuVaincu;
         this.nomDuVainqueur = nomDuVainqueur;
         this.age=age;
     }
 
-    public Collection<String> getNomDuVaincu() {
+    public List<String> getNomDuVaincu() {
         return nomDuVaincu;
     }
 
@@ -44,7 +51,8 @@ public class Bataille {
     @Override
     public String toString() {
         return "Bataille{" +
-                "nomDuVaincu=" + nomDuVaincu +
+                "id='"+id+"'"+
+                ", nomDuVaincu=" + nomDuVaincu +
                 ", nomDuVainqueur=" + nomDuVainqueur +
                 ",age="+age+
                 '}';

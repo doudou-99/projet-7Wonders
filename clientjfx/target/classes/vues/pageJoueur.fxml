@@ -68,7 +68,7 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="inscrire" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="S'inscrire" onAction="#inscription">
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="S'inscrire" onAction="#inscription">
                <font>
                   <Font size="18.0" />
                </font>

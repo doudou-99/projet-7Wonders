@@ -4,10 +4,12 @@ package modeles;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Plateau {
+public class Plateau implements Serializable {
+    private static final long serialVersionUID=1L;
     @BsonId()
     @BsonProperty("_id")
     private String id;

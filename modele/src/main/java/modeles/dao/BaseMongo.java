@@ -19,7 +19,6 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static com.mongodb.client.model.Updates.combine;
@@ -28,7 +27,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class BaseMongo{
-    private static BaseMongo base = new BaseMongo();
+    private static modeles.dao.BaseMongo base = new modeles.dao.BaseMongo();
 
     private List<Joueur> joueurList= new ArrayList<>();
     private List<Tour> tourList = new ArrayList<>();
@@ -168,28 +167,28 @@ public class BaseMongo{
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo", pseudo);
         Bson updat = Updates.push("listeDesBatimentsCivils", civil);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, updat, options);
+        getBase().getJoueurs().findOneAndUpdate(filter, updat, options);
     }
 
     public void ajoutPointsJoueur(String pseudo,int nombrePoint){
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo", pseudo);
         Bson upda = Updates.push("nombreDePoints", nombrePoint);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, upda, options);
+        getBase().getJoueurs().findOneAndUpdate(filter, upda, options);
     }
     
     public void ajoutCarteEtagesJoueur(String pseudo, Carte carteEtage){
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo",pseudo);
         Bson update = Updates.push("joueurs.cartesEtages",carteEtage);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter,update, options);
+        getBase().getJoueurs().findOneAndUpdate(filter,update, options);
     }
 
     public void ajoutBouclierJoueur(String pseudo, int nombreBouclier){
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo",pseudo);
         Bson update = Updates.push("nombreDeBoucliers", nombreBouclier);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+        getBase().getJoueurs().findOneAndUpdate(filter, update, options);
     }
 
     public List<Piece> getPieceList(){
@@ -203,33 +202,38 @@ public class BaseMongo{
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo",pseudo);
         Bson update = Updates.push("uneListeDePieces", piece);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+        getBase().getJoueurs().findOneAndUpdate(filter, update, options);
     }
 
     public void modifieNombrePiecesJoueur(String pseudo,int nb){
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo",pseudo);
         Bson update = Updates.push("nombrePieces", nb);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+        getBase().getJoueurs().findOneAndUpdate(filter, update, options);
     }
 
     public void ajoutPointsBataille(String pseudo,int point){
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         Bson filter = Filters.eq("pseudo",pseudo);
         Bson update = Updates.push("listePointsBataille", point);
-        BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+        getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+    }
+
+    public void majPartie(String idPartie,PartieGestion partieGestion){
+        getBase().getJeu().updateOne(Filters.eq("_id",idPartie),
+                combine(set("partieGestionCourant",partieGestion)));
     }
 
     public void ajoutPointsMerveille(String pseudo,int point){
-        BaseMongo.getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("pointMerveille",point)));
+        getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("pointMerveille",point)));
     }
 
     public void ajoutPointsGuilde(String pseudo, int point){
-        BaseMongo.getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("pointsVictoireGuilde",point)));
+        getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("pointsVictoireGuilde",point)));
     }
 
     public void ajoutPointsCommerce(String pseudo, int point){
-        BaseMongo.getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("pointsVictoireCommerce",point)));
+        getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("pointsVictoireCommerce",point)));
     }
 
     public Piece getPiece(String type){
@@ -242,7 +246,7 @@ public class BaseMongo{
     }
 
 
-    public static BaseMongo getBase() {
+    public static modeles.dao.BaseMongo getBase() {
         return base;
     }
 

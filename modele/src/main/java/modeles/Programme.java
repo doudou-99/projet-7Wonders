@@ -1,40 +1,34 @@
 package modeles;
 
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.client.model.Updates;
 import modeles.dao.BaseMongo;
-import org.bson.conversions.Bson;
+import modeles.facade.FacadeWondersImpl;
+import modeles.interfaces.FacadeWonders;
 
 import java.util.*;
 
 public class Programme {
     public static void main(String[] args) {
         BaseMongo baseMongo=BaseMongo.getBase();
-        System.out.println(baseMongo.getPlateauList());
-        System.out.println(baseMongo.getAges());
-        System.out.println(baseMongo.getCartes());
-        System.out.println(baseMongo.getCartesAges("age1"));
-        //System.out.println(baseMongo.getJoueurList());
         Defausse defausse = new Defausse();
 
         PaquetCarte paquetCarte = new PaquetCarte(BaseMongo.getBase().getAges().get(0));
-        Collections.shuffle((List<?>) paquetCarte.distribuire(4),new Random(1));
-        System.out.println(paquetCarte.distribuire(4).size()+","+paquetCarte.distribuire(4));
+        System.out.println(paquetCarte.distribuire(4).size()+","+paquetCarte.getTour().getTour().getAge());
+        PaquetCarte paquet = new PaquetCarte(BaseMongo.getBase().getAges().get(1));
+        System.out.println(paquet.distribuire(4).size()+", "+paquet.getTour().getTour().getAge());
+        PaquetCarte paquetCarte1 = new PaquetCarte(BaseMongo.getBase().getAges().get(2));
+        System.out.println(paquetCarte1.distribuire(4).size()+", "+paquetCarte1.getTour().getTour().getAge());
         Random random = new Random();
         List<BatimentCivil> batimentCivils = new ArrayList<>();
         List<Piece> pieces = new ArrayList<>();
         Joueur joueur = new Joueur("momo","ndoye","mo","18","momndoye");
         joueur.cartesEnPossession(paquetCarte);
         joueur.setMerveilles(BaseMongo.getBase().getPlateauList().get(0).getId());
-        joueur.setNombreBoucliers(0);
         joueur.setBatimentCivilList(batimentCivils);
         joueur.setListePieces(pieces);
         joueur.setDefausse(defausse);
-        List<Jeton> jetons =new ArrayList<Jeton>();
+        List<Jeton> jetons =new ArrayList<>();
         joueur.setJetons(jetons);
-        //BaseMongo.getBase().getJoueurs().insertOne(joueur);
+        BaseMongo.getBase().getJoueurs().insertOne(joueur);
         System.out.println(joueur.getListeCartes().size()+","+joueur.getListeCartes());
         System.out.println(BaseMongo.getBase().getJetons());
 
@@ -55,15 +49,21 @@ public class Programme {
         Map<String, List<Carte>> cartes = new HashMap<>();
         cartes.put(joueu.getPseudo(), (List<Carte>) joueu.cartesEnPossession(paquetCarte));
         tour.setCartesJouees(cartes);
-        //BaseMongo.getBase().getTours().insertOne(tour);
+        BaseMongo.getBase().getTours().insertOne(tour);
         System.out.println(BaseMongo.getBase().getTourList());
 
         Bataille bataille = new Bataille();
         bataille.setAge(BaseMongo.getBase().getAges().get(0));
         List<String> jou=new ArrayList<>();
-        jou.add(joueu.getPseudo());
+        Joueur joueur1 = new Joueur("fama","ndoye","famas","11","fama2010");
+        Joueur joueur2 = new Joueur("baba","ndoye","babs","13","babandoye2008");
+        BaseMongo.getBase().ajoutJoueur(joueur1);
+        BaseMongo.getBase().ajoutJoueur(joueur2);
+        GestionBataille gestionBataille = new GestionBataille();
+        gestionBataille.vainqueurBataille(joueur.getPseudo(),tour.getAge());
         bataille.setNomDuVainqueur(joueur.getPseudo());
-        //BaseMongo.getBase().getBatailles().insertOne(bataille);
+        bataille.setNomDuVaincu(jou);
+        BaseMongo.getBase().getBatailles().insertOne(bataille);
 
         System.out.println(BaseMongo.getBase().getBatailleList());
 
@@ -71,19 +71,17 @@ public class Programme {
         List<Joueur> joueuse=new ArrayList<>();
         joueuse.add(joueu);
         partie.setParticipants(joueuse);
+
+        PartieGestion partieGestion = new PartieGestion(joueur,joueu,joueur1,joueur2);
+        partie.setPartieGestionCourant(partieGestion);
         //BaseMongo.getBase().getJeu().insertOne(partie);
-        System.out.println(BaseMongo.getBase().getPartieList());
-        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
-        Bson filter = Filters.eq("pseudo",joueur.getPseudo());
-        Bson update =Updates.push("defausse.listeDesCartesDefausse",joueur.getListeCartes().get(0));
-        //BaseMongo.getBase().getJoueurs().findOneAndUpdate(filter,update, options);
-        GestionTour gestion = new GestionTour(tour);
-        partie.setGestionTour(gestion);
-        System.out.println(partie.getGestionTour()+","+partie.getGestionTour().getTour()+","+
-                partie.getGestionTour().getTourEnCours());
-        gestion.passageAgeSuivant();
-        System.out.println(partie.getGestionTour()+","+partie.getGestionTour().getTour()+","+
-                partie.getGestionTour().getTourEnCours());
+        GestionTour gestion = new GestionTour(BaseMongo.getBase().getAges().get(0));
+        FacadeWonders facadeWonders = new FacadeWondersImpl();
+        Joueur j = new Joueur("titi","toto","tutu","10","titi10");
+        facadeWonders.ajoutJoueur(j);
+        System.out.println(partie);
+
+
 
 
     }

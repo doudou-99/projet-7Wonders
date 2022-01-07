@@ -4,10 +4,7 @@ import modeles.*;
 import modeles.dao.BaseMongo;
 import modeles.dataencryption.DataChiffrement;
 import modeles.dataencryption.Invitation;
-import modeles.exceptions.JoueurInexistantException;
-import modeles.exceptions.PartieDejaPleineException;
-import modeles.exceptions.TicketInvalideException;
-import modeles.exceptions.TicketPerimeException;
+import modeles.exceptions.*;
 import modeles.interfaces.FacadeWonders;
 import modeles.interfaces.Score;
 
@@ -16,21 +13,21 @@ import java.util.*;
 public class FacadeWondersImpl implements FacadeWonders {
     private Map<String, Partie> parties;
     private Map<String,Partie> associationJoueurPartie;
-    private List<Joueur> joueurs;
     DataChiffrement dataChiffrement;
 
     public FacadeWondersImpl(){
         this.parties=new HashMap<>();
         this.associationJoueurPartie=new HashMap<>();
-        this.joueurs=new ArrayList<>();
         this.dataChiffrement=new DataChiffrement("joue 7Wonders");
     }
 
     @Override
     public void ajoutJoueur(Joueur joueur){
-        this.joueurs.add( joueur);
+        BaseMongo.getBase().getJoueurList().add(joueur);
         BaseMongo.getBase().getJoueurs().insertOne(joueur);
     }
+
+
 
     @Override
     public String creerPartie(Joueur joueur) {
@@ -47,9 +44,11 @@ public class FacadeWondersImpl implements FacadeWonders {
 
     }
 
+
+
     @Override
     public Joueur getJoueur(String pseudo) throws JoueurInexistantException {
-        for (Joueur j: joueurs){
+        for (Joueur j: BaseMongo.getBase().getJoueurList()){
             if (j.getPseudo().equals(pseudo)){
                 return j;
             }
@@ -59,75 +58,69 @@ public class FacadeWondersImpl implements FacadeWonders {
     }
 
     @Override
+    public Partie getPartieJeu(String pseudo) {
+        return associationJoueurPartie.get(pseudo);
+    }
+
+    @Override
     public void rejoindrePartie(Joueur joueur, String ticket) throws TicketPerimeException, TicketInvalideException, PartieDejaPleineException {
         Invitation invitation = this.dataChiffrement.dechiffrement(ticket);
         Partie partie = this.parties.get(invitation.getIdPartie());
         if (Objects.isNull(partie)) {
             throw new TicketPerimeException();
         }
-        while(joueurs.size()< invitation.getNbJoueurs()){
+        while(BaseMongo.getBase().getJoueurList().size()< invitation.getNbJoueurs()){
             partie.rejoindrePartie(joueur);
             this.associationJoueurPartie.put(joueur.getPseudo(),this.parties.get(invitation.getIdPartie()));
         }
 
     }
 
+
     @Override
-    public Carte jouerCarte(Joueur joueur, Carte carte) {
-        return null;
+    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) {
+        Age age=this.getPartieJeu(joueur.getPseudo()).getPartieGestionCourant().getGestiontour().getTour().getAge();
+        this.getPartieJeu(joueur.getPseudo()).choixJoueur(joueur.getPseudo(),choixAction,nomCarte,choixCarte,age);
     }
 
     @Override
     public void arreterPartie(Joueur joueur) {
-
+        this.getPartieJeu(joueur.getPseudo()).arreterPartie();
     }
 
     @Override
     public void reprendrePartie(Joueur joueur) {
-
+        this.getPartieJeu(joueur.getPseudo()).reprendrePartie();
     }
 
-    @Override
-    public void sauvegarderPartie(Joueur joueur) {
 
-    }
+
+
+
 
     @Override
     public boolean partieTerminee(Joueur joueur) {
-        return false;
+
+        return this.getPartieJeu(joueur.getPseudo()).partieTerminee();
     }
 
+
+
     @Override
-    public Joueur getVainqueur(Joueur joueur) {
-        return null;
+    public String vainqueur(Joueur joueur) throws PartieNonTermineeException {
+        return this.getPartieJeu(joueur.getPseudo()).vainqueurJeu();
     }
+
 
     @Override
     public boolean partieCommencee(Joueur joueur) {
-        return false;
+        return this.getPartieJeu(joueur.getPseudo()).partieCommencee();
     }
+
 
     @Override
-    public GestionCapacite getCapacites(Joueur joueur) {
-        return null;
-    }
-
-    @Override
-    public List<Piece> getPieces(Joueur joueur) {
-        return null;
-    }
-
-    @Override
-    public Score getScoreCourant(Joueur joueur) {
-        return null;
-    }
-
-    @Override
-    public void finDePartie(Joueur joueur) {
-
-    }
-
-    public Joueur getCreateur(){
-        return null;
+    public void finDePartie() {
+        this.associationJoueurPartie.clear();
+        this.parties.clear();
     }
 }

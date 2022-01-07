@@ -2,25 +2,27 @@ package modeles;
 
 import modeles.dao.BaseMongo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GestionBataille {
+public class GestionBataille  {
     private Bataille bataille;
-    private Map<Integer,Joueur> joueurBataille;
+    private Map<String,Joueur> joueurBataille;
     private Map<String, Integer> nombreJoueur;
     private GestionTour gestionTour;
     private List<String> perdus = new ArrayList<>();
     private List<Integer> numeros=new ArrayList<>();
-    private Map<String,Integer> points = new HashMap<>();
+
+
 
     public GestionBataille(){
         this.joueurBataille=new HashMap<>();
         this.nombreJoueur=new HashMap<>();
         for (int i = 0; i< BaseMongo.getBase().getJoueurList().size(); i++) {
-            this.joueurBataille.put(i,BaseMongo.getBase().getJoueurList().get(i));
+            this.joueurBataille.put(String.valueOf(i),BaseMongo.getBase().getJoueurList().get(i));
             this.nombreJoueur.put(BaseMongo.getBase().getJoueurList().get(i).getPseudo(),i);
         }
     }
@@ -44,7 +46,7 @@ public class GestionBataille {
                     break;
             }
         }
-        return joueurBataille.get(voisin);
+        return joueurBataille.get(String.valueOf(voisin));
     }
 
     public Joueur voisinGauche(String joueur) {
@@ -66,11 +68,11 @@ public class GestionBataille {
                     break;
             }
         }
-        return joueurBataille.get(voisin);
+        return joueurBataille.get(String.valueOf(voisin));
     }
 
 
-    public String vainqueurBataille(String pseudo,Age age){
+    public void vainqueurBataille(String pseudo,Age age){
         this.bataille = new Bataille();
         String vainqueur="";
         Joueur joueur = BaseMongo.getBase().getJoueur(pseudo);
@@ -341,8 +343,53 @@ public class GestionBataille {
                 }
             }
         }
-        return vainqueur;
     }
 
+    public Bataille getBataille() {
+        return bataille;
+    }
 
+    public void setBataille(Bataille bataille) {
+        this.bataille = bataille;
+    }
+
+    public Map<String, Joueur> getJoueurBataille() {
+        return joueurBataille;
+    }
+
+    public void setJoueurBataille(Map<String, Joueur> joueurBataille) {
+        this.joueurBataille = joueurBataille;
+    }
+
+    public Map<String, Integer> getNombreJoueur() {
+        return nombreJoueur;
+    }
+
+    public void setNombreJoueur(Map<String, Integer> nombreJoueur) {
+        this.nombreJoueur = nombreJoueur;
+    }
+
+    public GestionTour getGestionTour() {
+        return gestionTour;
+    }
+
+    public void setGestionTour(GestionTour gestionTour) {
+        this.gestionTour = gestionTour;
+    }
+
+    public List<String> getPerdus() {
+        return perdus;
+    }
+
+    public void setPerdus(List<String> perdus) {
+        this.perdus = perdus;
+    }
+
+    public List<Integer> getNumeros() {
+        return numeros;
+    }
+
+    public void setNumeros(List<Integer> numeros) {
+        this.numeros = numeros;
+    }
 }

@@ -12,7 +12,7 @@ public class App extends Application {
     public void start(Stage stage) {
         GestionnaireVue gestionnaireVue = new GestionnaireVue(stage);
         FacadeWonders facadeParis = new FacadeWondersImpl();
-        Controleur controleur = new Controleur(facadeParis, gestionnaireVue);
+        Controleur controleur = new Controleur(gestionnaireVue);
         controleur.run();
     }
 

@@ -76,7 +76,7 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
     }
 
     @Override
-    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) {
+    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RessourceVoisinInsuffisantException, ChoixDejaFaitException, CiteContientCarteException, ConstructionMerveilleImpossible, PieceInsuffisanteException, ChoixIncompletsException, RemoteException, CartePasConstruiteException, RessourceInsuffisanteException, ConstructionImpossibleException, RessourceInexistanteException {
         try {
             this.serviceWonders.jouer(joueur, choixAction, nomCarte, choixCarte);
         } catch (RemoteException e) {
@@ -99,6 +99,15 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
             this.serviceWonders.reprendrePartie(joueur);
         } catch (RemoteException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void debutJeu(Joueur joueur, String nomPlateau) {
+        try {
+            this.serviceWonders.debutJeu(joueur, nomPlateau);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e.detail);
         }
     }
 

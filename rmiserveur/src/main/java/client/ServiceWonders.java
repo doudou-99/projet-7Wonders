@@ -16,7 +16,7 @@ public interface ServiceWonders extends Remote {
     Joueur getJoueur(String pseudo) throws JoueurInexistantException,RemoteException;
 
     void rejoindrePartie(Joueur joueur, String ticket) throws TicketPerimeException, TicketInvalideException, PartieDejaPleineException,RemoteException;
-    void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RemoteException;
+    void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RemoteException, ChoixIncompletsException, ChoixDejaFaitException, ConstructionMerveilleImpossible, PieceInsuffisanteException, RessourceInexistanteException, RessourceVoisinInsuffisantException, CartePasConstruiteException, RessourceInsuffisanteException, ConstructionImpossibleException, CiteContientCarteException;
 
     void arreterPartie(Joueur joueur) throws RemoteException;
     void reprendrePartie(Joueur joueur) throws RemoteException;
@@ -24,6 +24,8 @@ public interface ServiceWonders extends Remote {
 
 
     boolean partieTerminee(Joueur joueur) throws RemoteException;
+
+    void debutJeu(Joueur joueur,String nomPlateau) throws RemoteException;
 
     String vainqueur(Joueur joueur) throws PartieNonTermineeException,RemoteException;
 

@@ -17,6 +17,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import modeles.dao.BaseMongo;
+import modeles.exceptions.PartieDejaPleineException;
+import modeles.exceptions.TicketInvalideException;
+import modeles.exceptions.TicketPerimeException;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -92,6 +95,7 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
         }
 
         this.controleur.inscription(nom, prenom, age, pseudo, motDePasse);
+        this.controleur.creerPartie(this.controleur.getJoueur());
         this.prenom.setText("");
         this.nom.setText("");
         this.age.setText("");
@@ -101,7 +105,7 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
 
     @Override
     public void setAbonnements(LanceurOrdre controleur) {
-        controleur.abonnement(this, Ordre.OrdreType.NOUVEAU_JOUEUR, Ordre.OrdreType.MENU);
+        controleur.abonnement(this, Ordre.OrdreType.NOUVEAU_JOUEUR, Ordre.OrdreType.CONNEXION);
     }
 
     @Override
@@ -115,9 +119,9 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
                     alert.showAndWait();
                 }
                 break;
-            case MENU:
+            case CONNEXION:
                 Alert ale = new Alert(Alert.AlertType.CONFIRMATION);
-                ale.setTitle("Page joueur");
+                ale.setTitle("Page connexion");
                 ale.setContentText("Affichage de l'inscription du joueur");
                 ale.showAndWait();
                 break;
@@ -132,5 +136,11 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
 
     public Scene getScene() {
         return scene;
+    }
+
+    public void rejoindre(ActionEvent actionEvent) {
+        if (BaseMongo.getBase().getJoueurList().contains(this.controleur.getJoueur())){
+            this.controleur.rejoindrePartie(this.controleur.getJoueur(),this.controleur.getTicket());
+        }
     }
 }

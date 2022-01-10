@@ -4,37 +4,43 @@ import controleur.Controleur;
 import controleur.ordre.EcouteurOrdre;
 import controleur.ordre.LanceurOrdre;
 import controleur.ordre.Ordre;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
     private Stage stage;
-    private PageAccueil pageAccueil;
+    private PageNbJoueur pageNbJoueur;
     private PageJoueur pageJoueur;
-    private PageMenu pageMenu;
+    private PageAccueil pageAccueil;
     private PageChoixPlateau plateau;
     private PageConnexion pageConnexion;
+    private PagePartie pagePartie;
 
     public GestionnaireVue(Stage stage){
         this.stage=stage;
 
-        this.pageAccueil=PageAccueil.creer();
+        this.pageNbJoueur= PageNbJoueur.creer();
         this.pageJoueur=PageJoueur.creer();
-        this.pageMenu=PageMenu.creer();
+        this.pageAccueil= PageAccueil.creer();
         this.pageConnexion=PageConnexion.creer();
         this.plateau=PageChoixPlateau.creer();
+        this.pagePartie = PagePartie.creer();
     }
 
 
     @Override
     public void setAbonnements(LanceurOrdre controleur) {
-        controleur.abonnement(this, Ordre.OrdreType.ACCUEIL, Ordre.OrdreType.MENU,
+        controleur.abonnement(this, Ordre.OrdreType.ACCUEIL, Ordre.OrdreType.PAGE_NOMBRE,
                 Ordre.OrdreType.JOUEUR, Ordre.OrdreType.NOMBRE_JOUEURS, Ordre.OrdreType.NOUVEAU_JOUEUR,
                 Ordre.OrdreType.AIDE, Ordre.OrdreType.NOUVEAU_PLATEAU, Ordre.OrdreType.CHOIX_PLATEAU,
                 Ordre.OrdreType.ARRETER_PARTIE, Ordre.OrdreType.CONNEXION, Ordre.OrdreType.NOUVELLE_PARTIE,
-                Ordre.OrdreType.REPRENDRE_PARTIE, Ordre.OrdreType.SAUVER_PARTIE);
+                Ordre.OrdreType.REPRENDRE_PARTIE, Ordre.OrdreType.SAUVER_PARTIE,
+                Ordre.OrdreType.ERREUR_TICKET_PERIME, Ordre.OrdreType.ERREUR_TICKET_INVALIDE,
+                Ordre.OrdreType.ERREUR_PARTIE_PLEINE, Ordre.OrdreType.RETOUR, Ordre.OrdreType.NOUVEAU_PLATEAU,
+                Ordre.OrdreType.JOUER_PARTIE);
         this.pageAccueil.setAbonnements(controleur);
         this.pageJoueur.setAbonnements(controleur);
-        this.pageMenu.setAbonnements(controleur);
+        this.pageNbJoueur.setAbonnements(controleur);
         this.pageConnexion.setAbonnements(controleur);
         this.plateau.setAbonnements(controleur);
     }
@@ -42,8 +48,8 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
     @Override
     public void broadCast(Ordre ordre) {
         switch (ordre.getType()){
-            case MENU:
-                this.stage.setScene(this.pageMenu.getScene());
+            case PAGE_NOMBRE:
+                this.stage.setScene(this.pageNbJoueur.getScene());
                 this.stage.show();
                 break;
             case ACCUEIL:
@@ -62,6 +68,31 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
                 this.stage.setScene(this.plateau.getScene());
                 this.stage.show();
                 break;
+            case ERREUR_TICKET_INVALIDE:
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur: ticket invalide");
+                alert.setContentText("Attention! Le ticket est invalide!");
+                alert.setHeaderText("Ticket invalide.");
+                alert.showAndWait();
+                break;
+            case JOUER_PARTIE:
+                this.stage.setScene(this.pagePartie.getScene());
+                this.stage.show();
+                break;
+            case ERREUR_TICKET_PERIME:
+                Alert aler = new Alert(Alert.AlertType.ERROR);
+                aler.setTitle("Erreur: ticket périmé");
+                aler.setContentText("Attention! Le ticket est périmé!");
+                aler.setHeaderText("Ticket périmé.");
+                aler.showAndWait();
+                break;
+            case ERREUR_PARTIE_PLEINE:
+                Alert ale = new Alert(Alert.AlertType.ERROR);
+                ale.setTitle("Erreur: Partie pleine");
+                ale.setContentText("Attention! La partie est déjà en cours !");
+                ale.setHeaderText("Partie pleine.");
+                ale.showAndWait();
+                break;
         }
     }
 
@@ -69,7 +100,7 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
     public void setControleur(Controleur controleur) {
         pageAccueil.setControleur(controleur);
         pageJoueur.setControleur(controleur);
-        pageMenu.setControleur(controleur);
+        pageNbJoueur.setControleur(controleur);
         pageConnexion.setControleur(controleur);
     }
 }

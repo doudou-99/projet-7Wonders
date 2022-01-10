@@ -60,11 +60,15 @@ public class Partie implements Serializable {
         this.partieGestionCourant.getGestionCommerce().faireAffaire(pseudo, choixCite, nomCarte);
     }
 
+    public void debutJeu(Joueur joueur,String nomPlateau){
+        this.partieGestionCourant.choisirPlateau(joueur,nomPlateau);
+    }
+
     public void rejoindrePartie(Joueur joueur) throws PartieDejaPleineException {
         this.participants.add(createur);
         if (etatPartie != EtatPartie.ATTENTE && this.participants.size()==nbJoueurs)
             throw new PartieDejaPleineException();
-        while (this.participants.size()!=nbJoueurs){
+        while (this.participants.size()<nbJoueurs){
             this.participants.add(joueur);
         }
 
@@ -82,10 +86,9 @@ public class Partie implements Serializable {
     }
 
 
-    public void choixJoueur(String joueur, String choix,String nomCarte,String choixCarte,Age age){
+    public void choixJoueur(String joueur, String choix,String nomCarte,String choixCarte,Age age) throws ChoixDejaFaitException, ConstructionMerveilleImpossible, PieceInsuffisanteException, RessourceInexistanteException, RessourceVoisinInsuffisantException, CartePasConstruiteException, RessourceInsuffisanteException, CiteContientCarteException, ConstructionImpossibleException, ChoixIncompletsException {
         this.partieGestionCourant.setGestiontour(new GestionTour(age));
         while (this.partieGestionCourant.getGestiontour().getTour().getNombreTourEnCours()<= age.getNombreTour()) {
-            try {
                 this.partieGestionCourant.choixJoueur(joueur, choix, nomCarte, choixCarte);
                 this.partieGestionCourant.maj(joueur, choix, nomCarte, choixCarte);
                 if (partieGestionCourant.tourJoueursFini() &&
@@ -96,17 +99,6 @@ public class Partie implements Serializable {
                 if (this.partieGestionCourant.partieTerminee()) {
                     this.etatPartie = EtatPartie.FIN;
                 }
-            } catch (ChoixIncompletsException | CartePasConstruiteException | RessourceInexistanteException | RessourceInsuffisanteException | PieceInsuffisanteException | RessourceVoisinInsuffisantException e) {
-
-            } catch (ChoixDejaFaitException e) {
-                e.printStackTrace();
-            } catch (ConstructionMerveilleImpossible constructionMerveilleImpossible) {
-                constructionMerveilleImpossible.printStackTrace();
-            } catch (ConstructionImpossibleException e) {
-                e.printStackTrace();
-            } catch (CiteContientCarteException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -185,6 +177,10 @@ public class Partie implements Serializable {
 
     public void setJoueur1(Joueur joueur1) {
         this.joueur1 = joueur1;
+    }
+
+    public void setNbJoueurs(int nbJoueurs) {
+        this.nbJoueurs = nbJoueurs;
     }
 
     public Joueur getJoueur2() {

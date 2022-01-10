@@ -15,7 +15,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="nom"/>
+                  <TextField fx:id="nom" prefHeight="40.0" prefWidth="200.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
@@ -25,7 +25,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="prenom"/>
+                  <TextField fx:id="prenom" prefHeight="40.0" prefWidth="200.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
@@ -35,7 +35,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="age"/>
+                  <TextField fx:id="age" prefHeight="40.0" prefWidth="200.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0">
@@ -45,7 +45,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="40.0" prefWidth="200.0" fx:id="pseudo"/>
+                  <TextField fx:id="pseudo" prefHeight="40.0" prefWidth="200.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="45.0" prefWidth="437.0">
@@ -55,20 +55,21 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <PasswordField prefHeight="40.0" prefWidth="200.0" fx:id="motDePasse">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </PasswordField>
+                  <PasswordField fx:id="motDePasse" prefHeight="40.0" prefWidth="200.0" />
                </children>
             </HBox>
          </children>
       </VBox>
    </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="S'inscrire" onAction="#inscription">
+            <Button mnemonicParsing="false" onAction="#inscription" prefHeight="50.0" prefWidth="150.0" text="S'inscrire">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button onAction="#rejoindre" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Rejoindre">
                <font>
                   <Font size="18.0" />
                </font>

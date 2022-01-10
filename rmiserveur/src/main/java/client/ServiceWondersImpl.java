@@ -48,7 +48,7 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
     }
 
     @Override
-    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RemoteException {
+    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RemoteException, ChoixDejaFaitException, CiteContientCarteException, ConstructionMerveilleImpossible, PieceInsuffisanteException, ChoixIncompletsException, RessourceVoisinInsuffisantException, CartePasConstruiteException, RessourceInsuffisanteException, ConstructionImpossibleException, RessourceInexistanteException {
         this.facadeWonders.jouer(joueur, choixAction, nomCarte, choixCarte);
     }
 
@@ -65,6 +65,11 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
     @Override
     public boolean partieTerminee(Joueur joueur) throws RemoteException {
         return this.facadeWonders.partieTerminee(joueur);
+    }
+
+    @Override
+    public void debutJeu(Joueur joueur, String nomPlateau) throws RemoteException{
+        this.facadeWonders.debutJeu(joueur, nomPlateau);
     }
 
     @Override

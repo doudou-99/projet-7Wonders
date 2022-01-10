@@ -18,7 +18,7 @@ public class FacadeWondersImpl implements FacadeWonders {
     public FacadeWondersImpl(){
         this.parties=new HashMap<>();
         this.associationJoueurPartie=new HashMap<>();
-        this.dataChiffrement=new DataChiffrement("joue 7Wonders");
+        this.dataChiffrement=new DataChiffrement("jouerensemble");
     }
 
     @Override
@@ -69,7 +69,7 @@ public class FacadeWondersImpl implements FacadeWonders {
         if (Objects.isNull(partie)) {
             throw new TicketPerimeException();
         }
-        while(BaseMongo.getBase().getJoueurList().size()< invitation.getNbJoueurs()){
+        while(BaseMongo.getBase().getJoueurList().size()< partie.getNbJoueurs()){
             partie.rejoindrePartie(joueur);
             this.associationJoueurPartie.put(joueur.getPseudo(),this.parties.get(invitation.getIdPartie()));
         }
@@ -78,7 +78,7 @@ public class FacadeWondersImpl implements FacadeWonders {
 
 
     @Override
-    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) {
+    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws ChoixIncompletsException, ChoixDejaFaitException, ConstructionMerveilleImpossible, PieceInsuffisanteException, RessourceInexistanteException, RessourceVoisinInsuffisantException, CartePasConstruiteException, RessourceInsuffisanteException, ConstructionImpossibleException, CiteContientCarteException {
         Age age=this.getPartieJeu(joueur.getPseudo()).getPartieGestionCourant().getGestiontour().getTour().getAge();
         this.getPartieJeu(joueur.getPseudo()).choixJoueur(joueur.getPseudo(),choixAction,nomCarte,choixCarte,age);
     }
@@ -93,14 +93,14 @@ public class FacadeWondersImpl implements FacadeWonders {
         this.getPartieJeu(joueur.getPseudo()).reprendrePartie();
     }
 
-
-
-
+    @Override
+    public void debutJeu(Joueur joueur, String nomPlateau) {
+        this.getPartieJeu(joueur.getPseudo()).debutJeu(joueur,nomPlateau);
+    }
 
 
     @Override
     public boolean partieTerminee(Joueur joueur) {
-
         return this.getPartieJeu(joueur.getPseudo()).partieTerminee();
     }
 

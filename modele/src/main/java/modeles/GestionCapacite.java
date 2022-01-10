@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GestionCapacite {
+public class GestionCapacite implements Serializable{
     private static int idCompas;
     private static int idBois;
     private static int idArgile;
@@ -32,8 +32,7 @@ public class GestionCapacite {
     private Map<String,Integer> ressourceEtage;
     private Tour tour;
 
-    public GestionCapacite(Tour tour){
-        this.tour=tour;
+    public GestionCapacite(){
         this.nombreCompas=idCompas;
         this.nombreBois=idBois;
         this.nombreArgile=idArgile;

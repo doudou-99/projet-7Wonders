@@ -51,6 +51,12 @@ public class PartieGestion implements Serializable {
         this.mainJoueur=new MainJoueur(this.paquetCarte);
     }
 
+    public void choisirPlateau(Joueur joueur,String nomPlateau){
+        if (this.joueurs.containsValue(joueur)){
+            joueur.choisirPlateau(nomPlateau);
+        }
+    }
+
 
 
     public void defausseCarte(String pseudo,String carte){

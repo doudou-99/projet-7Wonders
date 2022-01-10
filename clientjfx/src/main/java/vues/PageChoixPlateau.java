@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import modeles.dao.BaseMongo;
+
 import java.io.IOException;
 
 
@@ -56,6 +58,35 @@ public class PageChoixPlateau implements EcouteurOrdre,VueInteractive {
     }
 
     public void choix(MouseEvent mouseEvent) {
+        if (PhareAlexandrie.isPressed()){
+            if (PhareAlexandrie.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("Le phare d'Alexandrie").getImage())){
+                this.controleur.debut("Le phare d'Alexandrie");
+            }
+        }else if (PiramideGizeh.isPressed()){
+            if (PiramideGizeh.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("La grande piramyde de Gizeh").getImage())){
+                this.controleur.debut("La grande piramyde de Gizeh");
+            }
+        }else if (ColosseDeRhodeus.isPressed()){
+            if (ColosseDeRhodeus.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("Le Colosse de Rhodes").getImage())){
+                this.controleur.debut("Le Colosse de Rhodes");
+            }
+        }else if (JardinsSuspendus.isPressed()){
+            if (JardinsSuspendus.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("Les jardins suspendus de Babylone").getImage())){
+                this.controleur.debut("Les jardins suspendus de Babylone");
+            }
+        }else if (MausoleeDHalicarnasse.isPressed()){
+            if (MausoleeDHalicarnasse.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("Le mausolée d'Halicarnasse").getImage())){
+                this.controleur.debut("Le mausolée d'Halicarnasse");
+            }
+        }else if (StatueDeZeus.isPressed()) {
+            if (StatueDeZeus.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("La statue de Zeus à Olympie").getImage())) {
+                this.controleur.debut("La statue de Zeus à Olympie");
+            }
+        }else if (TempleDArtemis.isPressed()) {
+            if (TempleDArtemis.getImage().getUrl().split("/")[4].equals(BaseMongo.getBase().getPlateauNom("Le temple d'Artemis à Ephèse").getImage())) {
+                this.controleur.debut("Le temple d'Artemis à Ephèse");
+            }
+        }
 
     }
 

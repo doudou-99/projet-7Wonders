@@ -4,6 +4,7 @@ import controleur.Controleur;
 import controleur.ordre.EcouteurOrdre;
 import controleur.ordre.LanceurOrdre;
 import controleur.ordre.Ordre;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -11,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
 public class PagePartie implements EcouteurOrdre, VueInteractive {
+    @FXML
     private BorderPane pane;
     private Scene scene;
 

@@ -4,8 +4,12 @@ import controleur.Controleur;
 import controleur.ordre.EcouteurOrdre;
 import controleur.ordre.LanceurOrdre;
 import controleur.ordre.Ordre;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
     private Stage stage;
@@ -43,14 +47,20 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
         this.pageNbJoueur.setAbonnements(controleur);
         this.pageConnexion.setAbonnements(controleur);
         this.plateau.setAbonnements(controleur);
+        this.pagePartie.setAbonnements(controleur);
     }
 
     @Override
     public void broadCast(Ordre ordre) {
+
         switch (ordre.getType()){
             case PAGE_NOMBRE:
                 this.stage.setScene(this.pageNbJoueur.getScene());
                 this.stage.show();
+                Controleur controleur = this.pageNbJoueur.getControleur();
+                if (!Objects.isNull(controleur.getTicket())){
+                    this.pageNbJoueur.nbJoueurs.setText(String.valueOf(controleur.getNombreJoueur()));
+                }
                 break;
             case ACCUEIL:
                 this.stage.setScene(this.pageAccueil.getScene());
@@ -59,10 +69,16 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
             case JOUEUR:
                 this.stage.setScene(this.pageJoueur.getScene());
                 this.stage.show();
+
                 break;
             case CONNEXION:
+                this.pageConnexion.ticket.setText(this.pageConnexion.getControleur().getTicket());
+                this.pageConnexion.ticket.setDisable(false);
+                controleur = this.pageConnexion.getControleur();
                 this.stage.setScene(this.pageConnexion.getScene());
                 this.stage.show();
+
+
                 break;
             case CHOIX_PLATEAU:
                 this.stage.setScene(this.plateau.getScene());
@@ -102,5 +118,6 @@ public class GestionnaireVue implements VueInteractive, EcouteurOrdre {
         pageJoueur.setControleur(controleur);
         pageNbJoueur.setControleur(controleur);
         pageConnexion.setControleur(controleur);
+        pagePartie.setControleur(controleur);
     }
 }

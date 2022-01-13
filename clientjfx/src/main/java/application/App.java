@@ -11,7 +11,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         GestionnaireVue gestionnaireVue = new GestionnaireVue(stage);
-        FacadeWonders facadeParis = new FacadeWondersImpl();
         Controleur controleur = new Controleur(gestionnaireVue);
         controleur.run();
     }

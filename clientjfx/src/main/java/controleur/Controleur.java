@@ -41,11 +41,15 @@ public class Controleur implements LanceurOrdre {
     private Joueur joueur;
     private int nombreJoueur;
     private String nomPlateau;
+    private Partie partie;
 
+    public void creerJoueur(String nom, String prenom, String age, String pseudo, String motDePasse){
+        this.joueur = new Joueur(nom,prenom,pseudo,age,motDePasse);
+        this.wonders.ajoutJoueur(this.joueur);
+    }
 
     public void inscription(String nom, String prenom, String age, String pseudo, String motDePasse) {
-        this.joueur = new Joueur(nom,prenom,pseudo,age,motDePasse);
-        this.wonders.ajoutJoueur(joueur);
+        this.creerJoueur(nom, prenom, age, pseudo, motDePasse);
         this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVEAU_JOUEUR));
         System.out.println(BaseMongo.getBase().getJoueur(joueur.getPseudo()));
     }
@@ -73,9 +77,10 @@ public class Controleur implements LanceurOrdre {
 
     public void creerPartie(Joueur joueur) {
         this.joueur=joueur;
-        this.ticket = this.wonders.creerPartie(joueur);
+        this.ticket = this.wonders.creerPartie(this.joueur);
         this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVELLE_PARTIE));
         this.fireOrdre(new Ordre(Ordre.OrdreType.CONNEXION));
+        System.out.println(this.ticket);
     }
 
     public int getNombreJoueur() {
@@ -87,12 +92,11 @@ public class Controleur implements LanceurOrdre {
     }
 
 
-    public Partie getPartie(String pseudo){
-        Partie partie =this.wonders.getPartieJeu(pseudo);
-        partie.setCreateur(this.joueur);
+    public Partie getPartie(){
+        this.partie =this.wonders.getPartieJeu(this.joueur.getPseudo());
         partie.setNbJoueurs(this.nombreJoueur);
+        System.out.println(this.partie);
         return partie;
-
     }
 
     public void reprendre(Joueur joueur) {
@@ -108,7 +112,7 @@ public class Controleur implements LanceurOrdre {
         try {
             this.wonders.rejoindrePartie(joueur, ticket);
             this.fireOrdre(new Ordre(Ordre.OrdreType.REJOINDRE_PARTIE));
-            this.fireOrdre(new Ordre(Ordre.OrdreType.CHOIX_PLATEAU));
+            this.goToPlateau();
         } catch (TicketPerimeException e) {
             this.fireOrdre(new Ordre(Ordre.OrdreType.ERREUR_TICKET_PERIME));
         } catch (TicketInvalideException e) {
@@ -119,6 +123,10 @@ public class Controleur implements LanceurOrdre {
 
     }
 
+    public void goToPlateau(){
+        this.fireOrdre(new Ordre(Ordre.OrdreType.CHOIX_PLATEAU));
+    }
+
     public void goToNombreJoueurs() {
         this.fireOrdre(new Ordre(Ordre.OrdreType.PAGE_NOMBRE));
     }
@@ -127,10 +135,19 @@ public class Controleur implements LanceurOrdre {
         return this.wonders.partieCommencee(this.joueur);
     }
 
+    public boolean choixPlateauFait(String pseudo){
+        return this.wonders.choixPlateauFait(pseudo);
+    }
+
+    public String getNomPlateau() {
+        return nomPlateau;
+    }
+
     public void debut(String nomPlateau){
         this.nomPlateau=nomPlateau;
         this.wonders.debutJeu(this.joueur,nomPlateau);
         this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVEAU_PLATEAU));
         this.fireOrdre(new Ordre(Ordre.OrdreType.JOUER_PARTIE));
+        System.out.println(this.joueur.getMerveilles());
     }
 }

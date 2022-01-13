@@ -6,15 +6,6 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane fx:id="borderpane" prefHeight="550.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@images/background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vues.PageConnexion">
-   <bottom>
-      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="connecter" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Connexion" onAction="#connexion">
-               <font>
-                  <Font size="18.0" />
-               </font></Button>
-         </children></HBox>
-   </bottom>
    <center>
       <HBox alignment="CENTER" prefHeight="150.0" prefWidth="550.0" BorderPane.alignment="CENTER_RIGHT">
          <children>
@@ -23,11 +14,17 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField prefHeight="40.0" prefWidth="200.0" fx:id="ticket"/>
+            <TextField fx:id="ticket" prefHeight="40.0" prefWidth="200.0" />
          </children>
          <BorderPane.margin>
             <Insets top="200.0" />
          </BorderPane.margin>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="200.0" />
+         </padding>
       </HBox>
    </center>
 </BorderPane>

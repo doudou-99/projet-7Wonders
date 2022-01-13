@@ -40,6 +40,15 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
     }
 
     @Override
+    public boolean choixPlateauFait(String pseudo) {
+        try {
+            return this.serviceWonders.choixPlateauFait(pseudo);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e.detail);
+        }
+    }
+
+    @Override
     public String creerPartie(Joueur joueur) {
         try {
             return this.serviceWonders.creerPartie(joueur);

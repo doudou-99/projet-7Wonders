@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 
 public interface ProxyServiceWonders {
     void ajoutJoueur(Joueur joueur);
+    boolean choixPlateauFait(String pseudo);
     String creerPartie(Joueur joueur);
 
     Partie getPartieJeu(String pseudo);

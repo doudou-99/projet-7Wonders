@@ -8,6 +8,7 @@ import java.util.List;
 public interface FacadeWonders {
 
     void ajoutJoueur(Joueur joueur);
+    boolean choixPlateauFait(String pseudo);
     String creerPartie(Joueur joueur);
 
     Partie getPartieJeu(String pseudo);

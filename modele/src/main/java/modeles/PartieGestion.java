@@ -7,10 +7,7 @@ import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PartieGestion implements Serializable {
     private static final long serialVersionUID=1L;
@@ -27,23 +24,16 @@ public class PartieGestion implements Serializable {
 
     public PartieGestion(){}
 
-    public PartieGestion(Joueur joueur, Joueur joueur1, Joueur joueur2, Joueur joueur3){
+    public PartieGestion(List<Joueur> joueurList){
         this.joueurs=new HashMap<>();
         this.choix=new HashMap<>();
         this.score=new HashMap<>();
         this.citeJoueurs=new HashMap<>();
-        this.joueurs.put("0",joueur);
-        this.joueurs.put("1",joueur1);
-        this.joueurs.put("2",joueur2);
-        this.joueurs.put("3",joueur3);
-        this.score.put("0",joueur.getNombreDePoints());
-        this.score.put("1",joueur1.getNombreDePoints());
-        this.score.put("2", joueur2.getNombreDePoints());
-        this.score.put("3",joueur3.getNombreDePoints());
-        this.citeJoueurs.put(joueur.getPseudo(),"0");
-        this.citeJoueurs.put(joueur1.getPseudo(),"1");
-        this.citeJoueurs.put(joueur2.getPseudo(),"2");
-        this.citeJoueurs.put(joueur3.getPseudo(),"3");
+        for (int i=0;i<joueurList.size();i++){
+            this.joueurs.put(String.valueOf(i),joueurList.get(i));
+            this.score.put(String.valueOf(i),joueurList.get(i).getNombreDePoints());
+            this.citeJoueurs.put(joueurList.get(i).getPseudo(),String.valueOf(i));
+        }
         this.gestiontour=new GestionTour(BaseMongo.getBase().getAges().get(0));
         Tour tour = new Tour(BaseMongo.getBase().getAges().get(0));
         this.gestiontour.setTour(tour);

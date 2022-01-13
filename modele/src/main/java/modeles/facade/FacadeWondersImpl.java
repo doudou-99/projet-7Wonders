@@ -27,6 +27,10 @@ public class FacadeWondersImpl implements FacadeWonders {
         BaseMongo.getBase().getJoueurs().insertOne(joueur);
     }
 
+    @Override
+    public boolean choixPlateauFait(String pseudo) {
+        return this.getPartieJeu(pseudo).choixPlateauFait(pseudo);
+    }
 
 
     @Override
@@ -36,9 +40,11 @@ public class FacadeWondersImpl implements FacadeWonders {
         this.associationJoueurPartie.put(joueur.getPseudo(),partie);
         this.parties.put(id,partie);
         this.ajoutJoueur(joueur);
+
         Invitation data = new Invitation();
         data.setIdPartie(id);
         data.setJoueurCreateur(joueur);
+        partie.getParticipants().add(joueur);
         BaseMongo.getBase().getJeu().insertOne(partie);
         return this.dataChiffrement.chiffrement(data);
 

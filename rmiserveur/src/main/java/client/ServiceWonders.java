@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 public interface ServiceWonders extends Remote {
     void ajoutJoueur(Joueur joueur) throws RemoteException;
     String creerPartie(Joueur joueur) throws RemoteException;
+    boolean choixPlateauFait(String pseudo) throws RemoteException;
 
     Partie getPartieJeu(String pseudo) throws RemoteException;
 

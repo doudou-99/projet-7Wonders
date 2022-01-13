@@ -11,10 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import modeles.dao.BaseMongo;
 import modeles.exceptions.PartieDejaPleineException;
@@ -23,6 +20,7 @@ import modeles.exceptions.TicketPerimeException;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class PageJoueur implements EcouteurOrdre,VueInteractive {
     @FXML
@@ -63,31 +61,31 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
         String age = this.age.getText();
         String pseudo=this.pseudo.getText();
         String motDePasse = this.motDePasse.getText();
-        if (this.nom.getLength() < 3 && !Objects.isNull(this.nom) ){
+        if (this.nom.getLength() < 3 || Objects.isNull(this.nom) ){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du nom");
             alert.setContentText("Le champ nom ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
-        if (!Objects.isNull(this.prenom) && this.prenom.getLength()<3  ){
+        if (Objects.isNull(this.prenom) || this.prenom.getLength()<3  ){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ prenom ");
             alert.setContentText("Le champ prenom ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
-        if (this.age.getLength() <2 && !Objects.isNull(this.age)){
+        if (this.age.getLength() <2 || Objects.isNull(this.age)){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ age");
             alert.setContentText("Le champ age ne doit pas être vide et il doit être supérieur ou égal à 2");
             alert.showAndWait();
         }
-        if (!Objects.isNull(this.pseudo) && this.pseudo.getLength() <3){
+        if (Objects.isNull(this.pseudo) || this.pseudo.getLength() <3){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ pseudo");
             alert.setContentText("Le pseudo ne doit pas être vide et il doit être supérieur à 3");
             alert.showAndWait();
         }
-        if(!Objects.isNull(this.motDePasse) && this.motDePasse.getLength()<3) {
+        if(Objects.isNull(this.motDePasse) || this.motDePasse.getLength()<3) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur saisie du champ mot de passe");
             alert.setContentText("Le mot de passe ne doit pas être vide et il doit être supérieur à 3");
@@ -105,7 +103,7 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
 
     @Override
     public void setAbonnements(LanceurOrdre controleur) {
-        controleur.abonnement(this, Ordre.OrdreType.NOUVEAU_JOUEUR, Ordre.OrdreType.CONNEXION);
+        controleur.abonnement(this, Ordre.OrdreType.NOUVEAU_JOUEUR, Ordre.OrdreType.CONNEXION, Ordre.OrdreType.REJOINDRE_PARTIE);
     }
 
     @Override
@@ -126,6 +124,7 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
                 ale.showAndWait();
                 break;
 
+
         }
     }
 
@@ -138,9 +137,37 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
         return scene;
     }
 
+    /*public void joueursComplets(){
+        Task<Boolean> attenteJoueur = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                while (!controleur.partieCommencee() && controleur.getPartie().getParticipants().size()<controleur.getNombreJoueur());
+                return true;
+            }
+        };
+        attenteJoueur.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, e -> controleur.rejoindrePartie(this.controleur.getJoueur(),this.controleur.getTicket()));
+        Thread thread = new Thread(attenteJoueur);
+        thread.start();
+    }*/
+
     public void rejoindre(ActionEvent actionEvent) {
-        if (BaseMongo.getBase().getJoueurList().contains(this.controleur.getJoueur())){
-            this.controleur.rejoindrePartie(this.controleur.getJoueur(),this.controleur.getTicket());
+        TextInputDialog token = new TextInputDialog();
+        token.setTitle("Ticket d'invitation");
+        token.setHeaderText("Entrez votre ticket");
+
+        Optional<String> resultat = token.showAndWait();
+        if (resultat.isPresent() && !(Objects.isNull(pseudo)) && !(Objects.isNull(nom)) && !(Objects.isNull(prenom))
+                && !(Objects.isNull(age)) && !(Objects.isNull(motDePasse))) {
+            this.controleur.creerJoueur(nom.getText(), prenom.getText(), age.getText(), pseudo.getText(), motDePasse.getText());
+
+            this.controleur.rejoindrePartie(this.controleur.getJoueur(), resultat.get());
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur saisie ticket et les autres champs");
+            alert.setHeaderText("Saisie du ticket et des champs");
+            alert.setContentText("Veuillez saisir le ticket et les autres champs (nom,prenom,age, mot de passe et pseudo)!");
+            alert.showAndWait();
+
         }
     }
 }

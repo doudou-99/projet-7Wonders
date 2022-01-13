@@ -13,7 +13,9 @@ public class Bataille {
     private String id;
     @BsonProperty("nomDuVaincu")
     private List<String> nomDuVaincu;
+    @BsonProperty("nomDuVainqueur")
     private String nomDuVainqueur;
+    @BsonProperty("age")
     private Age age;
 
     public Bataille(){}

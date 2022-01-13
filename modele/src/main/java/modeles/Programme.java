@@ -72,7 +72,7 @@ public class Programme {
         joueuse.add(joueu);
         partie.setParticipants(joueuse);
 
-        PartieGestion partieGestion = new PartieGestion(joueur,joueu,joueur1,joueur2);
+        PartieGestion partieGestion = new PartieGestion(joueuse);
         partie.setPartieGestionCourant(partieGestion);
         //BaseMongo.getBase().getJeu().insertOne(partie);
         GestionTour gestion = new GestionTour(BaseMongo.getBase().getAges().get(0));

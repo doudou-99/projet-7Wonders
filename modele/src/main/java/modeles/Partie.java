@@ -33,6 +33,7 @@ public class Partie implements Serializable {
         this.createur = createur;
         this.participants=new ArrayList<>();
         this.etatPartie = EtatPartie.ATTENTE;
+        this.participants.add(this.createur);
     }
 
 
@@ -65,15 +66,24 @@ public class Partie implements Serializable {
     }
 
     public void rejoindrePartie(Joueur joueur) throws PartieDejaPleineException {
-        this.participants.add(createur);
+
         if (etatPartie != EtatPartie.ATTENTE && this.participants.size()==nbJoueurs)
             throw new PartieDejaPleineException();
         while (this.participants.size()<nbJoueurs){
             this.participants.add(joueur);
         }
-
+        this.partieGestionCourant=new PartieGestion(participants);
         this.etatPartie = EtatPartie.EN_COURS;
 
+    }
+
+    public boolean choixPlateauFait(String pseudo){
+        for(Joueur j: participants){
+            if (j.getPseudo().equals(pseudo) && !(j.getMerveilles().equals(""))){
+                return true;
+            }
+        }
+        return false;
     }
 
     public String vainqueurBatailleAge(String joueur,GestionTour gestionTour){

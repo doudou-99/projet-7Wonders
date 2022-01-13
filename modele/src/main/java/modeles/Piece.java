@@ -3,11 +3,12 @@ package modeles;
 
 import java.io.Serializable;
 
-public class Piece implements Serializable {
-    private static final long serialVersionUID=1L;
+public class Piece{
     private String type;
     private int valeur;
     private int nombrePieces;
+
+    public Piece(){}
 
     public Piece(int piece, String type) {
         this.valeur = piece;
@@ -28,5 +29,13 @@ public class Piece implements Serializable {
 
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setNombrePieces(int nombrePieces) {
+        this.nombrePieces = nombrePieces;
     }
 }

@@ -85,4 +85,8 @@ public class PageNbJoueur implements EcouteurOrdre,VueInteractive {
     public void setControleur(Controleur controleur) {
         this.controleur=controleur;
     }
+
+    public Controleur getControleur() {
+        return controleur;
+    }
 }

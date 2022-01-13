@@ -51,26 +51,6 @@ public class PageConnexion implements EcouteurOrdre,VueInteractive {
         }
     }
 
-    public void connexion(ActionEvent actionEvent) {
-        ticket.setText(this.controleur.getTicket());
-        if (Objects.isNull(ticket)){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Le champ ticket est vide");
-            alert.setContentText("Il faut remplir le champ ticket!");
-            alert.showAndWait();
-        }
-        Task<Boolean> attenteJoueur = new Task<Boolean>() {
-            @Override
-            protected Boolean call() throws Exception {
-                while (!controleur.partieCommencee());
-                return true;
-            }
-        };
-        attenteJoueur.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, e -> controleur.rejoindrePartie(this.controleur.getJoueur(),this.ticket.getText()));
-        Thread thread = new Thread(attenteJoueur);
-        thread.start();
-    }
-
     @Override
     public void setAbonnements(LanceurOrdre controleur) {
         controleur.abonnement(this, Ordre.OrdreType.REJOINDRE_PARTIE, Ordre.OrdreType.CHOIX_PLATEAU);
@@ -80,6 +60,16 @@ public class PageConnexion implements EcouteurOrdre,VueInteractive {
     public void broadCast(Ordre ordre) {
         switch (ordre.getType()){
             case REJOINDRE_PARTIE:
+                Task<Boolean> attenteJoueur = new Task<Boolean>() {
+                    @Override
+                    protected Boolean call() throws Exception {
+                        while (!controleur.partieCommencee() && controleur.getPartie().getParticipants().size()<controleur.getNombreJoueur());
+                        return true;
+                    }
+                };
+                attenteJoueur.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, e -> controleur.goToPlateau());
+                Thread thread = new Thread(attenteJoueur);
+                thread.start();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Validation ajout joueur à la partie");
                 alert.setContentText(" Ajout joueur");
@@ -88,11 +78,17 @@ public class PageConnexion implements EcouteurOrdre,VueInteractive {
                 break;
 
             case CHOIX_PLATEAU:
-                if (controleur.getPartie(this.controleur.getJoueur().getPseudo()).getParticipants().size()==this.controleur.getNombreJoueur()){
+                if (controleur.getPartie().getParticipants().size()==this.controleur.getNombreJoueur()){
                     Alert aler = new Alert(Alert.AlertType.CONFIRMATION);
                     aler.setTitle("Aller à la page de choix de plateau");
                     aler.setContentText("Page de choix de plateau");
                     aler.setHeaderText("Page de choix de plateau pour le joueur");
+                    aler.showAndWait();
+                }else{
+                    Alert aler = new Alert(Alert.AlertType.ERROR);
+                    aler.setTitle("Nombre de joueurs insuffisants");
+                    aler.setContentText("La partie ne peut pas commencer car le nombre de joueurs n'est pas bon");
+                    aler.setHeaderText("Erreur de nombre de joueurs");
                     aler.showAndWait();
                 }
                 break;
@@ -102,5 +98,9 @@ public class PageConnexion implements EcouteurOrdre,VueInteractive {
     @Override
     public void setControleur(Controleur controleur) {
         this.controleur=controleur;
+    }
+
+    public Controleur getControleur() {
+        return controleur;
     }
 }

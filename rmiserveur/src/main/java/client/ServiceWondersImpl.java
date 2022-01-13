@@ -33,6 +33,11 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
     }
 
     @Override
+    public boolean choixPlateauFait(String pseudo) throws RemoteException {
+        return this.facadeWonders.choixPlateauFait(pseudo);
+    }
+
+    @Override
     public Partie getPartieJeu(String pseudo) throws RemoteException {
         return this.facadeWonders.getPartieJeu(pseudo);
     }

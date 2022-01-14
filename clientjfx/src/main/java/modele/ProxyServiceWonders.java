@@ -5,11 +5,12 @@ import modeles.Partie;
 import modeles.exceptions.*;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface ProxyServiceWonders {
     void ajoutJoueur(Joueur joueur);
     boolean choixPlateauFait(String pseudo);
-    String creerPartie(Joueur joueur);
+    String creerPartie(Joueur joueur,int nombreJoueur);
 
     Partie getPartieJeu(String pseudo);
 

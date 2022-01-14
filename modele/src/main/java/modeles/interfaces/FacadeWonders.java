@@ -9,9 +9,10 @@ public interface FacadeWonders {
 
     void ajoutJoueur(Joueur joueur);
     boolean choixPlateauFait(String pseudo);
-    String creerPartie(Joueur joueur);
+    String creerPartie(Joueur joueur,int nombreJoueur);
 
     Partie getPartieJeu(String pseudo);
+
 
     Joueur getJoueur(String pseudo) throws JoueurInexistantException;
 

@@ -17,23 +17,22 @@ public class Partie implements Serializable {
     private String idPartie;
     private int nbJoueurs;
     private Joueur createur;
-    private Joueur joueur;
-    private Joueur joueur1;
-    private Joueur joueur2;
     private List<Joueur> participants;
     private EtatPartie etatPartie;
     private PartieGestion partieGestionCourant;
+    private static int ID;
 
 
     public enum EtatPartie{ATTENTE,EN_COURS,ARRET,REPRISE,FIN}
 
     public Partie(){}
 
-    public Partie(Joueur createur) {
+    public Partie(Joueur createur, int nombreJoueur) {
         this.createur = createur;
+        this.nbJoueurs=nombreJoueur;
         this.participants=new ArrayList<>();
         this.etatPartie = EtatPartie.ATTENTE;
-        this.participants.add(this.createur);
+        participants.add(this.createur);
     }
 
 
@@ -67,13 +66,13 @@ public class Partie implements Serializable {
 
     public void rejoindrePartie(Joueur joueur) throws PartieDejaPleineException {
 
-        if (etatPartie != EtatPartie.ATTENTE && this.participants.size()==nbJoueurs)
+        if (etatPartie != EtatPartie.ATTENTE && this.participants.size()>nbJoueurs)
             throw new PartieDejaPleineException();
-        while (this.participants.size()<nbJoueurs){
-            this.participants.add(joueur);
-        }
+        this.participants.add(joueur);
         this.partieGestionCourant=new PartieGestion(participants);
-        this.etatPartie = EtatPartie.EN_COURS;
+        if (participants.size()==nbJoueurs) {
+            this.etatPartie = EtatPartie.EN_COURS;
+        }
 
     }
 
@@ -173,33 +172,7 @@ public class Partie implements Serializable {
     }
 
 
-    public Joueur getJoueur() {
-        return joueur;
-    }
 
-    public void setJoueur(Joueur joueur) {
-        this.joueur = joueur;
-    }
-
-    public Joueur getJoueur1() {
-        return joueur1;
-    }
-
-    public void setJoueur1(Joueur joueur1) {
-        this.joueur1 = joueur1;
-    }
-
-    public void setNbJoueurs(int nbJoueurs) {
-        this.nbJoueurs = nbJoueurs;
-    }
-
-    public Joueur getJoueur2() {
-        return joueur2;
-    }
-
-    public void setJoueur2(Joueur joueur2) {
-        this.joueur2 = joueur2;
-    }
 
 
 
@@ -220,15 +193,16 @@ public class Partie implements Serializable {
         this.partieGestionCourant = partieGestionCourant;
     }
 
+    public void setNbJoueurs(int nbJoueurs) {
+        this.nbJoueurs = nbJoueurs;
+    }
+
     @Override
     public String toString() {
         return "Partie{" +
                 "idPartie='" + idPartie + '\'' +
                 ", nbJoueurs=" + nbJoueurs +
                 ", createur=" + createur +
-                ", joueur=" + joueur +
-                ", joueur1=" + joueur1 +
-                ", joueur2=" + joueur2 +
                 ", participants=" + participants +
                 ", etatPartie=" + etatPartie +
                 ", partieGestionCourant=" + partieGestionCourant +

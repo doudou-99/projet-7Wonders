@@ -1,9 +1,6 @@
 package vues;
 
 import controleur.Controleur;
-import controleur.ordre.EcouteurOrdre;
-import controleur.ordre.LanceurOrdre;
-import controleur.ordre.Ordre;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,11 +9,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class PageNbJoueur implements EcouteurOrdre,VueInteractive {
+public class PageNbJoueur implements VueInteractive {
 
     @FXML
     public TextField nbJoueurs;
@@ -26,6 +24,11 @@ public class PageNbJoueur implements EcouteurOrdre,VueInteractive {
     public Button bouton;
     private Scene scene;
     private Controleur controleur;
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage=stage;
+    }
 
     public void initialisation(){
         this.scene=new Scene(this.borderpane);
@@ -39,16 +42,17 @@ public class PageNbJoueur implements EcouteurOrdre,VueInteractive {
         this.scene = scene;
     }
 
-    public static PageNbJoueur creer(){
+    public static PageNbJoueur creer(Stage stage){
+        FXMLLoader fxmlLoader = new FXMLLoader(PageNbJoueur.class.getResource("pageNbJoueur.fxml"));
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(PageNbJoueur.class.getResource("pageNbJoueur.fxml"));
             fxmlLoader.load();
-            PageNbJoueur vue = fxmlLoader.getController();
-            vue.initialisation();
-            return vue;
         } catch (IOException e) {
            throw new RuntimeException("Erreur chargement");
         }
+        PageNbJoueur vue = fxmlLoader.getController();
+        vue.setStage(stage);
+        vue.initialisation();
+        return vue;
     }
 
     public void debut(ActionEvent actionEvent) {
@@ -58,32 +62,16 @@ public class PageNbJoueur implements EcouteurOrdre,VueInteractive {
         }
     }
 
-    @Override
-    public void setAbonnements(LanceurOrdre controleur) {
-        controleur.abonnement(this, Ordre.OrdreType.NOMBRE_JOUEURS, Ordre.OrdreType.JOUEUR);
-    }
-
-    @Override
-    public void broadCast(Ordre ordre) {
-        switch (ordre.getType()){
-            case NOMBRE_JOUEURS:
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation de nombre de joueurs pour 7Wonders");
-                alert.setContentText("Le nombre de joueurs requis est bien "+ this.nbJoueurs.getText() +" !");
-                alert.showAndWait();
-                break;
-            case JOUEUR:
-                Alert aler = new Alert(Alert.AlertType.CONFIRMATION);
-                aler.setTitle("Confirmation page joueur");
-                aler.setContentText("On peut passer à la page d'inscription !");
-                aler.showAndWait();
-                break;
-        }
-    }
 
     @Override
     public void setControleur(Controleur controleur) {
         this.controleur=controleur;
+    }
+
+    @Override
+    public void show() {
+        this.stage.setScene(this.scene);
+        this.stage.show();
     }
 
     public Controleur getControleur() {

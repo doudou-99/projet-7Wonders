@@ -3,15 +3,11 @@ package application;
 import controleur.Controleur;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import modeles.facade.FacadeWondersImpl;
-import modeles.interfaces.FacadeWonders;
-import vues.GestionnaireVue;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) {
-        GestionnaireVue gestionnaireVue = new GestionnaireVue(stage);
-        Controleur controleur = new Controleur(gestionnaireVue);
+        Controleur controleur = new Controleur(stage);
         controleur.run();
     }
 

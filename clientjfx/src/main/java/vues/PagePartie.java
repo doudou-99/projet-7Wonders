@@ -1,20 +1,24 @@
 package vues;
 
 import controleur.Controleur;
-import controleur.ordre.EcouteurOrdre;
-import controleur.ordre.LanceurOrdre;
-import controleur.ordre.Ordre;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PagePartie implements EcouteurOrdre, VueInteractive {
+public class PagePartie implements VueInteractive {
     @FXML
     private BorderPane pane;
     private Scene scene;
+    private Stage stage;
+    private Controleur controleur;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     public Scene getScene() {
         return scene;
@@ -24,11 +28,12 @@ public class PagePartie implements EcouteurOrdre, VueInteractive {
         this.scene = new Scene(this.pane);
     }
 
-    public static PagePartie creer() {
+    public static PagePartie creer(Stage stage) {
         FXMLLoader fxmlLoader = new FXMLLoader(PagePartie.class.getResource("pagePartie.fxml"));
         try{
             fxmlLoader.load();
             PagePartie vue = fxmlLoader.getController();
+            vue.setStage(stage);
             vue.initialisation();
             return vue;
 
@@ -37,18 +42,15 @@ public class PagePartie implements EcouteurOrdre, VueInteractive {
         }
     }
 
-    @Override
-    public void setAbonnements(LanceurOrdre controleur) {
-
-    }
-
-    @Override
-    public void broadCast(Ordre ordre) {
-
-    }
 
     @Override
     public void setControleur(Controleur controleur) {
+        this.controleur=controleur;
+    }
 
+    @Override
+    public void show() {
+        this.stage.setScene(this.scene);
+        this.stage.show();
     }
 }

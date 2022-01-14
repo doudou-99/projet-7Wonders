@@ -12,6 +12,11 @@ import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
+import java.util.List;
+import java.util.Objects;
+
+import static client.ServiceWonders.SERVEUR;
 
 public class ProxyServiceWondersImpl implements ProxyServiceWonders{
     public ServiceWonders serviceWonders;
@@ -19,7 +24,8 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
     public ProxyServiceWondersImpl(){
         System.out.println("Lancement du client");
         try {
-            this.serviceWonders =(ServiceWonders) Naming.lookup("registre");
+            this.serviceWonders =(ServiceWonders) Naming.lookup(SERVEUR);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (RemoteException e) {
@@ -49,9 +55,10 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
     }
 
     @Override
-    public String creerPartie(Joueur joueur) {
+    public String creerPartie(Joueur joueur, int nombreJoueur) {
         try {
-            return this.serviceWonders.creerPartie(joueur);
+
+            return this.serviceWonders.creerPartie(joueur,nombreJoueur);
         } catch (RemoteException e) {
             throw new RuntimeException(e.detail);
         }
@@ -155,4 +162,6 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
             e.printStackTrace();
         }
     }
+
+
 }

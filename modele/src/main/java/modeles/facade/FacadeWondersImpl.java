@@ -34,8 +34,8 @@ public class FacadeWondersImpl implements FacadeWonders {
 
 
     @Override
-    public String creerPartie(Joueur joueur) {
-        Partie partie = new Partie(joueur);
+    public String creerPartie(Joueur joueur, int nombreJoueur) {
+        Partie partie = new Partie(joueur,nombreJoueur);
         String id = partie.getIdPartie();
         this.associationJoueurPartie.put(joueur.getPseudo(),partie);
         this.parties.put(id,partie);
@@ -75,10 +75,8 @@ public class FacadeWondersImpl implements FacadeWonders {
         if (Objects.isNull(partie)) {
             throw new TicketPerimeException();
         }
-        while(BaseMongo.getBase().getJoueurList().size()< partie.getNbJoueurs()){
-            partie.rejoindrePartie(joueur);
-            this.associationJoueurPartie.put(joueur.getPseudo(),this.parties.get(invitation.getIdPartie()));
-        }
+        partie.rejoindrePartie(joueur);
+        this.associationJoueurPartie.put(joueur.getPseudo(),this.parties.get(invitation.getIdPartie()));
 
     }
 

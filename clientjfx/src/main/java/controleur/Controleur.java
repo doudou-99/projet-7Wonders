@@ -1,10 +1,6 @@
 package controleur;
 
-import client.ServiceWonders;
-import client.ServiceWondersImpl;
-import controleur.ordre.EcouteurOrdre;
-import controleur.ordre.LanceurOrdre;
-import controleur.ordre.Ordre;
+import javafx.stage.Stage;
 import modele.ProxyServiceWonders;
 import modele.ProxyServiceWondersImpl;
 import modeles.Joueur;
@@ -13,29 +9,38 @@ import modeles.dao.BaseMongo;
 import modeles.exceptions.PartieDejaPleineException;
 import modeles.exceptions.TicketInvalideException;
 import modeles.exceptions.TicketPerimeException;
-import vues.GestionnaireVue;
+import vues.*;
 
 import java.util.*;
 
-public class Controleur implements LanceurOrdre {
+public class Controleur{
     private ProxyServiceWonders wonders;
-    private GestionnaireVue gestionnaireVue;
-    private Map<Ordre.OrdreType, Collection<EcouteurOrdre>> abonnes;
+    private PageAccueil accueil;
+    private PagePartie pagePartie;
+    private PageConnexion connexion;
+    private PageChoixPlateau pageChoixPlateau;
+    private PageNbJoueur pageNbJoueur;
+    private PageJoueur pageJoueur;
     private String ticket;
 
-    public Controleur(GestionnaireVue gestionnaireVue){
+    public Controleur(Stage stage){
         this.wonders=new ProxyServiceWondersImpl();
-        this.gestionnaireVue=gestionnaireVue;
-        this.abonnes = new HashMap<>();
-        for (Ordre.OrdreType type: Ordre.OrdreType.values()){
-            this.abonnes.put(type, new ArrayList<>());
-        }
-        this.gestionnaireVue.setControleur(this);
-        this.gestionnaireVue.setAbonnements(this);
+        this.accueil=PageAccueil.creer(stage);
+        this.accueil.setControleur(this);
+        this.pageJoueur=PageJoueur.creer(stage);
+        this.pageJoueur.setControleur(this);
+        this.pageNbJoueur=PageNbJoueur.creer(stage);
+        this.pageNbJoueur.setControleur(this);
+        this.pageChoixPlateau=PageChoixPlateau.creer(stage);
+        this.pageChoixPlateau.setControleur(this);
+        this.pagePartie=PagePartie.creer(stage);
+        this.pagePartie.setControleur(this);
+        this.connexion=PageConnexion.creer(stage);
+        this.connexion.setControleur(this);
     }
 
     public void run(){
-        this.fireOrdre(new Ordre(Ordre.OrdreType.ACCUEIL));
+        accueil.show();
     }
 
     private Joueur joueur;
@@ -50,14 +55,13 @@ public class Controleur implements LanceurOrdre {
 
     public void inscription(String nom, String prenom, String age, String pseudo, String motDePasse) {
         this.creerJoueur(nom, prenom, age, pseudo, motDePasse);
-        this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVEAU_JOUEUR));
+        this.connexion.show();
         System.out.println(BaseMongo.getBase().getJoueur(joueur.getPseudo()));
     }
 
     public void nombre(int nombreJoueurs){
         this.nombreJoueur=nombreJoueurs;
-        this.fireOrdre(new Ordre(Ordre.OrdreType.NOMBRE_JOUEURS));
-        this.fireOrdre(new Ordre(Ordre.OrdreType.JOUEUR));
+        this.pageJoueur.show();
     }
 
 
@@ -65,22 +69,15 @@ public class Controleur implements LanceurOrdre {
         return joueur;
     }
 
-    @Override
-    public void abonnement(EcouteurOrdre o, Ordre.OrdreType... types) {
-        Arrays.stream(types).forEach(e -> this.abonnes.get(e).add(o));
-    }
-
-    @Override
-    public void fireOrdre(Ordre ordre) {
-        this.abonnes.get(ordre.getType()).stream().forEach(e -> e.broadCast(ordre));
-    }
 
     public void creerPartie(Joueur joueur) {
         this.joueur=joueur;
-        this.ticket = this.wonders.creerPartie(this.joueur);
-        this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVELLE_PARTIE));
-        this.fireOrdre(new Ordre(Ordre.OrdreType.CONNEXION));
+        this.ticket = this.wonders.creerPartie(this.joueur, this.nombreJoueur);
+        this.connexion.chargerDonnees();
+        this.connexion.show();
         System.out.println(this.ticket);
+        this.partie=this.wonders.getPartieJeu(joueur.getPseudo());
+        System.out.println(this.partie);
     }
 
     public int getNombreJoueur() {
@@ -92,43 +89,27 @@ public class Controleur implements LanceurOrdre {
     }
 
 
-    public Partie getPartie(){
-        this.partie =this.wonders.getPartieJeu(this.joueur.getPseudo());
-        partie.setNbJoueurs(this.nombreJoueur);
-        System.out.println(this.partie);
-        return partie;
-    }
 
     public void reprendre(Joueur joueur) {
         this.wonders.reprendrePartie(joueur);
-        this.fireOrdre(new Ordre(Ordre.OrdreType.REPRENDRE_PARTIE));
+        this.pagePartie.show();
     }
 
     public void retourAccueil() {
-        this.fireOrdre(new Ordre(Ordre.OrdreType.ACCUEIL));
+        this.accueil.show();
     }
 
-    public void rejoindrePartie(Joueur joueur,String ticket){
-        try {
+    public void rejoindrePartie(Joueur joueur,String ticket) throws TicketInvalideException, PartieDejaPleineException, TicketPerimeException {
             this.wonders.rejoindrePartie(joueur, ticket);
-            this.fireOrdre(new Ordre(Ordre.OrdreType.REJOINDRE_PARTIE));
             this.goToPlateau();
-        } catch (TicketPerimeException e) {
-            this.fireOrdre(new Ordre(Ordre.OrdreType.ERREUR_TICKET_PERIME));
-        } catch (TicketInvalideException e) {
-            this.fireOrdre(new Ordre(Ordre.OrdreType.ERREUR_TICKET_INVALIDE));
-        } catch (PartieDejaPleineException e) {
-            this.fireOrdre(new Ordre(Ordre.OrdreType.ERREUR_PARTIE_PLEINE));
-        }
-
     }
 
     public void goToPlateau(){
-        this.fireOrdre(new Ordre(Ordre.OrdreType.CHOIX_PLATEAU));
+       this.pageChoixPlateau.show();
     }
 
     public void goToNombreJoueurs() {
-        this.fireOrdre(new Ordre(Ordre.OrdreType.PAGE_NOMBRE));
+       this.pageNbJoueur.show();
     }
 
     public boolean partieCommencee() {
@@ -146,8 +127,7 @@ public class Controleur implements LanceurOrdre {
     public void debut(String nomPlateau){
         this.nomPlateau=nomPlateau;
         this.wonders.debutJeu(this.joueur,nomPlateau);
-        this.fireOrdre(new Ordre(Ordre.OrdreType.NOUVEAU_PLATEAU));
-        this.fireOrdre(new Ordre(Ordre.OrdreType.JOUER_PARTIE));
+        this.pagePartie.show();
         System.out.println(this.joueur.getMerveilles());
     }
 }

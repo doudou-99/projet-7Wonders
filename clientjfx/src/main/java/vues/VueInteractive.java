@@ -4,4 +4,5 @@ import controleur.Controleur;
 
 public interface VueInteractive {
     void setControleur(Controleur controleur);
+    void show();
 }

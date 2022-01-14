@@ -1,18 +1,13 @@
 package vues;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import controleur.Controleur;
-import controleur.ordre.EcouteurOrdre;
-import controleur.ordre.LanceurOrdre;
-import controleur.ordre.Ordre;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import modeles.dao.BaseMongo;
 import modeles.exceptions.PartieDejaPleineException;
 import modeles.exceptions.TicketInvalideException;
@@ -22,7 +17,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PageJoueur implements EcouteurOrdre,VueInteractive {
+public class PageJoueur implements VueInteractive {
     @FXML
     public BorderPane pane;
     @FXML
@@ -36,17 +31,19 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
     @FXML
     public PasswordField motDePasse;
     private Scene scene;
+    private Stage stage;
     private Controleur controleur;
 
     public void initialisation(){
         this.scene=new Scene(this.pane);
     }
 
-    public static PageJoueur creer(){
+    public static PageJoueur creer(Stage stage){
         FXMLLoader fxmlLoader = new FXMLLoader(PageJoueur.class.getResource("pageJoueur.fxml"));
         try {
             fxmlLoader.load();
             PageJoueur vue= fxmlLoader.getController();
+            vue.setStage(stage);
             vue.initialisation();
             return vue;
 
@@ -102,35 +99,14 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
     }
 
     @Override
-    public void setAbonnements(LanceurOrdre controleur) {
-        controleur.abonnement(this, Ordre.OrdreType.NOUVEAU_JOUEUR, Ordre.OrdreType.CONNEXION, Ordre.OrdreType.REJOINDRE_PARTIE);
-    }
-
-    @Override
-    public void broadCast(Ordre ordre) {
-        switch (ordre.getType()){
-            case NOUVEAU_JOUEUR:
-                if (BaseMongo.getBase().getJoueurList().contains(BaseMongo.getBase().getJoueur(pseudo.getText()))) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmination de l'ajout du joueur");
-                    alert.setContentText("Le joueur " + this.pseudo.getText() + " a été ajouté! ");
-                    alert.showAndWait();
-                }
-                break;
-            case CONNEXION:
-                Alert ale = new Alert(Alert.AlertType.CONFIRMATION);
-                ale.setTitle("Page connexion");
-                ale.setContentText("Affichage de l'inscription du joueur");
-                ale.showAndWait();
-                break;
-
-
-        }
-    }
-
-    @Override
     public void setControleur(Controleur controleur) {
         this.controleur=controleur;
+    }
+
+    @Override
+    public void show() {
+        this.stage.setScene(this.scene);
+        this.stage.show();
     }
 
     public Scene getScene() {
@@ -150,6 +126,12 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
         thread.start();
     }*/
 
+    private void showError(String title,String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR,message,ButtonType.OK);
+        alert.setTitle(title);
+        alert.showAndWait();
+    }
+
     public void rejoindre(ActionEvent actionEvent) {
         TextInputDialog token = new TextInputDialog();
         token.setTitle("Ticket d'invitation");
@@ -160,14 +142,21 @@ public class PageJoueur implements EcouteurOrdre,VueInteractive {
                 && !(Objects.isNull(age)) && !(Objects.isNull(motDePasse))) {
             this.controleur.creerJoueur(nom.getText(), prenom.getText(), age.getText(), pseudo.getText(), motDePasse.getText());
 
-            this.controleur.rejoindrePartie(this.controleur.getJoueur(), resultat.get());
+            try {
+                this.controleur.rejoindrePartie(this.controleur.getJoueur(), resultat.get());
+            } catch (TicketInvalideException e) {
+                this.showError("Ticket invalide", "Le ticket saisi est invalide!");
+            } catch (PartieDejaPleineException e) {
+                this.showError("Partie déjà pleine","La partie est déjà pleine!");
+            } catch (TicketPerimeException e) {
+               this.showError("Ticket périmé","Le ticket est déjà périmé!");
+            }
         }else{
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur saisie ticket et les autres champs");
-            alert.setHeaderText("Saisie du ticket et des champs");
-            alert.setContentText("Veuillez saisir le ticket et les autres champs (nom,prenom,age, mot de passe et pseudo)!");
-            alert.showAndWait();
-
+            this.showError("Erreur saisie ticket et les autres champs","Veuillez saisir le ticket et les autres champs (nom,prenom,age, mot de passe et pseudo)!" );
         }
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

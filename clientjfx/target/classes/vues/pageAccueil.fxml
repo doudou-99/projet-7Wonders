@@ -9,7 +9,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="jouer" alignment="CENTER" mnemonicParsing="false" prefHeight="39.0" prefWidth="190.0" text="Jouer la partie" onAction="#jouerPartie">
+            <Button fx:id="jouer" alignment="CENTER" mnemonicParsing="false" prefHeight="39.0" prefWidth="190.0" text="Jouer la partie">
                <font>
                   <Font size="18.0" />
                </font>

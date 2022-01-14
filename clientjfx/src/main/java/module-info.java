@@ -15,6 +15,4 @@ module clientjfx {
     exports application;
     exports controleur;
     exports modele;
-
-    exports controleur.ordre;
 }

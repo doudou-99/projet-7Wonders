@@ -8,9 +8,13 @@ import modeles.interfaces.FacadeWonders;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWonders {
     public FacadeWonders facadeWonders;
+
 
     public ServiceWondersImpl() throws RemoteException {
         super();
@@ -23,72 +27,76 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
 
 
     @Override
-    public void ajoutJoueur(Joueur joueur) throws RemoteException {
+    public synchronized void ajoutJoueur(Joueur joueur) throws RemoteException {
         this.facadeWonders.ajoutJoueur(joueur);
     }
 
     @Override
-    public String creerPartie(Joueur joueur) throws RemoteException {
-        return this.facadeWonders.creerPartie(joueur);
+    public synchronized String creerPartie(Joueur joueur, int nombreJoueur) throws RemoteException {
+        return this.facadeWonders.creerPartie(joueur,nombreJoueur);
     }
 
     @Override
-    public boolean choixPlateauFait(String pseudo) throws RemoteException {
+    public synchronized boolean choixPlateauFait(String pseudo) throws RemoteException {
         return this.facadeWonders.choixPlateauFait(pseudo);
     }
 
     @Override
-    public Partie getPartieJeu(String pseudo) throws RemoteException {
+    public synchronized Partie getPartieJeu(String pseudo) throws RemoteException {
         return this.facadeWonders.getPartieJeu(pseudo);
+
     }
 
     @Override
-    public Joueur getJoueur(String pseudo) throws JoueurInexistantException, RemoteException {
+    public synchronized Joueur getJoueur(String pseudo) throws JoueurInexistantException, RemoteException {
         return this.facadeWonders.getJoueur(pseudo);
     }
 
     @Override
-    public void rejoindrePartie(Joueur joueur, String ticket) throws TicketPerimeException, TicketInvalideException, PartieDejaPleineException, RemoteException { ;
-        this.facadeWonders.rejoindrePartie(joueur,ticket);
+    public synchronized void rejoindrePartie(Joueur joueur, String ticket) throws TicketPerimeException, TicketInvalideException, PartieDejaPleineException, RemoteException {
+        this.facadeWonders.rejoindrePartie(joueur, ticket);
     }
 
     @Override
-    public void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RemoteException, ChoixDejaFaitException, CiteContientCarteException, ConstructionMerveilleImpossible, PieceInsuffisanteException, ChoixIncompletsException, RessourceVoisinInsuffisantException, CartePasConstruiteException, RessourceInsuffisanteException, ConstructionImpossibleException, RessourceInexistanteException {
+    public synchronized void jouer(Joueur joueur, String choixAction, String nomCarte, String choixCarte) throws RemoteException, ChoixDejaFaitException, CiteContientCarteException, ConstructionMerveilleImpossible, PieceInsuffisanteException, ChoixIncompletsException, RessourceVoisinInsuffisantException, CartePasConstruiteException, RessourceInsuffisanteException, ConstructionImpossibleException, RessourceInexistanteException {
         this.facadeWonders.jouer(joueur, choixAction, nomCarte, choixCarte);
     }
 
     @Override
-    public void arreterPartie(Joueur joueur) throws RemoteException {
+    public synchronized void arreterPartie(Joueur joueur) throws RemoteException {
         this.facadeWonders.arreterPartie(joueur);
     }
 
     @Override
-    public void reprendrePartie(Joueur joueur) throws RemoteException {
+    public synchronized void reprendrePartie(Joueur joueur) throws RemoteException {
         this.facadeWonders.reprendrePartie(joueur);
     }
 
+
+
+
     @Override
-    public boolean partieTerminee(Joueur joueur) throws RemoteException {
+    public synchronized boolean partieTerminee(Joueur joueur) throws RemoteException {
         return this.facadeWonders.partieTerminee(joueur);
     }
 
     @Override
-    public void debutJeu(Joueur joueur, String nomPlateau) throws RemoteException{
+    public synchronized void debutJeu(Joueur joueur, String nomPlateau) throws RemoteException{
         this.facadeWonders.debutJeu(joueur, nomPlateau);
     }
 
     @Override
-    public String vainqueur(Joueur joueur) throws PartieNonTermineeException, RemoteException {
+    public synchronized String vainqueur(Joueur joueur) throws PartieNonTermineeException, RemoteException {
         return this.facadeWonders.vainqueur(joueur);
     }
 
     @Override
-    public boolean partieCommencee(Joueur joueur) throws RemoteException {
+    public synchronized boolean partieCommencee(Joueur joueur) throws RemoteException {
         return this.facadeWonders.partieCommencee(joueur);
     }
 
     @Override
-    public void finDePartie() throws RemoteException {
+    public synchronized void finDePartie() throws RemoteException {
         this.facadeWonders.finDePartie();
     }
 }

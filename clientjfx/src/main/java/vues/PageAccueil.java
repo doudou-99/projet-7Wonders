@@ -1,9 +1,6 @@
 package vues;
 
 import controleur.Controleur;
-import controleur.ordre.EcouteurOrdre;
-import controleur.ordre.LanceurOrdre;
-import controleur.ordre.Ordre;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PageAccueil implements EcouteurOrdre,VueInteractive {
+public class PageAccueil implements VueInteractive {
     @FXML
     public BorderPane pane;
     @FXML
@@ -28,6 +26,7 @@ public class PageAccueil implements EcouteurOrdre,VueInteractive {
 
     private Scene scene;
     private Controleur controleur;
+    private Stage stage;
 
     public void initialisation(){this.scene = new Scene(this.pane);}
 
@@ -35,22 +34,28 @@ public class PageAccueil implements EcouteurOrdre,VueInteractive {
         return scene;
     }
 
-    public static PageAccueil creer(){
+    public static PageAccueil creer(Stage stage){
         FXMLLoader fxmlLoader = new FXMLLoader(PageAccueil.class.getResource("pageAccueil.fxml"));
         try{
             fxmlLoader.load();
-            PageAccueil vue = fxmlLoader.getController();
-            vue.initialisation();
-            return vue;
+
 
         } catch (IOException e) {
             throw new RuntimeException("Erreur chargement menu");
         }
+        PageAccueil vue = fxmlLoader.getController();
+        vue.setStage(stage);
+        vue.initialisation();
+        vue.initailiserBouton();
+        return vue;
+    }
+
+    public void initailiserBouton(){
+        this.jouer.setOnAction(e -> jouerPartie());
     }
 
 
-    public void jouerPartie(ActionEvent actionEvent) {
-
+    public void jouerPartie() {
         this.controleur.goToNombreJoueurs();
     }
 
@@ -67,49 +72,17 @@ public class PageAccueil implements EcouteurOrdre,VueInteractive {
     }
 
     @Override
-    public void setAbonnements(LanceurOrdre controleur) {
-        controleur.abonnement(this, Ordre.OrdreType.PAGE_NOMBRE,
-                Ordre.OrdreType.REPRENDRE_PARTIE, Ordre.OrdreType.AIDE, Ordre.OrdreType.RETOUR);
-    }
-
-    @Override
-    public void broadCast(Ordre ordre) {
-        switch (ordre.getType()){
-            case PAGE_NOMBRE:
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Validation nombre de joueurs");
-                alert.setContentText("Aller à la page nombre de joueurs");
-                alert.setHeaderText("Page de saisie de nombre de joueurs");
-                alert.showAndWait();
-                break;
-            case REPRENDRE_PARTIE:
-                Alert aler = new Alert(Alert.AlertType.CONFIRMATION);
-                aler.setTitle("Reprise partie");
-                aler.setContentText("Partie reprise");
-                aler.setHeaderText("Partie reprise");
-                aler.showAndWait();
-                break;
-            case AIDE:
-                Alert alerte = new Alert(Alert.AlertType.CONFIRMATION);
-                alerte.setTitle("Aide partie");
-                alerte.setContentText("Aide partie");
-                alerte.setHeaderText("Aide partie");
-                alerte.showAndWait();
-                break;
-            case RETOUR:
-                Alert ale = new Alert(Alert.AlertType.CONFIRMATION);
-                ale.setTitle("Accueil");
-                ale.setContentText("Retour à l'accueil!");
-                ale.setHeaderText("Accueil");
-                ale.showAndWait();
-                break;
-
-        }
-
-    }
-
-    @Override
     public void setControleur(Controleur controleur) {
         this.controleur=controleur;
+    }
+
+    @Override
+    public void show() {
+        this.stage.setScene(this.scene);
+        this.stage.show();
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

@@ -11,8 +11,11 @@ public interface FacadeWonders {
     boolean choixPlateauFait(String pseudo);
     String creerPartie(Joueur joueur,int nombreJoueur);
 
-    Partie getPartieJeu(String pseudo);
+    List<Carte> getCartesMainJoueur(String pseudo);
 
+    Partie getPartieJeu(String pseudo);
+    Plateau getPlateau(String pseudo);
+    List<Carte> donnerCarteJoueur(Joueur joueur);
 
     Joueur getJoueur(String pseudo) throws JoueurInexistantException;
 

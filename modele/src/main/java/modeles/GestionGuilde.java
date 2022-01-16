@@ -6,7 +6,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GestionGuilde {
+public class GestionGuilde implements Serializable{
+    private final static long serialVersionUID=3L;
     private Map<String,Joueur> joueurGuilde;
     private Map<String, Integer> nombreJoueur;
     private GestionTour tour;

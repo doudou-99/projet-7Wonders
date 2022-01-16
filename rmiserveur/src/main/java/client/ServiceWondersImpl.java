@@ -1,16 +1,16 @@
 package client;
 
+import modeles.Carte;
 import modeles.Joueur;
 import modeles.Partie;
+import modeles.Plateau;
 import modeles.exceptions.*;
 import modeles.facade.FacadeWondersImpl;
 import modeles.interfaces.FacadeWonders;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWonders {
     public FacadeWonders facadeWonders;
@@ -39,6 +39,12 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
     @Override
     public synchronized boolean choixPlateauFait(String pseudo) throws RemoteException {
         return this.facadeWonders.choixPlateauFait(pseudo);
+    }
+
+    @Override
+    public List<Carte> donnerCarteJoueur(Joueur joueur) throws RemoteException {
+        this.facadeWonders.donnerCarteJoueur(joueur);
+        return null;
     }
 
     @Override
@@ -72,7 +78,10 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
         this.facadeWonders.reprendrePartie(joueur);
     }
 
-
+    @Override
+    public Plateau getPlateau(String pseudo) throws RemoteException {
+        return this.facadeWonders.getPlateau(pseudo);
+    }
 
 
     @Override
@@ -98,5 +107,10 @@ public class ServiceWondersImpl extends UnicastRemoteObject implements ServiceWo
     @Override
     public synchronized void finDePartie() throws RemoteException {
         this.facadeWonders.finDePartie();
+    }
+
+    @Override
+    public List<Carte> getCartesMainJoueur(String pseudo) throws RemoteException{
+        return this.facadeWonders.getCartesMainJoueur(pseudo);
     }
 }

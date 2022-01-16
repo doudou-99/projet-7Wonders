@@ -4,10 +4,11 @@ import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class Bataille {
+public class Bataille implements Serializable {
     @BsonProperty("_id")
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String id;
@@ -20,7 +21,7 @@ public class Bataille {
 
     public Bataille(){}
 
-    public Bataille(String id,List<String> nomDuVaincu, String nomDuVainqueur,Age age) {
+    public Bataille(List<String> nomDuVaincu, String nomDuVainqueur,Age age) {
         this.nomDuVaincu = nomDuVaincu;
         this.nomDuVainqueur = nomDuVainqueur;
         this.age=age;
@@ -48,6 +49,14 @@ public class Bataille {
 
     public Age getAge() {
         return age;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GestionCapacite implements Serializable{
+    private final static long serialVersionUID=3L;
     private static int idCompas;
     private static int idBois;
     private static int idArgile;

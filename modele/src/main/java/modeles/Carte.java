@@ -3,11 +3,13 @@ package modeles;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Carte {
+public class Carte implements Serializable {
+    private final static long serialVersionUID=5L;
     @BsonId()
     @BsonProperty("_id")
     private String id;

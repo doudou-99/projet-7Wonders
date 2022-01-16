@@ -4,14 +4,17 @@ import modeles.dao.BaseMongo;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MainJoueur {
+public class MainJoueur implements Serializable{
+    private final static long serialVersionUID=3L;
     private PaquetCarte paquetCarte;
     private Map<String,Joueur> joueurs;
     private Map<String, Integer> nombreJoueur;
     private Map<String,String> choixJoueur;
     private GestionTour gestionTour;
+    private Map<String,List<Carte>> cartesMain;
 
     public MainJoueur(){}
 
@@ -19,17 +22,24 @@ public class MainJoueur {
         this.joueurs=new HashMap<>();
         this.nombreJoueur=new HashMap<>();
         this.choixJoueur=new HashMap<>();
+        this.cartesMain=new HashMap<>();
         this.paquetCarte=paquetCarte;
-        this.donnerMainCarte();
+        this.paquetCarte.distribuire(4);
+
     }
     public void donnerMainCarte(){
         for(Joueur joueur: BaseMongo.getBase().getJoueurList()){
-            if (joueurs.containsKey(String.valueOf(nombreJoueur.get(joueur.getPseudo()))) && this.choixJoueur.containsKey(joueur.getPseudo())) {
+            if (joueurs.containsValue(joueur)) {
                 joueur.cartesEnPossession(paquetCarte);
+                cartesMain.put(joueur.getPseudo(),joueur.cartesEnPossession(paquetCarte));
             }
         }
     }
 
+    public List<Carte> donnerMainCarteJoueur(Joueur joueur){
+            cartesMain.put(joueur.getPseudo(),joueur.cartesEnPossession(paquetCarte));
+            return joueur.cartesEnPossession(paquetCarte);
+    }
     public Joueur voisinDroite(String joueur) {
         Joueur joueur1 = BaseMongo.getBase().getJoueur(joueur);
         int voisin = 0;
@@ -160,5 +170,13 @@ public class MainJoueur {
                 ", choixJoueur=" + choixJoueur +
                 ", gestionTour=" + gestionTour +
                 '}';
+    }
+
+    public Map<String, List<Carte>> getCartesMain() {
+        return cartesMain;
+    }
+
+    public void setCartesMain(Map<String, List<Carte>> cartesMain) {
+        this.cartesMain = cartesMain;
     }
 }

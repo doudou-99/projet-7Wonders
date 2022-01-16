@@ -15,11 +15,13 @@ public class Partie implements Serializable {
     @BsonProperty("_id")
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String idPartie;
+    private int nombrePartie;
     private int nbJoueurs;
     private Joueur createur;
     private List<Joueur> participants;
     private EtatPartie etatPartie;
     private PartieGestion partieGestionCourant;
+
     private static int ID;
 
 
@@ -28,6 +30,8 @@ public class Partie implements Serializable {
     public Partie(){}
 
     public Partie(Joueur createur, int nombreJoueur) {
+        ID=ID++;
+        this.nombrePartie=ID;
         this.createur = createur;
         this.nbJoueurs=nombreJoueur;
         this.participants=new ArrayList<>();
@@ -60,8 +64,17 @@ public class Partie implements Serializable {
         this.partieGestionCourant.getGestionCommerce().faireAffaire(pseudo, choixCite, nomCarte);
     }
 
+    public List<Carte> donnerCarteJoueur(Joueur joueur){
+        return this.partieGestionCourant.getMainJoueur().donnerMainCarteJoueur(joueur);
+    }
+
     public void debutJeu(Joueur joueur,String nomPlateau){
         this.partieGestionCourant.choisirPlateau(joueur,nomPlateau);
+        this.partieGestionCourant.getMainJoueur().donnerMainCarte();
+    }
+
+    public List<Carte> getCartesMainJoueur(String pseudo){
+        return this.partieGestionCourant.getMainJoueur().getCartesMain().get(pseudo);
     }
 
     public void rejoindrePartie(Joueur joueur) throws PartieDejaPleineException {
@@ -197,10 +210,19 @@ public class Partie implements Serializable {
         this.nbJoueurs = nbJoueurs;
     }
 
+    public int getNombrePartie() {
+        return nombrePartie;
+    }
+
+    public void setNombrePartie(int nombrePartie) {
+        this.nombrePartie = nombrePartie;
+    }
+
     @Override
     public String toString() {
         return "Partie{" +
                 "idPartie='" + idPartie + '\'' +
+                ", nombrePartie=" + nombrePartie +
                 ", nbJoueurs=" + nbJoueurs +
                 ", createur=" + createur +
                 ", participants=" + participants +

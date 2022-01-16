@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Defausse implements Serializable {
+    private final static long serialVersionUID=2L;
     @BsonProperty("listeDesCartesDefausse")
     private Collection<Carte> carteDefaussees;
 

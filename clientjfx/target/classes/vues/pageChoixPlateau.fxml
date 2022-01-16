@@ -8,11 +8,11 @@
 
 <BorderPane fx:id="borderpane" prefHeight="550.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@images/background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vues.PageChoixPlateau">
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="MausoleeDHalicarnasse" fitHeight="93.0" fitWidth="158.0" onMouseClicked="#choix" pickOnBounds="true">
+                  <ImageView fx:id="MausoleeDHalicarnasse" fitHeight="93.0" fitWidth="158.0" onMouseClicked="#choixMausolee" pickOnBounds="true">
                      <image>
                         <Image url="@images/PlateauMerveille/LeMausoleeDHalicarnasse.jpg" />
                      </image>
@@ -28,7 +28,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView fx:id="StatueDeZeus" fitHeight="91.0" fitWidth="176.0" onMouseClicked="#choix" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="StatueDeZeus" fitHeight="91.0" fitWidth="176.0" onMouseClicked="#choixStatue" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/PlateauMerveille/LaStatueDeZeusAOlympie.jpg" />
                      </image>
@@ -40,7 +40,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="TempleDArtemis" fitHeight="100.0" fitWidth="158.0" onMouseClicked="#choix" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="TempleDArtemis" fitHeight="100.0" fitWidth="158.0" onMouseClicked="#choixTemple" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/PlateauMerveille/LeTempleDArtemis.jpg" />
                      </image>
@@ -48,7 +48,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView fx:id="JardinsSuspendus" fitHeight="100.0" fitWidth="167.0" onMouseClicked="#choix" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="JardinsSuspendus" fitHeight="100.0" fitWidth="167.0" onMouseClicked="#choixJardins" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -56,7 +56,7 @@
                         <Image url="@images/PlateauMerveille/LesJardinsSuspendusDeBabylone.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="PhareAlexandrie" fitHeight="90.0" fitWidth="194.0" onMouseClicked="#choix" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="PhareAlexandrie" fitHeight="90.0" fitWidth="194.0" onMouseClicked="#choixPhare" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/PlateauMerveille/PhareDAlexandrie.jpg" />
                      </image>
@@ -68,7 +68,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="PiramideGizeh" fitHeight="90.0" fitWidth="184.0" onMouseClicked="#choix" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="PiramideGizeh" fitHeight="90.0" fitWidth="184.0" onMouseClicked="#choixPiramide" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/PlateauMerveille/PiramideDeGizeh.jpg" />
                      </image>

@@ -1,6 +1,9 @@
 package modeles;
 
-public class Cout {
+import java.io.Serializable;
+
+public class Cout implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String ressource;
     private int nombreUnite;
 

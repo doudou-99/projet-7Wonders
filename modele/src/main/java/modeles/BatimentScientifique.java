@@ -1,6 +1,9 @@
 package modeles;
 
-public class BatimentScientifique {
+import java.io.Serializable;
+
+public class BatimentScientifique implements Serializable {
+    private final static long serialVersionUID=3L;
     private String nomCarte;
     private String typeSymbole;
     private int nombre;

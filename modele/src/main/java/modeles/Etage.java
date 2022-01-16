@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public class Etage implements Serializable {
+    private final static long serialVersionUID=3L;
     @BsonProperty("_id")
     private String id;
     private CoutConstructionEtage coutConstruction;

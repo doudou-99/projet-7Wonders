@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GestionBataille  {
+public class GestionBataille  implements Serializable{
+    private final static long serialVersionUID=4L;
     private Bataille bataille;
     private Map<String,Joueur> joueurBataille;
     private Map<String, Integer> nombreJoueur;

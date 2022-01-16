@@ -1,6 +1,9 @@
 package modeles;
 
-public class BatimentCivil{
+import java.io.Serializable;
+
+public class BatimentCivil implements Serializable {
+    private final static long serialVersionUID=3L;
     private String nom;
     private int nombre;
     public BatimentCivil(){}

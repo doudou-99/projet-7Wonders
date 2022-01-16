@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class PaquetCarte {
-
+public class PaquetCarte implements Serializable{
+    private final static long serialVersionUID=3L;
     private List<Carte> cartesCollection;
     private GestionTour tour;
 

@@ -3,7 +3,8 @@ package modeles;
 import java.io.Serializable;
 import java.util.Collection;
 
-public class Effet {
+public class Effet implements Serializable{
+    private static final long serialVersionUID=2L;
     private String capacite;
     private int nombre;
     private Collection<String> choix;

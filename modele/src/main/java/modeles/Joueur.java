@@ -70,6 +70,7 @@ public class Joueur implements Serializable {
         this.pointsVictoireGuilde=0;
         this.pointMerveille=0;
         this.gestionCapacite=new GestionCapacite();
+        this.merveilles="";
     }
 
 
@@ -239,11 +240,8 @@ public class Joueur implements Serializable {
     }
 
     public void choisirPlateau(String nomPlateau){
-        if (BaseMongo.getBase().getPlateauList().contains(BaseMongo.getBase().getPlateauNom(nomPlateau))){
             this.setMerveilles(nomPlateau);
             BaseMongo.getBase().ajoutMerveilleJoueur(this.pseudo,nomPlateau);
-            this.gestionCapacite.gererCapacitePlateau(nomPlateau);
-        }
     }
 
     public int scoreEtages(modeles.Joueur joueur){

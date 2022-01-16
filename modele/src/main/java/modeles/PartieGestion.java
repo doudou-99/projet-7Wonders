@@ -3,8 +3,6 @@ package modeles;
 import modeles.dao.BaseMongo;
 import modeles.exceptions.*;
 import modeles.interfaces.Score;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,6 +14,7 @@ public class PartieGestion implements Serializable {
     private Map<String,String> choix;
     private Map<String,Integer> score;
     private Map<String,String> citeJoueurs;
+    private Map<String,Integer> nombreJoueur;
     private GestionCommerce gestionCommerce;
     private GestionGuilde gestionGuilde;
     private GestionBataille gestionBataille;
@@ -29,16 +28,21 @@ public class PartieGestion implements Serializable {
         this.choix=new HashMap<>();
         this.score=new HashMap<>();
         this.citeJoueurs=new HashMap<>();
+        this.nombreJoueur=new HashMap<>();
         for (int i=0;i<joueurList.size();i++){
             this.joueurs.put(String.valueOf(i),joueurList.get(i));
             this.score.put(String.valueOf(i),joueurList.get(i).getNombreDePoints());
             this.citeJoueurs.put(joueurList.get(i).getPseudo(),String.valueOf(i));
+            this.nombreJoueur.put(joueurList.get(i).getPseudo(), i);
         }
         this.gestiontour=new GestionTour(BaseMongo.getBase().getAges().get(0));
         Tour tour = new Tour(BaseMongo.getBase().getAges().get(0));
         this.gestiontour.setTour(tour);
         this.paquetCarte=new PaquetCarte(this.gestiontour.getTour().getAge());
         this.mainJoueur=new MainJoueur(this.paquetCarte);
+        this.mainJoueur.setJoueurs(joueurs);
+        this.mainJoueur.setChoixJoueur(choix);
+        this.mainJoueur.setNombreJoueur(this.nombreJoueur);
     }
 
     public void choisirPlateau(Joueur joueur,String nomPlateau){
@@ -48,6 +52,19 @@ public class PartieGestion implements Serializable {
     }
 
 
+    public void choixJoueur( String joueur,String choix, String nomCarte,String choixCarte) throws ChoixDejaFaitException, CiteContientCarteException, RessourceInexistanteException, CartePasConstruiteException, RessourceVoisinInsuffisantException, RessourceInsuffisanteException, ConstructionImpossibleException, PieceInsuffisanteException, ConstructionMerveilleImpossible {
+        switch (choix){
+            case "Defausse carte":
+                choixDefausse(joueur, nomCarte);
+                break;
+            case "Construire bâtiment":
+                choixJouerCarte(joueur,nomCarte,choixCarte);
+                break;
+            case "Construire merveille":
+                choixConstructionMerveille(joueur, nomCarte);
+                break;
+        }
+    }
 
     public void defausseCarte(String pseudo,String carte){
         Joueur joueur =BaseMongo.getBase().getJoueur(pseudo);
@@ -61,105 +78,107 @@ public class PartieGestion implements Serializable {
 
     }
 
-    public void choixJoueur(String joueur, String choixJeu,String nomCarte,String choixCarte) throws ChoixDejaFaitException, ConstructionMerveilleImpossible, RessourceVoisinInsuffisantException, RessourceInexistanteException, CartePasConstruiteException, RessourceInsuffisanteException, PieceInsuffisanteException, ConstructionImpossibleException, CiteContientCarteException {
+    public void choixDefausse(String joueur, String nomCarte) throws ChoixDejaFaitException {
         if (!Objects.isNull(this.choix.get(joueur))) {
             throw new ChoixDejaFaitException();
         }
-        switch (choixJeu){
-            case "Defausser carte":
-                this.defausseCarte(joueur,nomCarte);
-                break;
-            case "Construire batiment":
-                for (Joueur j: joueurs.values()){
-                    if(j.getPseudo().equals(joueur)){
-                        j.jouerCarte(nomCarte);
-                        this.choix.put(j.getPseudo(),nomCarte);
-                        for(Effet e: BaseMongo.getBase().getCartesNom(nomCarte).getEffet()){
-                            if (e.getCapacite().contains("/")){
-                                for (String cap: e.getChoix()){
-                                    if (choixCarte.equals(cap)){
-                                        j.getGestionCapacite().augmenterRessource(choixCarte,1);
+        this.defausseCarte(joueur,nomCarte);
+    }
+
+    public void choixJouerCarte(String joueur, String nomCarte,String choixCarte) throws ChoixDejaFaitException, CiteContientCarteException, RessourceInsuffisanteException, RessourceInexistanteException, CartePasConstruiteException, RessourceVoisinInsuffisantException, ConstructionImpossibleException, PieceInsuffisanteException {
+        if (!Objects.isNull(this.choix.get(joueur))) {
+            throw new ChoixDejaFaitException();
+        }
+        for (Joueur j: joueurs.values()){
+            if(j.getPseudo().equals(joueur)){
+                j.jouerCarte(nomCarte);
+                this.choix.put(j.getPseudo(),nomCarte);
+                for(Effet e: BaseMongo.getBase().getCartesNom(nomCarte).getEffet()){
+                    if (e.getCapacite().contains("/")){
+                        for (String cap: e.getChoix()){
+                            if (choixCarte.equals(cap)){
+                                j.getGestionCapacite().augmenterRessource(choixCarte,1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void choixConstructionMerveille(String joueur, String nomCarte) throws ConstructionMerveilleImpossible, ChoixDejaFaitException {
+        if (!Objects.isNull(this.choix.get(joueur))) {
+            throw new ChoixDejaFaitException();
+        }
+        PaquetCarte paquetCar = new PaquetCarte(this.gestiontour.getTour().getAge());
+        for(Joueur j: joueurs.values()) {
+            if (j.getPseudo().equals(joueur)) {
+                Collection<Carte> car = j.cartesEnPossession(paquetCar);
+                for (Carte c : car) {
+                    if (c.getNom().equals(nomCarte)) {
+                        Plateau plateau = BaseMongo.getBase().getPlateauNom(j.getMerveilles());
+                        for (Etage etage : plateau.getEtages()) {
+                            if (etage.getId().equals("etage:1")) {
+                                j.constructionMerveille(etage, c);
+                                for (Effet e : etage.getEffet()) {
+                                    if (e.getCapacite().equals("point de victoire")) {
+                                        if (citeJoueurs.get(j.getPseudo()).equals("1")) {
+                                            this.score.put("1", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                        if (citeJoueurs.get(j.getPseudo()).equals("0")) {
+                                            this.score.put("0", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                        if (citeJoueurs.get(j.getPseudo()).equals("2")) {
+                                            this.score.put("2", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                        if (citeJoueurs.get(j.getPseudo()).equals("3")) {
+                                            this.score.put("3", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                    }
+                                }
+
+                            } else if (etage.getId().equals("etage:2")) {
+                                j.constructionMerveille(etage, c);
+                                for (Effet e : etage.getEffet()) {
+                                    if (!e.getCapacite().equals("point de victoire")) {
+                                        j.getGestionCapacite().augmenterRessource(e.getCapacite(), e.getNombre());
+                                    } else {
+                                        this.score.put("3", e.getNombre());
+                                        j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                    }
+                                }
+                            } else if (etage.getId().equals("etage:3")) {
+                                j.constructionMerveille(etage, c);
+                                for (Effet e : etage.getEffet()) {
+                                    if (e.getCapacite().equals("point de victoire")) {
+                                        if (citeJoueurs.get(j.getPseudo()).equals("1")) {
+                                            this.score.put("1", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                        if (citeJoueurs.get(j.getPseudo()).equals("0")) {
+                                            this.score.put("0", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                        if (citeJoueurs.get(j.getPseudo()).equals("2")) {
+                                            this.score.put("2", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
+                                        if (citeJoueurs.get(j.getPseudo()).equals("3")) {
+                                            this.score.put("3", e.getNombre());
+                                            j.setPointMerveille(j.getPointMerveille() + e.getNombre());
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-
-                break;
-            case "Construire merveille":
-
-                PaquetCarte paquetCar = new PaquetCarte(this.gestiontour.getTour().getAge());
-                for(Joueur j: joueurs.values()) {
-                    if (j.getPseudo().equals(joueur)) {
-                        Collection<Carte> car = j.cartesEnPossession(paquetCar);
-                        for (Carte c : car) {
-                            if (c.getNom().equals(nomCarte)) {
-                                Plateau plateau = BaseMongo.getBase().getPlateauNom(j.getMerveilles());
-                                for (Etage etage : plateau.getEtages()) {
-                                    if (etage.getId().equals("etage:1")) {
-                                        j.constructionMerveille(etage, c);
-                                        for (Effet e : etage.getEffet()) {
-                                            if (e.getCapacite().equals("point de victoire")) {
-                                                if (citeJoueurs.get(j.getPseudo()).equals("1")) {
-                                                    this.score.put("1", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                                if (citeJoueurs.get(j.getPseudo()).equals("0")) {
-                                                    this.score.put("0", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                                if (citeJoueurs.get(j.getPseudo()).equals("2")) {
-                                                    this.score.put("2", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                                if (citeJoueurs.get(j.getPseudo()).equals("3")) {
-                                                    this.score.put("3", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                            }
-                                        }
-
-                                    } else if (etage.getId().equals("etage:2")) {
-                                        j.constructionMerveille(etage, c);
-                                        for (Effet e : etage.getEffet()) {
-                                            if (!e.getCapacite().equals("point de victoire")) {
-                                                j.getGestionCapacite().augmenterRessource(e.getCapacite(), e.getNombre());
-                                            }else{
-                                                this.score.put("3",e.getNombre());
-                                                j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                            }
-                                        }
-                                    } else if (etage.getId().equals("etage:3")) {
-                                        j.constructionMerveille(etage, c);
-                                        for (Effet e : etage.getEffet()) {
-                                            if (e.getCapacite().equals("point de victoire")) {
-                                                if (citeJoueurs.get(j.getPseudo()).equals("1")) {
-                                                    this.score.put("1", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                                if (citeJoueurs.get(j.getPseudo()).equals("0")) {
-                                                    this.score.put("0", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                                if (citeJoueurs.get(j.getPseudo()).equals("2")) {
-                                                    this.score.put("2", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                                if (citeJoueurs.get(j.getPseudo()).equals("3")) {
-                                                    this.score.put("3", e.getNombre());
-                                                    j.setPointMerveille(j.getPointMerveille()+e.getNombre());
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        this.choix.put(j.getPseudo(), nomCarte);
-                    }
-                }
-                break;
+                this.choix.put(j.getPseudo(), nomCarte);
+            }
         }
     }
 
@@ -345,6 +364,14 @@ public class PartieGestion implements Serializable {
 
     public void setPaquetCarte(PaquetCarte paquetCarte) {
         this.paquetCarte = paquetCarte;
+    }
+
+    public Map<String, Integer> getNombreJoueur() {
+        return nombreJoueur;
+    }
+
+    public void setNombreJoueur(Map<String, Integer> nombreJoueur) {
+        this.nombreJoueur = nombreJoueur;
     }
 
     @Override

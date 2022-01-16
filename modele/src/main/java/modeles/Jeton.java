@@ -4,7 +4,8 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.io.Serializable;
 
-public class Jeton {
+public class Jeton implements Serializable{
+    private final static long serialVersionUID=3L;
     private final static int nombre = 42;
     @BsonProperty("_id")
     private String id;

@@ -3,17 +3,31 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-
 <BorderPane fx:id="pane" prefHeight="550.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@images/background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vues.PagePartie">
+
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" >
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
+            <HBox fx:id="plateauCreateur" prefHeight="100.0" prefWidth="200.0">
+               <children></children>
             </HBox>
          </children>
       </VBox>
    </center>
+   <top>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="TOP_CENTER" fx:id="plateaux" prefHeight="100.0" prefWidth="200.0">
+               <children></children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER" fx:id="carteAjouer" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

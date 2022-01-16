@@ -12,7 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GestionCommerce  {
+public class GestionCommerce  implements Serializable{
+    private final static long serialVersionUID=3L;
     private Map<String,Joueur> joueurCommerce;
     private static int coutPieces = 2;
     private Map<String, Integer> nombreJoueur;

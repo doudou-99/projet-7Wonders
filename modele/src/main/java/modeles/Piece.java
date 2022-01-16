@@ -3,7 +3,8 @@ package modeles;
 
 import java.io.Serializable;
 
-public class Piece{
+public class Piece implements Serializable{
+    private final static long serialVersionUID=3L;
     private String type;
     private int valeur;
     private int nombrePieces;

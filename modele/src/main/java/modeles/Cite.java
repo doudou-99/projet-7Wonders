@@ -2,10 +2,12 @@ package modeles;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cite {
+public class Cite implements Serializable {
+    private final static long serialVersionUID=6L;
     @BsonProperty("_id")
     private String id;
     private List<Carte> cartes;

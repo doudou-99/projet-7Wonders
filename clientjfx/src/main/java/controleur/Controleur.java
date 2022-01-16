@@ -3,8 +3,10 @@ package controleur;
 import javafx.stage.Stage;
 import modele.ProxyServiceWonders;
 import modele.ProxyServiceWondersImpl;
+import modeles.Carte;
 import modeles.Joueur;
 import modeles.Partie;
+import modeles.Plateau;
 import modeles.dao.BaseMongo;
 import modeles.exceptions.PartieDejaPleineException;
 import modeles.exceptions.TicketInvalideException;
@@ -47,6 +49,9 @@ public class Controleur{
     private int nombreJoueur;
     private String nomPlateau;
     private Partie partie;
+    private Plateau plateau;
+    private String url;
+    private List<Carte> cartesMain;
 
     public void creerJoueur(String nom, String prenom, String age, String pseudo, String motDePasse){
         this.joueur = new Joueur(nom,prenom,pseudo,age,motDePasse);
@@ -70,6 +75,7 @@ public class Controleur{
     }
 
 
+
     public void creerPartie(Joueur joueur) {
         this.joueur=joueur;
         this.ticket = this.wonders.creerPartie(this.joueur, this.nombreJoueur);
@@ -88,7 +94,9 @@ public class Controleur{
         return ticket;
     }
 
-
+    public void goToPartie(){
+        this.pagePartie.show();
+    }
 
     public void reprendre(Joueur joueur) {
         this.wonders.reprendrePartie(joueur);
@@ -100,8 +108,13 @@ public class Controleur{
     }
 
     public void rejoindrePartie(Joueur joueur,String ticket) throws TicketInvalideException, PartieDejaPleineException, TicketPerimeException {
-            this.wonders.rejoindrePartie(joueur, ticket);
-            this.goToPlateau();
+            if (Objects.isNull(this.partie)){
+                this.partie=BaseMongo.getBase().getPartieList().get(0);
+                this.wonders.rejoindrePartie(joueur, ticket);
+                this.pageChoixPlateau.chargerDonnees();
+                this.goToPlateau();
+            }
+
     }
 
     public void goToPlateau(){
@@ -124,10 +137,36 @@ public class Controleur{
         return nomPlateau;
     }
 
+    public Partie getPartie() {
+        return partie;
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
     public void debut(String nomPlateau){
         this.nomPlateau=nomPlateau;
         this.wonders.debutJeu(this.joueur,nomPlateau);
-        this.pagePartie.show();
+        this.plateau = this.wonders.getPlateau(this.joueur.getPseudo());
+        System.out.println(this.url);
+        this.pagePartie.initialiserPlateaux();
+        this.cartesMain=this.wonders.getCartesMainJoueur(joueur.getPseudo());
+        System.out.println(this.cartesMain);
+        this.pagePartie.initialiserCartes();
+        this.goToPartie();
         System.out.println(this.joueur.getMerveilles());
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public List<Carte> getCartesMain() {
+        return cartesMain;
     }
 }

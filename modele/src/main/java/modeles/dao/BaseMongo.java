@@ -147,11 +147,15 @@ public class BaseMongo{
         this.getJoueurs().findOneAndUpdate(filter,update, options);
     }
 
-    public void ajoutMerveilleJoueur(String pseudo,String merveille){
+    public void ajoutJoueurPartie(int nombrePartie,Joueur joueur){
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
-        Bson filter = Filters.eq("pseudo",pseudo);
-        Bson update = Updates.push("merveilles",merveille);
-        this.getJoueurs().findOneAndUpdate(filter,update, options);
+        Bson filter = Filters.eq("nombrePartie",nombrePartie);
+        Bson update = Updates.push("participants",joueur);
+        this.getJeu().findOneAndUpdate(filter,update, options);
+    }
+
+    public void ajoutMerveilleJoueur(String pseudo,String merveille){
+        this.getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("merveilles",merveille)));
     }
 
     public void ajoutBataille(Bataille bataille){
@@ -171,10 +175,7 @@ public class BaseMongo{
     }
 
     public void ajoutPointsJoueur(String pseudo,int nombrePoint){
-        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
-        Bson filter = Filters.eq("pseudo", pseudo);
-        Bson upda = Updates.push("nombreDePoints", nombrePoint);
-        getBase().getJoueurs().findOneAndUpdate(filter, upda, options);
+        getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("nombreDePoints",nombrePoint)));;
     }
     
     public void ajoutCarteEtagesJoueur(String pseudo, Carte carteEtage){
@@ -206,10 +207,7 @@ public class BaseMongo{
     }
 
     public void modifieNombrePiecesJoueur(String pseudo,int nb){
-        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
-        Bson filter = Filters.eq("pseudo",pseudo);
-        Bson update = Updates.push("nombrePieces", nb);
-        getBase().getJoueurs().findOneAndUpdate(filter, update, options);
+        getBase().getJoueurs().updateOne(Filters.eq("pseudo",pseudo),combine(set("nombrePieces",nb)));
     }
 
     public void ajoutPointsBataille(String pseudo,int point){

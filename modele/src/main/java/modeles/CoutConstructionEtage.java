@@ -2,10 +2,12 @@ package modeles;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CoutConstructionEtage {
+public class CoutConstructionEtage implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Cout cout;
     @BsonProperty("carteUtilisees")
     private Collection<Carte> cartesUtilisees;

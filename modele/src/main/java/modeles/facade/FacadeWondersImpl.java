@@ -13,12 +13,14 @@ import java.util.*;
 public class FacadeWondersImpl implements FacadeWonders {
     private Map<String, Partie> parties;
     private Map<String,Partie> associationJoueurPartie;
+    private Map<String, Plateau> plateauxJoueurs;
     DataChiffrement dataChiffrement;
 
     public FacadeWondersImpl(){
         this.parties=new HashMap<>();
         this.associationJoueurPartie=new HashMap<>();
         this.dataChiffrement=new DataChiffrement("jouerensemble");
+        this.plateauxJoueurs=new HashMap<>();
     }
 
     @Override
@@ -44,7 +46,6 @@ public class FacadeWondersImpl implements FacadeWonders {
         Invitation data = new Invitation();
         data.setIdPartie(id);
         data.setJoueurCreateur(joueur);
-        partie.getParticipants().add(joueur);
         BaseMongo.getBase().getJeu().insertOne(partie);
         return this.dataChiffrement.chiffrement(data);
 
@@ -60,12 +61,25 @@ public class FacadeWondersImpl implements FacadeWonders {
             }
         }
         throw new JoueurInexistantException();
-
+    }
+    @Override
+    public List<Carte> getCartesMainJoueur(String pseudo){
+        return this.getPartieJeu(pseudo).getCartesMainJoueur(pseudo);
     }
 
     @Override
     public Partie getPartieJeu(String pseudo) {
         return associationJoueurPartie.get(pseudo);
+    }
+
+    @Override
+    public Plateau getPlateau(String pseudo) {
+        return this.plateauxJoueurs.get(pseudo);
+    }
+
+    @Override
+    public List<Carte> donnerCarteJoueur(Joueur joueur) {
+        return this.getPartieJeu(joueur.getPseudo()).donnerCarteJoueur(joueur);
     }
 
     @Override
@@ -76,6 +90,7 @@ public class FacadeWondersImpl implements FacadeWonders {
             throw new TicketPerimeException();
         }
         partie.rejoindrePartie(joueur);
+        BaseMongo.getBase().ajoutJoueurPartie(partie.getNombrePartie(),joueur);
         this.associationJoueurPartie.put(joueur.getPseudo(),this.parties.get(invitation.getIdPartie()));
 
     }
@@ -100,6 +115,8 @@ public class FacadeWondersImpl implements FacadeWonders {
     @Override
     public void debutJeu(Joueur joueur, String nomPlateau) {
         this.getPartieJeu(joueur.getPseudo()).debutJeu(joueur,nomPlateau);
+        joueur.setMerveilles(nomPlateau);
+        this.plateauxJoueurs.put(joueur.getPseudo(),BaseMongo.getBase().getPlateauNom(nomPlateau));
     }
 
 

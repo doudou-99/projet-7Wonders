@@ -7,10 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import modeles.Joueur;
 import modeles.dao.BaseMongo;
 
 import java.io.File;
@@ -18,6 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.Objects;
 
 
 public class PageChoixPlateau implements VueInteractive {
@@ -37,6 +42,7 @@ public class PageChoixPlateau implements VueInteractive {
     public ImageView TempleDArtemis;
     @FXML
     public BorderPane borderpane;
+    public VBox vbox;
 
     private Scene scene;
     private Controleur controleur;
@@ -65,52 +71,7 @@ public class PageChoixPlateau implements VueInteractive {
         }
     }
 
-    public void choix(MouseEvent mouseEvent) {
-        String nom = "";
-        //new File(getClass().getResource(String.valueOf(ColosseDeRhodeus.getImage().getUrl())).getFile()).getName();
-        String colosse= new File(getClass().getResource(String.valueOf(ColosseDeRhodeus.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        String phare = new File(getClass().getResource(String.valueOf(PhareAlexandrie.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        String piramide= new File(getClass().getResource(String.valueOf(PiramideGizeh.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        String statue = new File(getClass().getResource(String.valueOf(StatueDeZeus.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        String mausolee = new File(getClass().getResource(String.valueOf(MausoleeDHalicarnasse.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        String jardins = new File(getClass().getResource(String.valueOf(JardinsSuspendus.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        String temple = new File(getClass().getResource(String.valueOf(TempleDArtemis.getImage().getUrl())).getFile().replaceAll("/","//")).getName();
-        if (PhareAlexandrie.isPressed()){
-            if (phare.equals(BaseMongo.getBase().getPlateauNom("Le phare d'Alexandrie").getImage())){
-                nom="Le phare d'Alexandrie";
-                PhareAlexandrie.setImage(null);
-            }
-        }else if (PiramideGizeh.isPressed()){
-            if (piramide.equals(BaseMongo.getBase().getPlateauNom("La grande piramyde de Gizeh").getImage())){
-                nom="La grande piramyde de Gizeh";
-                PiramideGizeh.setImage(null);
-            }
-        }else if (ColosseDeRhodeus.isPressed()){
-            if (colosse.equals(BaseMongo.getBase().getPlateauNom("Le Colosse de Rhodes").getImage())){
-                nom="Le Colosse de Rhodes";
-                ColosseDeRhodeus.setImage(null);
-            }
-        }else if (JardinsSuspendus.isPressed()){
-            if (jardins.equals(BaseMongo.getBase().getPlateauNom("Les jardins suspendus de Babylone").getImage())){
-                nom="Les jardins suspendus de Babylone";
-                JardinsSuspendus.setImage(null);
-            }
-        }else if (MausoleeDHalicarnasse.isPressed()){
-            if (mausolee.equals(BaseMongo.getBase().getPlateauNom("Le mausolée d'Halicarnasse").getImage())){
-                nom="Le mausolée d'Halicarnasse";
-                MausoleeDHalicarnasse.setImage(null);
-            }
-        }else if (StatueDeZeus.isPressed()) {
-            if (statue.equals(BaseMongo.getBase().getPlateauNom("La statue de Zeus à Olympie").getImage())) {
-                nom="La statue de Zeus à Olympie";
-                StatueDeZeus.setImage(null);
-            }
-        }else if (TempleDArtemis.isPressed()) {
-            if (temple.equals(BaseMongo.getBase().getPlateauNom("Le temple d'Artemis à Ephèse").getImage())) {
-                nom="Le temple d'Artemis à Ephèse";
-                TempleDArtemis.setImage(null);
-            }
-        }
+    public void chargerDonnees(){
         Task<Boolean> attenteChoixPlateau = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
@@ -118,10 +79,32 @@ public class PageChoixPlateau implements VueInteractive {
                 return true;
             }
         };
-        String finalNom = nom;
-        attenteChoixPlateau.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, e ->controleur.debut(finalNom));
+
+        attenteChoixPlateau.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, e ->controleur.goToPartie());
         Thread thread = new Thread(attenteChoixPlateau);
         thread.start();
+    }
+
+    public void choix(MouseEvent mouseEvent) {
+        String colosse = ColosseDeRhodeus.getImage().getUrl();
+        System.out.println();
+        if (Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+            if (mouseEvent.getClickCount()==1) {
+                if (colosse.contains(BaseMongo.getBase().getPlateauNom("Le Colosse de Rhodes").getImage())) {
+                    String nom = "Le Colosse de Rhodes";
+                    System.out.println(nom);
+                    ColosseDeRhodeus.setVisible(false);
+                    controleur.setUrl(colosse);
+                    controleur.debut(nom);
+
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
     }
 
 
@@ -138,5 +121,132 @@ public class PageChoixPlateau implements VueInteractive {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void choixMausolee(MouseEvent mouseEvent) {
+        String mausolee = MausoleeDHalicarnasse.getImage().getUrl();
+        if(Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+            if (mouseEvent.getClickCount()==1) {
+                if (mausolee.contains(BaseMongo.getBase().getPlateauNom("Le mausolée d'Halicarnasse").getImage())) {
+                    String nom = "Le mausolée d'Halicarnasse";
+                    System.out.println(nom);
+                    MausoleeDHalicarnasse.setVisible(false);
+                    controleur.setUrl(mausolee);
+                    controleur.debut(nom);
+
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
+    }
+
+    public void choixStatue(MouseEvent mouseEvent) {
+        String statue = StatueDeZeus.getImage().getUrl();
+        if(Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+            if (mouseEvent.getClickCount()==1) {
+                if (statue.contains(BaseMongo.getBase().getPlateauNom("La statue de Zeus à Olympie").getImage())) {
+                    String nom ="La statue de Zeus à Olympie";
+                    System.out.println(nom);
+                    StatueDeZeus.setVisible(false);
+                    controleur.setUrl(statue);
+                    controleur.debut(nom);
+
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
+    }
+
+    public void choixTemple(MouseEvent mouseEvent) {
+        String temple = TempleDArtemis.getImage().getUrl();
+        if(Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+            if (mouseEvent.getClickCount()==1) {
+                if (temple.contains(BaseMongo.getBase().getPlateauNom("Le temple d'Artemis à Ephèse").getImage())) {
+                    String nom = "Le temple d'Artemis à Ephèse";
+                    System.out.println(nom);
+                    TempleDArtemis.setVisible(false);
+                    controleur.setUrl(temple);
+                    controleur.debut(nom);
+
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
+    }
+
+    public void choixJardins(MouseEvent mouseEvent) {
+        String jardins = JardinsSuspendus.getImage().getUrl();
+        if(Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+            if (mouseEvent.getClickCount()==1) {
+                if (jardins.contains(BaseMongo.getBase().getPlateauNom("Les jardins suspendus de Babylone").getImage())) {
+                    String nom = "Les jardins suspendus de Babylone";
+                    System.out.println(nom);
+                    JardinsSuspendus.setVisible(false);
+                    controleur.setUrl(jardins);
+                    controleur.debut(nom);
+
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
+    }
+
+    public void choixPhare(MouseEvent mouseEvent) {
+        String phare=PhareAlexandrie.getImage().getUrl();
+        if(Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+            if (mouseEvent.getClickCount()==1) {
+                if (phare.contains(BaseMongo.getBase().getPlateauNom("Le phare d'Alexandrie").getImage())) {
+                    String nom = "Le phare d'Alexandrie";
+                    System.out.println(nom);
+                    PhareAlexandrie.setVisible(false);
+                    controleur.setUrl(phare);
+                    controleur.debut(nom);
+
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
+    }
+
+    public void choixPiramide(MouseEvent mouseEvent) {
+        String piramide=PiramideGizeh.getImage().getUrl();
+        if(Objects.isNull(controleur.getJoueur().getMerveilles()) || controleur.getJoueur().getMerveilles().isEmpty()) {
+                if (mouseEvent.getClickCount()==1){
+                    if (piramide.contains(BaseMongo.getBase().getPlateauNom("La grande pyramide de Gizeh").getImage())){
+                        String nom="La grande pyramide de Gizeh";
+                        System.out.println(nom);
+                        PiramideGizeh.setVisible(false);
+                        controleur.setUrl(piramide);
+                        controleur.debut(nom);
+
+                    }
+                }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur choix plateau");
+            alert.setContentText("Vous avez déjà choisi votre merveille!");
+            alert.showAndWait();
+        }
+
     }
 }

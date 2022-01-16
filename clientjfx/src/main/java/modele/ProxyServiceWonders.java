@@ -1,7 +1,9 @@
 package modele;
 
+import modeles.Carte;
 import modeles.Joueur;
 import modeles.Partie;
+import modeles.Plateau;
 import modeles.exceptions.*;
 
 import java.rmi.RemoteException;
@@ -29,4 +31,7 @@ public interface ProxyServiceWonders {
 
     boolean partieCommencee(Joueur joueur);
     void finDePartie();
+    Plateau getPlateau(String pseudo);
+    List<Carte> donnerCarteJoueur(Joueur joueur);
+    List<Carte> getCartesMainJoueur(String pseudo);
 }

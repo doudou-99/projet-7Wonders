@@ -4,7 +4,8 @@ import modeles.dao.BaseMongo;
 
 import java.io.Serializable;
 
-public class GestionTour {
+public class GestionTour implements Serializable{
+    private final static long serialVersionUID=3L;
     private int tourEnCours;
     private Tour tour;
 

@@ -2,7 +2,10 @@ package modeles;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-public class Age {
+import java.io.Serializable;
+
+public class Age implements Serializable {
+    private static final long serialVersionUID = 1L;
     @BsonProperty("_id")
     private String id;
     @BsonProperty("sensDeRotation")

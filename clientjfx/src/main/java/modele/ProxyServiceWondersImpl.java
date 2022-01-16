@@ -1,20 +1,17 @@
 package modele;
 
 import client.ServiceWonders;
-import client.ServiceWondersImpl;
+import modeles.Carte;
 import modeles.Joueur;
 import modeles.Partie;
+import modeles.Plateau;
 import modeles.exceptions.*;
 
-import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.util.List;
-import java.util.Objects;
 
 import static client.ServiceWonders.SERVEUR;
 
@@ -160,6 +157,32 @@ public class ProxyServiceWondersImpl implements ProxyServiceWonders{
             this.serviceWonders.finDePartie();
         } catch (RemoteException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Plateau getPlateau(String pseudo) {
+        try {
+            return this.serviceWonders.getPlateau(pseudo);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e.detail);
+        }
+    }
+
+    @Override
+    public List<Carte> donnerCarteJoueur(Joueur joueur) {
+        try {
+            return this.serviceWonders.donnerCarteJoueur(joueur);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e.detail);
+        }
+    }
+    @Override
+    public List<Carte> getCartesMainJoueur(String pseudo){
+        try {
+            return this.serviceWonders.getCartesMainJoueur(pseudo);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e.detail);
         }
     }
 

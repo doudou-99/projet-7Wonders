@@ -1,0 +1,11 @@
+[{
+	"type": "or",
+	"valeur":3,
+	"nombrePieces":20
+},
+{
+	"type": "argent",
+	"valeur":1,
+	"nombrePieces":30
+}]
+

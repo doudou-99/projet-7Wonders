@@ -1,0 +1,253 @@
+
+[{
+
+	"_id":"plateau:1",
+	"nom":"Le Colosse de Rhodes",
+	"capacite":"minerai",
+	"face":"A",
+	"image":"ColosseDeRhodeus.jpg",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":{
+				"cout":{
+					"ressource":"bois",
+					"nombreUnite":2
+				}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{
+					"ressource":"argile",
+					"nombreUnite":3
+				}
+			},
+			"effet":[{"capacite":"bouclier","nombre":2,"choix":[""]}]
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{
+					"ressource":"minerai",
+					"nombreUnite":4
+				}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+},
+{
+	"_id":"plateau:2",
+	"nom":"Le phare d'Alexandrie",
+	"capacite":"verre",
+	"face":"A",
+	"image":"PhareDAlexandrie.jpg",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":
+			{
+				"cout":{
+					"ressource":"pierre",
+					"nombreUnite":2
+				}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{
+					"ressource":"minerai",
+					"nombreUnite":2
+				}
+			},
+			"effet":[{"capacite":"argile","nombre":1,"choix":[""]},{"capacite":"minerai","nombre":1,"choix":[""]},{"capacite":"bois","nombre":1,"choix":[""]},
+			{"capacite":"pierre","nombre":1,"choix":[""]}]
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{
+					"ressource":"verre",
+					"nombreUnite":2
+				}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+},
+{
+	"_id":"plateau:3",
+	"nom":"Le temple d'Artemis à Ephèse",
+	"capacite":"papyrus",
+	"face":"A",
+	"image":"LeTempleDArtemis.jpg",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":
+			{
+				"cout":{
+					"ressource":"pierre",
+					"nombreUnite":2
+				}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{"ressource":"bois","nombreUnite":2}
+			},
+			"effet":[{"capacite":"piece","nombre":9,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{"ressource":"papyrus","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+},
+{
+	"_id":"plateau:4",
+	"nom":"Les jardins suspendus de Babylone",
+	"capacite":"argile",
+	"image":"LesJardinsSuspendusDeBabylone.jpg",
+	"face":"A",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":
+			{
+				"cout":{"ressource":"argile","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{"ressource":"bois","nombreUnite":3}
+			},
+			"effet":[{"capacite":"symbole scientifique au choix","nombre":1,"choix":["compas","roue","tablette"]}]
+
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{"ressource":"argile","nombreUnite":4}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+}
+,
+{
+	"_id":"plateau:5",
+	"nom":"La statue de Zeus à Olympie",
+	"capacite":"bois",
+	"image":"LaStatueDeZeusAOlympie.jpg",
+	"face":"A",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":
+			{
+				"cout":{"ressource":"bois","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{"ressource":"pierre","nombreUnite":2}
+			},
+			"effet":[{"capacite":"batiment","nombre":1,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{"ressource":"minerai","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+},
+{
+	"_id":"plateau:6",
+	"nom":"Le mausolée d'Halicarnasse",
+	"capacite":"tissu",
+	"image":"LeMausoleeDHalicarnasse.jpg",
+	"face":"A",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":
+			{
+				"cout":{"ressource":"argile","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{"ressource":"minerai","nombreUnite":3}
+			},
+			"effet":[{"capacite":"carte defaussée et construction","nombre":1,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{"ressource":"tissu","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+},
+{
+	"_id":"plateau:7",
+	"nom":"La grande pyramide de Gizeh",
+	"capacite":"pierre",
+	"image":"PiramideDeGizeh.jpg",
+	"face":"A",
+	"etages":[
+		{
+			"_id":"etage:1",
+			"coutConstruction":
+			{
+				"cout":{"ressource":"pierre","nombreUnite":2}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":3,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:2",
+			"coutConstruction":{
+				"cout":{"ressource":"bois","nombreUnite":3}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":5,"choix":[""]}]
+
+		},
+		{
+			"_id":"etage:3",
+			"coutConstruction":{
+				"cout":{"ressource":"pierre","nombreUnite":4}
+			},
+			"effet":[{"capacite":"point de victoire","nombre":7,"choix":[""]}]
+		}
+	]
+}
+	]

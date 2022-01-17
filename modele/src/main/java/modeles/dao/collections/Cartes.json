@@ -1,0 +1,816 @@
+[
+	{
+		"_id" : "carte:1",
+		"age":"age1",
+		"chiffre":[4],
+		"type":"Matières premières",
+		"couleur":"marron",
+		"nom":"Excavation",
+		"image":"Excavation.png",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"pierre","nombre":1,"choix":[""],"capaciteSup":""},{"capacite":"argile","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:2",
+		"age":"age1",
+		"chiffre":[3,5],
+		"type":"Matières premières",
+		"couleur":"marron",
+		"nom":"Cavite",
+		"image":"Cavite.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"pierre","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:3",
+		"age":"age1",
+		"chiffre":[3,4],
+		"type":"Matières premières",
+		"nom":"Chantier",
+		"couleur":"marron",
+		"image":"Chantier.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"bois","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:4",
+		"age":"age1",
+		"chiffre":[3],
+		"type":"Matières premières",
+		"nom":"Exploitation Forestiere",
+		"couleur":"marron",
+		"image":"ExploitationForestiere.png",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"pierre","nombre":1,"choix":[""],"capaciteSup":""},{"capacite":"bois","nombre":1,"choix":[""],"capaciteSup":""}]
+	}
+	,{
+		"_id" : "carte:5",
+		"age":"age1",
+		"chiffre":[3,4],
+		"type":"Matières premières",
+		"nom":"Filon",
+		"couleur":"marron",
+		"image":"Filon.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"minerai","nombre":1,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:6",
+		"age":"age1",
+		"chiffre":[3],
+		"type":"Matières premières",
+		"nom":"FosseArgileuse",
+		"couleur":"marron",
+		"image":"FosseArgileuse",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"argile","nombre":1,"choix":[""]},{"capacite":"minerai","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:7",
+		"age":"age1",
+		"chiffre":[3,6],
+		"type":"Bâtiments civils",
+		"nom":"Theatre",
+		"couleur":"bleu",
+		"image":"Theatre.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"point de victoire","nombre":2,"choix":[""],"capaciteSup":""}]
+		
+	},{
+		"_id" : "carte:8",
+		"age":"age1",
+		"chiffre":[4,7],
+		"type":"Bâtiments civils",
+		"nom":"Preteur Sur Gages",
+		"couleur":"bleu",
+		"image":"PreteurSurGages.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"point de victoire","nombre":3,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:9",
+		"age":"age1",
+		"chiffre":[3,7],
+		"type":"Bâtiments civils",
+		"nom":"Bains",
+		"couleur":"bleu",
+		"image":"Bains.png",
+		"cout":[{"ressource":"pierre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":3,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:10",
+		"age":"age1",
+		"chiffre":[3,5],
+		"type":"Bâtiments civils",
+		"nom":"Autel",
+		"couleur":"bleu",
+		"image":"Autel.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"point de victoire","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:11",
+		"age":"age1",
+		"chiffre":[3,4],
+		"type":"Bâtiments scientifiques",
+		"nom":"Scriptorium",
+		"couleur":"vert",
+		"image":"Scriptorium.png",
+		"cout":[{"ressource":"papyrus","nombreUnite":1}],
+		"capacite":[{"capacite":"tablette","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:12",
+		"age":"age1",
+		"chiffre":[3,5],
+		"type":"Bâtiments scientifiques",
+		"nom":"Officine",
+		"couleur":"vert",
+		"image":"Officine.png",
+		"cout":[{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"compas","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:13",
+		"age":"age1",
+		"chiffre":[3,7],
+		"type":"Bâtiments scientifiques",
+		"nom":"Atelier",
+		"couleur":"vert",
+		"image":"Atelier.png",
+		"cout":[{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"roue","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+
+	{
+		"_id" : "carte:14",
+		"age":"age1",
+		"chiffre":[3,6],
+		"type":"Bâtiments commerciaux",
+		"nom":"Marche",
+		"couleur":"jaune",
+		"image":"Marche.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"reduction de piece","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"produits manufacturés"}]
+		
+	},
+
+	{
+		"_id" : "carte:15",
+		"age":"age1",
+		"chiffre":[4,5,7],
+		"type":"Bâtiments commerciaux",
+		"nom":"Taverne",
+		"couleur":"jaune",
+		"image":"Taverne.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"piece","nombre":5,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:16",
+		"age":"age1",
+		"chiffre":[3,7],
+		"type":"Bâtiments commerciaux",
+		"nom":"ComptoirOuest",
+		"couleur":"jaune",
+		"image":"ComptoirOuest.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"reduction de piece","nombre":1,"choix":["cite gauche"],"capaciteSup":"matières premières"}]
+	},
+
+	{
+		"_id" : "carte:17",
+		"age":"age1",
+		"chiffre":[3,7],
+		"type":"Bâtiments commerciaux",
+		"nom":"ComptoirEst",
+		"couleur":"jaune",
+		"image":"ComptoirEst.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"reduction de piece","nombre":1,"choix":["cite droite"],"capaciteSup":"matières premières"}]
+	},
+	
+	{
+		"_id" : "carte:18",
+		"age":"age1",
+		"chiffre":[3,4],
+		"type":"Bâtiments militaires",
+		"nom":"TourDeGarde",
+		"couleur":"rouge",
+		"image":"TourDeGarde.png",
+		"cout":[{"ressource":"argile","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:19",
+		"age":"age1",
+		"chiffre":[3,7],
+		"type":"Bâtiments militaires",
+		"nom":"Palissade",
+		"couleur":"rouge",
+		"image":"Palissade.png",
+		"cout":[{"ressource":"bois","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":1,"choix":[""],"capaciteSup":""}]
+	
+	},
+	{
+		"_id" : "carte:20",
+		"age":"age1",
+		"chiffre":[3,5],
+		"type":"Bâtiments militaires",
+		"nom":"Caserne",
+		"couleur":"rouge",
+		"image":"Caserne.png",
+		"cout":[{"ressource":"argile","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:21",
+		"age":"age1",
+		"chiffre":[3,6],
+		"type":"Produits manufacturés",
+		"nom":"MetierATisser",
+		"couleur":"gris",
+		"image":"MetierATisser.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"tissu","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:22",
+		"age":"age1",
+		"chiffre":[3,6],
+		"type":"Produits manufacturés",
+		"nom":"Presse",
+		"couleur":"gris",
+		"image":"Presse.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"papyrus","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:23",
+		"age":"age1",
+		"chiffre":[3,6],
+		"type":"Produits manufacturés",
+		"nom":"Verrerie",
+		"couleur":"gris",
+		"image":"Verrerie.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"verre","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:24",
+		"age":"age2",
+		"chiffre":[3,4],
+		"type":"Matières premières",
+		"nom":"Briquetterie",
+		"couleur":"marron",
+		"image":"Briquetterie.png",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"argile","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:25",
+		"age":"age2",
+		"chiffre":[3,4],
+		"type":"Matières premières",
+		"nom":"Carriere",
+		"couleur":"marron",
+		"image":"Carriere.png",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"pierre","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:26",
+		"age":"age2",
+		"chiffre":[3,4],
+		"type":"Matières premières",
+		"nom":"Fonderie",
+		"couleur":"marron",
+		"image":"Fonderie.png",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"minerai","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:27",
+		"age":"age2",
+		"chiffre":[3,4],
+		"type":"Matières premières",
+		"nom":"Scierie",
+		"couleur":"marron",
+		"image":"Scierie.png",
+		"cout":[{"ressource":"piece","nombreUnite":1}],
+		"capacite":[{"capacite":"bois","nombre":2,"choix":[""],"capaciteSup":""}]
+	}
+	,
+	{
+		"_id" : "carte:28",
+		"age":"age2",
+		"chiffre":[3,7],
+		"type":"Bâtiments civils",
+		"nom":"Aqueduc",
+		"couleur":"bleu",
+		"image":"Aqueduc.png",
+		"cout":[{"ressource":"pierre","nombreUnite":3}],
+		"capacite":[{"capacite":"point de victoire","nombre":5,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:29",
+		"age":"age2",
+		"chiffre":[3,7],
+		"type":"Bâtiments civils",
+		"nom":"Statue",
+		"couleur":"bleu",
+		"image":"Statue.png",
+		"cout":[{"ressource":"bois","nombreUnite":1},{"ressource":"minerai","nombreUnite":2}],
+		"capacite":[{"capacite":"point de victoire","nombre":4,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:30",
+		"age":"age2",
+		"chiffre":[3,6],
+		"type":"Bâtiments civils",
+		"nom":"Temple",
+		"couleur":"bleu",
+		"image":"Temple.png",
+		"cout":[{"ressource":"bois","nombreUnite":1},{"ressource":"argile","nombreUnite":1},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":3,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:31",
+		"age":"age2",
+		"chiffre":[3,5],
+		"type":"Bâtiments civils",
+		"nom":"Tribunal",
+		"couleur":"bleu",
+		"image":"Tribunal.png",
+		"cout":[{"ressource":"argile","nombreUnite":2},{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":4,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:32",
+		"age":"age2",
+		"chiffre":[3,6],
+		"type":"Bâtiments scientifiques",
+		"nom":"Bibliotheque",
+		"couleur":"vert",
+		"image":"Bibliotheque.png",
+		"cout":[{"ressource":"pierre","nombreUnite":2},{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":3,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:33",
+		"age":"age2",
+		"chiffre":[3,4],
+		"type":"Bâtiments scientifiques",
+		"nom":"Dispensaire",
+		"couleur":"vert",
+		"image":"Dispensaire.png",
+		"cout":[{"ressource":"minerai","nombreUnite":2},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"compas","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:34",
+		"age":"age2",
+		"chiffre":[3,7],
+		"type":"Bâtiments scientifiques",
+		"nom":"Ecole",
+		"couleur":"vert",
+		"image":"Ecole.png",
+		"cout":[{"ressource":"bois","nombreUnite":1},{"ressource":"papyrus","nombreUnite":1}],
+		"capacite":[{"capacite":"tablette","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:35",
+		"age":"age2",
+		"chiffre":[3,5],
+		"type":"Bâtiments scientifiques",
+		"nom":"Laboratoire",
+		"couleur":"vert",
+		"image":"Laboratoire.png",
+		"cout":[{"ressource":"argile","nombreUnite":2},{"ressource":"papyrus","nombreUnite":1}],
+		"capacite":[{"capacite":"roue","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+
+	{
+		"_id" : "carte:36",
+		"age":"age2",
+		"chiffre":[4,7],
+		"type":"Bâtiments commerciaux",
+		"nom":"Bazar",
+		"couleur":"jaune",
+		"image":"Bazar.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"piece","nombre":2,"choix":["cite gauche","cite droite","cite"],"capaciteSup":"gris"}]
+	},
+
+	{
+		"_id" : "carte:37",
+		"age":"age2",
+		"chiffre":[3,5,6],
+		"type":"Bâtiments commerciaux",
+		"nom":"Caravanserail",
+		"couleur":"jaune",
+		"image":"Caravanserail.png",
+		"cout":[{"ressource":"bois","nombreUnite":2}],
+		"capacite":[{"capacite":"argile/pierre/minerai/bois","nombre":1,"choix":["argile","pierre","minerai","bois"]}]
+	},{
+		"_id" : "carte:38",
+		"age":"age2",
+		"chiffre":[3,6,7],
+		"type":"Bâtiments commerciaux",
+		"nom":"Forum",
+		"couleur":"jaune",
+		"image":"Forum.png",
+		"cout":[{"ressource":"argile","nombreUnite":2}],
+		"capacite":[{"capacite":"tissu/verre/papyrus","nombre":1,"choix":["tissu","verre","papyrus"]}]
+	},
+
+	{
+		"_id" : "carte:39",
+		"age":"age2",
+		"chiffre":[3,6],
+		"type":"Bâtiments commerciaux",
+		"nom":"Vignoble",
+		"couleur":"jaune",
+		"image":"Vignoble.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"piece","nombre":1,"choix":["cite gauche","cite droite","cite"],"capaciteSup":"marron"}]
+	},
+	
+	{
+		"_id" : "carte:40",
+		"age":"age2",
+		"chiffre":[3,6],
+		"type":"Bâtiments militaires",
+		"nom":"ChampsDeTir",
+		"couleur":"rouge",
+		"image":"ChampsDeTir.png",
+		"cout":[{"ressource":"bois","nombreUnite":2},{"ressource":"minerai","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:41",
+		"age":"age2",
+		"chiffre":[3,5],
+		"type":"Bâtiments militaires",
+		"nom":"Ecuries",
+		"couleur":"rouge",
+		"image":"Ecuries.png",
+		"cout":[{"ressource":"argile","nombreUnite":1},{"ressource":"minerai","nombreUnite":1},{"ressource":"bois","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:42",
+		"age":"age2",
+		"chiffre":[3,7],
+		"type":"Bâtiments militaires",
+		"nom":"Muraille",
+		"couleur":"rouge",
+		"image":"Muraille.png",
+		"cout":[{"ressource":"pierre","nombreUnite":3}],
+		"capacite":[{"capacite":"bouclier","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:43",
+		"age":"age2",
+		"chiffre":[4,6,7],
+		"type":"Bâtiments militaires",
+		"nom":"PlaceDArmes",
+		"couleur":"rouge",
+		"image":"PlaceDArmes.png",
+		"cout":[{"ressource":"minerai","nombreUnite":2},{"ressource":"bois","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":2,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:44",
+		"age":"age2",
+		"chiffre":[3,5],
+		"type":"Produits manufacturés",
+		"nom":"MetierATisser",
+		"couleur":"gris",
+		"image":"MetierATisser.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"tissu","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:45",
+		"age":"age2",
+		"chiffre":[3,5],
+		"type":"Produits manufacturés",
+		"nom":"Verrerie",
+		"couleur":"gris",
+		"image":"Verrerie.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"verre","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:46",
+		"age":"age2",
+		"chiffre":[3,5],
+		"type":"Produits manufacturés",
+		"nom":"Presse",
+		"couleur":"gris",
+		"image":"Presse.png",
+		"cout":[{"ressource":"","nombreUnite":0}],
+		"capacite":[{"capacite":"papyrus","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:47",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesArmateurs",
+		"couleur":"violet",
+		"image":"GuildesDesArmateurs.png",
+		"cout":[{"ressource":"bois","nombreUnite":3},{"ressource":"papyrus","nombreUnite":1},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":[""],"capaciteSup":"marron,gris,violet"}]
+	},
+	{
+		"_id" : "carte:48",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesArtisans",
+		"couleur":"violet",
+		"image":"GuildesDesArtisans.png",
+		"cout":[{"ressource":"minerai","nombreUnite":2},{"ressource":"pierre","nombreUnite":2}],
+		"capacite":[{"capacite":"point de victoire","nombre":2,"choix":["cite gauche", "cite droite"], "capaciteSup":"gris"}]
+	},
+	{
+		"_id" : "carte:49",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesBatisseurs",
+		"couleur":"violet",
+		"image":"GuildesDesBatisseurs.png",
+		"cout":[{"ressource":"pierre","nombreUnite":2},{"ressource":"argile","nombreUnite":2},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite","cite"],"capaciteSup":"etage"}]
+	},
+	{
+		"_id" : "carte:50",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesCommercants",
+		"couleur":"violet",
+		"image":"GuildesDesCommercants.png",
+		"cout":[{"ressource":"tissu","nombreUnite":1},{"ressource":"papyrus","nombreUnite":1},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"jaune"}]
+	}
+	,{
+		"_id" : "carte:51",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesEspions",
+		"couleur":"violet",
+		"image":"GuildesDesEspions.png",
+		"cout":[{"ressource":"argile","nombreUnite":3},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"rouge"}]
+	},{
+		"_id" : "carte:52",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesMagistrats",
+		"couleur":"violet",
+		"image":"GuildesDesMagistrats.png",
+		"cout":[{"ressource":"bois","nombreUnite":3},{"ressource":"pierre","nombreUnite":1},{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"bleu"}]
+	},{
+		"_id" : "carte:53",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesPhilosophes",
+		"couleur":"violet",
+		"image":"GuildesDesPhilosophes.png",
+		"cout":[{"ressource":"argile","nombreUnite":3},{"ressource":"papyrus","nombreUnite":1},{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"vert"}]
+	},{
+		"_id" : "carte:54",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesScientifiques",
+		"couleur":"violet",
+		"image":"GuildesDesScientifiques.png",
+		"cout":[{"ressource":"bois","nombreUnite":2},{"ressource":"minerai","nombreUnite":2},{"ressource":"papyrus","nombreUnite":1}],
+		"capacite":[{"capacite":"compas/roue/tablette","nombre":1,"choix":["compas","roue","tablette"],"capaciteSup":""}]
+	},{
+		"_id" : "carte:55",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesStrateges",
+		"couleur":"violet",
+		"image":"GuildesDesStrateges.png",
+		"cout":[{"ressource":"minerai","nombreUnite":2},{"ressource":"pierre","nombreUnite":1},{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"defaite"}]
+	},{
+		"_id" : "carte:56",
+		"age":"age3",
+		"chiffre":[],
+		"type":"Guilde",
+		"nom":"GuildesDesTravailleurs",
+		"couleur":"violet",
+		"image":"GuildesDesTravailleurs.png",
+		"cout":[{"ressource":"bois","nombreUnite":1},{"ressource":"pierre","nombreUnite":1},{"ressource":"argile","nombreUnite":1},{"ressource":"minerai","nombreUnite":2}],
+		"capacite":[{"capacite":"point de victoire","nombre":1,"choix":["cite gauche","cite droite"],"capaciteSup":"marron"}]
+	},
+	{
+		"_id" : "carte:57",
+		"age":"age3",
+		"chiffre":[3,5,6],
+		"type":"Bâtiments civils",
+		"nom":"HotelDeVille",
+		"couleur":"bleu",
+		"image":"HotelDeVille.png",
+		"cout":[{"ressource":"verre","nombreUnite":1},{"ressource":"pierre","nombreUnite":2},{"ressource":"minerai","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":6,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:58",
+		"age":"age3",
+		"chiffre":[3,4],
+		"type":"Bâtiments civils",
+		"nom":"Jardins",
+		"couleur":"bleu",
+		"image":"Jardins.png",
+		"cout":[{"ressource":"bois","nombreUnite":1},{"ressource":"argile","nombreUnite":2}],
+		"capacite":[{"capacite":"point de victoire","nombre":5,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:59",
+		"age":"age3",
+		"chiffre":[3,7],
+		"type":"Bâtiments civils",
+		"nom":"Palace",
+		"couleur":"bleu",
+		"image":"Palace.png",
+		"cout":[{"ressource":"verre","nombreUnite":1},{"ressource":"pierre","nombreUnite":1},{"ressource":"minerai","nombreUnite":1}
+		,{"ressource":"papyrus","nombreUnite":1},{"ressource":"bois","nombreUnite":1},{"ressource":"tissu","nombreUnite":1},{"ressource":"argile","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":8,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:60",
+		"age":"age3",
+		"chiffre":[3,6],
+		"type":"Bâtiments civils",
+		"nom":"Pantheon",
+		"couleur":"bleu",
+		"image":"Pantheon.png",
+		"cout":[{"ressource":"argile","nombreUnite":2},{"ressource":"minerai","nombreUnite":1},
+		{"ressource":"papyrus","nombreUnite":1},{"ressource":"tissu","nombreUnite":1},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire","nombre":7,"choix":[""],"capaciteSup":""}]
+	},{
+		"_id" : "carte:61",
+		"age":"age3",
+		"chiffre":[3,5],
+		"type":"Bâtiments civils",
+		"nom":"Senat",
+		"couleur":"bleu",
+		"image":"Senat.png",
+		"cout":[{"ressource":"minerai","nombreUnite":1},{"ressource":"pierre","nombreUnite":1},{"ressource":"bois","nombreUnite":2}],
+		"capacite":[{"capacite":"point de victoire","nombre":6,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:62",
+		"age":"age3",
+		"chiffre":[3,7],
+		"type":"Bâtiments scientifiques",
+		"nom":"Academie",
+		"couleur":"vert",
+		"image":"Academie.png",
+		"cout":[{"ressource":"pierre","nombreUnite":3},{"ressource":"verre","nombreUnite":1}],
+		"capacite":[{"capacite":"compas","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:63",
+		"age":"age3",
+		"chiffre":[3,5],
+		"type":"Bâtiments scientifiques",
+		"nom":"Etude",
+		"couleur":"vert",
+		"image":"Etude.png",
+		"cout":[{"ressource":"tissu","nombreUnite":1},{"ressource":"papyrus","nombreUnite":1},{"ressource":"bois","nombreUnite":1}],
+		"capacite":[{"capacite":"roue","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:64",
+		"age":"age3",
+		"chiffre":[3,6],
+		"type":"Bâtiments scientifiques",
+		"nom":"Loge",
+		"couleur":"vert",
+		"image":"Loge.png",
+		"cout":[{"ressource":"argile","nombreUnite":2},{"ressource":"tissu","nombreUnite":1},{"ressource":"papyrus","nombreUnite":1}],
+		"capacite":[{"capacite":"compas","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:65",
+		"age":"age3",
+		"chiffre":[3,4],
+		"type":"Bâtiments scientifiques",
+		"nom":"Universite",
+		"couleur":"vert",
+		"image":"Universite.png",
+		"cout":[{"ressource":"papyrus","nombreUnite":1},{"ressource":"verre","nombreUnite":1},{"ressource":"bois","nombreUnite":2}],
+		"capacite":[{"capacite":"tablette","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:66",
+		"age":"age3",
+		"chiffre":[3,7],
+		"type":"Bâtiments scientifiques",
+		"nom":"Observatoire",
+		"couleur":"vert",
+		"image":"Observatoire.png",
+		"cout":[{"ressource":"minerai","nombreUnite":2},{"ressource":"verre","nombreUnite":1},{"ressource":"tissu","nombreUnite":1}],
+		"capacite":[{"capacite":"roue","nombre":1,"choix":[""],"capaciteSup":""}]
+	},
+
+	{
+		"_id" : "carte:67",
+		"age":"age3",
+		"chiffre":[3,5,7],
+		"type":"Bâtiments commerciaux",
+		"nom":"Arene",
+		"couleur":"jaune",
+		"image":"Arene.png",
+		"cout":[{"ressource":"minerai","nombreUnite":1},{"ressource":"pierre","nombreUnite":2}],
+		"capacite":[{"capacite":"point de victoire,piece","nombre":1,"choix":[""],"capaciteSup":"etage"}]
+	},
+
+	{
+		"_id" : "carte:68",
+		"age":"age3",
+		"chiffre":[4,6],
+		"type":"Bâtiments commerciaux",
+		"nom":"ChambreDeCommerce",
+		"couleur":"jaune",
+		"image":"ChambreDeCommerce.png",
+		"cout":[{"ressource":"argile","nombreUnite":2},{"ressource":"papyrus","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire,piece","nombre":2,"choix":[""],"capaciteSup":"gris"}]
+	},{
+		"_id" : "carte:69",
+		"age":"age3",
+		"chiffre":[3,6],
+		"type":"Bâtiments commerciaux",
+		"nom":"Phare",
+		"couleur":"jaune",
+		"image":"Phare.png",
+		"cout":[{"ressource":"verre","nombreUnite":1},{"ressource":"pierre","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire,piece","nombre":1,"choix":[""],"capaciteSup":"jaune"}]
+	},
+
+	{
+		"_id" : "carte:70",
+		"age":"age3",
+		"chiffre":[3,4],
+		"type":"Bâtiments commerciaux",
+		"nom":"Port",
+		"couleur":"jaune",
+		"image":"Port.png",
+		"cout":[{"ressource":"minerai","nombreUnite":1},{"ressource":"tissu","nombreUnite":1},{"ressource":"bois","nombreUnite":1}],
+		"capacite":[{"capacite":"point de victoire,piece","nombre":1,"choix":[""],"capaciteSup":"marron"}]
+		
+	},
+	
+	{
+		"_id" : "carte:71",
+		"age":"age3",
+		"chiffre":[3,4,7],
+		"type":"Bâtiments militaires",
+		"nom":"Arsenal",
+		"couleur":"rouge",
+		"image":"Arsenal.png",
+		"cout":[{"ressource":"minerai","nombreUnite":1},{"ressource":"tissu","nombreUnite":1},{"ressource":"bois","nombreUnite":2}],
+		"capacite":[{"capacite":"bouclier","nombre":3,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:72",
+		"age":"age3",
+		"chiffre":[3,5],
+		"type":"Bâtiments militaires",
+		"nom":"AtelierDeSiege",
+		"couleur":"rouge",
+		"image":"AtelierDeSiege.png",
+		"cout":[{"ressource":"argile","nombreUnite":3},{"ressource":"bois","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":3,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:73",
+		"age":"age3",
+		"chiffre":[4,5,6],
+		"type":"Bâtiments militaires",
+		"nom":"Cirque",
+		"couleur":"rouge",
+		"image":"Cirque.png",
+		"cout":[{"ressource":"minerai","nombreUnite":1},{"ressource":"pierre","nombreUnite":3}],
+		"capacite":[{"capacite":"bouclier","nombre":3,"choix":[""],"capaciteSup":""}]
+	},
+	{
+		"_id" : "carte:74",
+		"age":"age3",
+		"chiffre":[3,7],
+		"type":"Bâtiments militaires",
+		"nom":"Fortifications",
+		"couleur":"rouge",
+		"image":"Fortifications.png",
+		"cout":[{"ressource":"minerai","nombreUnite":3},{"ressource":"pierre","nombreUnite":1}],
+		"capacite":[{"capacite":"bouclier","nombre":3,"choix":[""],"capaciteSup":""}]
+	}	
+]

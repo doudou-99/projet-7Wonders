@@ -4,10 +4,21 @@ import modeles.dao.BaseMongo;
 import modeles.facade.FacadeWondersImpl;
 import modeles.interfaces.FacadeWonders;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Programme {
     public static void main(String[] args) {
+        System.out.println(new File("collections/ages.json").toPath().toAbsolutePath());
+        try {
+            System.out.println(Files.readString(Path.of("modele/src/main/java/modeles/dao/collections/ages.json").toAbsolutePath(), StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         BaseMongo baseMongo=BaseMongo.getBase();
         Joueur joueur = new Joueur("ndoye","momar","momo","22","momo99");
         Partie partie = new Partie(joueur,4);

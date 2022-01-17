@@ -1,0 +1,17 @@
+[
+{
+  "_id": "age1",
+  "nombreTour": 6,
+  "sensDeRotation": "Horaire"
+},
+{
+"_id": "age2",
+"nombreTour": 6,
+"sensDeRotation": "Anti-Horaire"
+},
+{
+"_id": "age3",
+"nombreTour": 6,
+"sensDeRotation": "Horaire"
+}
+]

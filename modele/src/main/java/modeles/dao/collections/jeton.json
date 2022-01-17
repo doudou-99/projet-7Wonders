@@ -1,0 +1,28 @@
+[{
+	"_id":"jeton:1",
+	"type": "victoire",
+	"points":1,
+	"age":"age1",
+	"image":"jetons.png"
+},{
+	"_id":"jeton:2",
+	"type": "victoire",
+	"points":3,
+	"age":"age2",
+	"image":"jetonage.png"
+},
+{
+	"_id":"jeton:3",
+	"type": "victoire",
+	"points":5,
+	"age":"age3",
+	"image":"jeton.png"
+},
+{
+	"_id":"jeton:4",
+	"type": "defaite",
+	"points":-1,
+	"age":"",
+	"image":"jetondefaite.png"
+}
+]

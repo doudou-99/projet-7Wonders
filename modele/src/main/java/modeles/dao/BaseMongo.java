@@ -1,21 +1,35 @@
 package modeles.dao;
 
+import com.mongodb.MongoWriteException;
+import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.*;
 import modeles.*;
+import org.bson.AbstractBsonReader;
+import org.bson.BsonArray;
+import org.bson.BsonValue;
+import org.bson.Document;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
+import org.bson.json.JsonMode;
+import org.bson.json.JsonObject;
+import org.bson.json.JsonReader;
+import org.bson.types.ObjectId;
 
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileStore;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,8 +67,12 @@ public class BaseMongo{
                 .build();
         CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
 
+
+
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         mongoDatabase= mongoClient.getDatabase("wonders").withCodecRegistry(pojoCodecRegistry);
+
+
         this.joueurs=mongoDatabase.getCollection("joueurs",Joueur.class);
         this.tours= mongoDatabase.getCollection("tours",Tour.class);
         this.batailles= mongoDatabase.getCollection("batailles",Bataille.class);

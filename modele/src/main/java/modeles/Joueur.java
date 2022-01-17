@@ -273,11 +273,12 @@ public class Joueur implements Serializable {
     }
 
     public List<Carte> cartesEnPossession(PaquetCarte paquetCarte){
+        List<Carte> cartes = new ArrayList<>();
         for(int i=0;i<7;i++){
-            this.listeCartes.add(paquetCarte.distribuire(4).get(i));
+            cartes.add(paquetCarte.distribuire(4).get(i));
             paquetCarte.distribuire(4).remove(paquetCarte.distribuire(4).get(i));
         }
-        return this.listeCartes;
+        return cartes;
     }
 
     public void ajoutCite(Carte carte){

@@ -23,7 +23,7 @@ public class PagePartie implements VueInteractive {
     @FXML
     private HBox plateaux;
     @FXML
-    private HBox plateauCreateur;
+    private ImageView plateauCreateur;
     @FXML
     private BorderPane pane;
     private Scene scene;
@@ -31,18 +31,13 @@ public class PagePartie implements VueInteractive {
     private Controleur controleur;
 
     public void initialiserPlateaux(){
-        ImageView imageView = new ImageView();
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        imageView.setFitHeight(200);
-        imageView.setFitWidth(200);
-        imageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        Image image = new Image(controleur.getUrl());
-        imageView.setImage(image);
-        plateauCreateur.getChildren().add(imageView);
+        Image image = new Image(this.controleur.getUrl());
+        plateauCreateur.setImage(image);
         for (Joueur j: controleur.getPartie().getParticipants()){
             if(j != this.controleur.getJoueur() && !j.getMerveilles().equals("")){
                 ImageView imageView1 = new ImageView();
+                imageView1.setFitWidth(150);
+                imageView1.setFitHeight(100);
                 imageView1.setImage(new Image(String.valueOf(PagePartie.class.getResource("images/PlateauMerveilles/"+BaseMongo.getBase().getPlateauNom(j.getMerveilles()).getImage()))));
                 plateaux.getChildren().add(imageView1);
             }

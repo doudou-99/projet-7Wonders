@@ -28,8 +28,8 @@ public class Programme {
         partie.setParticipants(joueuse);
         //List<Carte> cartesMain = facadeWonders.donnerCarteJoueur(j);
         System.out.println(partieGestion.getJoueurs().containsValue(j));
+
         partie.debutJeu(j,"Le Colosse de Rhodes");
-        facadeWonders.creerPartie(j,4);
         System.out.println(partie.getNombrePartie());
         System.out.println(j.getListeCartes());
         System.out.println(j.getMerveilles());

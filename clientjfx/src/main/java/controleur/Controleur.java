@@ -151,7 +151,7 @@ public class Controleur{
         this.plateau = this.wonders.getPlateau(this.joueur.getPseudo());
         System.out.println(this.url);
         this.pagePartie.initialiserPlateaux();
-        this.cartesMain=this.wonders.getCartesMainJoueur(joueur.getPseudo());
+        this.cartesMain=joueur.getListeCartes();
         System.out.println(this.cartesMain);
         this.pagePartie.initialiserCartes();
         this.goToPartie();

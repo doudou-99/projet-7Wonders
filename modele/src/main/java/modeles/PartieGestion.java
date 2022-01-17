@@ -34,6 +34,8 @@ public class PartieGestion implements Serializable {
             this.score.put(String.valueOf(i),joueurList.get(i).getNombreDePoints());
             this.citeJoueurs.put(joueurList.get(i).getPseudo(),String.valueOf(i));
             this.nombreJoueur.put(joueurList.get(i).getPseudo(), i);
+            //this.cartes.put(joueurList.get(i).getP)
+
         }
         this.gestiontour=new GestionTour(BaseMongo.getBase().getAges().get(0));
         Tour tour = new Tour(BaseMongo.getBase().getAges().get(0));
@@ -50,6 +52,8 @@ public class PartieGestion implements Serializable {
             joueur.choisirPlateau(nomPlateau);
         }
     }
+
+
 
 
     public void choixJoueur( String joueur,String choix, String nomCarte,String choixCarte) throws ChoixDejaFaitException, CiteContientCarteException, RessourceInexistanteException, CartePasConstruiteException, RessourceVoisinInsuffisantException, RessourceInsuffisanteException, ConstructionImpossibleException, PieceInsuffisanteException, ConstructionMerveilleImpossible {

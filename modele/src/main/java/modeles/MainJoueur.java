@@ -30,7 +30,7 @@ public class MainJoueur implements Serializable{
     public void donnerMainCarte(){
         for(Joueur joueur: BaseMongo.getBase().getJoueurList()){
             if (joueurs.containsValue(joueur)) {
-                joueur.cartesEnPossession(paquetCarte);
+                joueur.setListeCartes(joueur.cartesEnPossession(paquetCarte));
                 cartesMain.put(joueur.getPseudo(),joueur.cartesEnPossession(paquetCarte));
             }
         }

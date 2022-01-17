@@ -12,10 +12,11 @@ public class App extends Application {
     public void start(Stage stage) {
         Controleur controleur = new Controleur(stage);
         controleur.run();
-        Media media = new Media("music/akatsuki.mp3");
+        Media media= new Media("file:///D://CoursM1_2021_2022/projets1/clientjfx/src/main/resources/vues/music/akatsuki.mp3");
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
     }
+
     public static void main(String[] args) {
         launch();
 
